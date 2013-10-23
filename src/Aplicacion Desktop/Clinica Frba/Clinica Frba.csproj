@@ -57,11 +57,23 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Login\FuncionalidadesWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\FuncionalidadesWindow.Designer.cs">
+      <DependentUpon>FuncionalidadesWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login\LoginWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Login\LoginWindow.Designer.cs">
       <DependentUpon>LoginWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\RolesWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\RolesWindow.Designer.cs">
+      <DependentUpon>RolesWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Registro de Usuario\Form1.cs">
       <SubType>Form</SubType>
@@ -149,8 +161,14 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Login\FuncionalidadesWindow.resx">
+      <DependentUpon>FuncionalidadesWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Login\LoginWindow.resx">
       <DependentUpon>LoginWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\RolesWindow.resx">
+      <DependentUpon>RolesWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

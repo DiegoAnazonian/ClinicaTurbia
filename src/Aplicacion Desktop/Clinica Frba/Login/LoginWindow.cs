@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using Clinica_Frba.Login;
 
 namespace Clinica_Frba.NewFolder10
 {
@@ -16,6 +17,7 @@ namespace Clinica_Frba.NewFolder10
         {
             InitializeComponent();
             btnLogin.Enabled = false;
+            this.ActiveControl = txtUsuario;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -45,7 +47,24 @@ namespace Clinica_Frba.NewFolder10
                     MessageBox.Show("Estas adentro.\n", "Login satisfactorio",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                     btnLogin.Enabled = true;
-                    return;
+                    List<SqlParameter> checkRolesParam = new List<SqlParameter>();
+                    checkRolesParam.Add(new SqlParameter("usuario", txtUsuario.Text));
+                    DataTable tablaRoles = Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[CONSULTA_ROLES]", checkRolesParam);
+                    if (tablaRoles.Rows.Count > 1)
+                    {
+                        List<string> roles = new List<string>();
+                        foreach (DataRow row in tablaRoles.Rows)
+                        {
+                            roles.Add(row[0].ToString());
+                        }
+                        this.Close();
+                        new RolesWindow(roles).Show();
+                    }
+                    else
+                    {
+                        this.Close();
+                        new FuncionalidadesWindow(tablaRoles.Rows[0][0].ToString()).Show();
+                    }
                 }
                 else
                 {
@@ -66,6 +85,14 @@ namespace Clinica_Frba.NewFolder10
             else
             {
                 btnLogin.Enabled = true;
+            }
+        }
+
+        private void LoginWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason.Equals(CloseReason.UserClosing)) 
+            {
+                Application.Exit();
             }
         }
     }
