@@ -40,14 +40,5 @@ namespace Clinica_Frba.Login
             new FuncionalidadesWindow(comboBox1.Text).Show();
             this.Close();
         }
-
-        private void RolesWindow_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            if (e.CloseReason == CloseReason.UserClosing)
-            {
-                MessageBox.Show("sad");
-                Application.Exit();
-            }
-        }
     }
 }

@@ -87,13 +87,5 @@ namespace Clinica_Frba.NewFolder10
                 btnLogin.Enabled = true;
             }
         }
-
-        private void LoginWindow_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (e.CloseReason.Equals(CloseReason.UserClosing)) 
-            {
-                Application.Exit();
-            }
-        }
     }
 }

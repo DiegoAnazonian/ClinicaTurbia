@@ -60,7 +60,6 @@
             this.Controls.Add(this.comboBox1);
             this.Name = "RolesWindow";
             this.Text = "Seleccione su rol";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.RolesWindow_FormClosed);
             this.ResumeLayout(false);
 
         }

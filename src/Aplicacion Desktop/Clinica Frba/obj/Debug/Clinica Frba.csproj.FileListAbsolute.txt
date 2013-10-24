@@ -9,3 +9,5 @@ C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Deskt
 C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica Frba.pdb
 C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Login.RolesWindow.resources
 C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Login.FuncionalidadesWindow.resources
+C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.NewFolder1.Form1.resources
+C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Abm_de_Rol.AltaRolWindow.resources

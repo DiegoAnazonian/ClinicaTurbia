@@ -37,7 +37,6 @@
             this.ClientSize = new System.Drawing.Size(262, 262);
             this.Name = "FuncionalidadesWindow";
             this.Text = "Clinica - FRBA";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FuncionalidadesWindow_FormClosed);
             this.ResumeLayout(false);
 
         }

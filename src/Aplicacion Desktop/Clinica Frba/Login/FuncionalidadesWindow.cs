@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using Clinica_Frba.Abm_de_Rol;
 
 namespace Clinica_Frba.Login
 {
@@ -34,17 +35,14 @@ namespace Clinica_Frba.Login
                         SizeF size = this.CreateGraphics().MeasureString(nombreFunc, btn.Font);
                         btn.Width = (int) size.Width;
                         this.Controls.Add(btn);
+                        btn.Click += (sender, args) =>
+                        {
+                            new Abm_de_Rol.AltaRolWindow().Show();
+                            this.Close();
+                        };
 //                        break;
 //                }
                 topOffset += 10;
-            }
-        }
-
-        private void FuncionalidadesWindow_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            if (e.CloseReason.Equals(CloseReason.UserClosing))
-            {
-                Application.Exit();
             }
         }
     }

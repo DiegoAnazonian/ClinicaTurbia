@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Clinica_Frba.Abm_de_Rol;
 
 namespace Clinica_Frba.NewFolder1
 {
@@ -14,6 +15,12 @@ namespace Clinica_Frba.NewFolder1
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void btnAlta_Click(object sender, EventArgs e)
+        {
+            new AltaRolWindow().Show();
+            this.Close();
         }
     }
 }
