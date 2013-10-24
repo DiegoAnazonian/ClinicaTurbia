@@ -29,10 +29,11 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textNombreRol = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.listFuncionalidades = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.radioHabilitado = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // label1
@@ -44,12 +45,12 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Nombre del Rol";
             // 
-            // textBox1
+            // textNombreRol
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 25);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(209, 20);
-            this.textBox1.TabIndex = 1;
+            this.textNombreRol.Location = new System.Drawing.Point(12, 25);
+            this.textNombreRol.Name = "textNombreRol";
+            this.textNombreRol.Size = new System.Drawing.Size(209, 20);
+            this.textNombreRol.TabIndex = 1;
             // 
             // label2
             // 
@@ -60,18 +61,18 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Funcionalidad disponibles";
             // 
-            // listBox1
+            // listFuncionalidades
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(12, 76);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-            this.listBox1.Size = new System.Drawing.Size(209, 121);
-            this.listBox1.TabIndex = 3;
+            this.listFuncionalidades.FormattingEnabled = true;
+            this.listFuncionalidades.Location = new System.Drawing.Point(12, 76);
+            this.listFuncionalidades.Name = "listFuncionalidades";
+            this.listFuncionalidades.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.listFuncionalidades.Size = new System.Drawing.Size(209, 121);
+            this.listFuncionalidades.TabIndex = 3;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(177, 223);
+            this.button1.Location = new System.Drawing.Point(177, 253);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(95, 27);
             this.button1.TabIndex = 4;
@@ -79,15 +80,28 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // radioHabilitado
+            // 
+            this.radioHabilitado.AutoSize = true;
+            this.radioHabilitado.Checked = true;
+            this.radioHabilitado.Location = new System.Drawing.Point(15, 212);
+            this.radioHabilitado.Name = "radioHabilitado";
+            this.radioHabilitado.Size = new System.Drawing.Size(72, 17);
+            this.radioHabilitado.TabIndex = 6;
+            this.radioHabilitado.TabStop = true;
+            this.radioHabilitado.Text = "Habilitado";
+            this.radioHabilitado.UseVisualStyleBackColor = true;
+            // 
             // AltaRolWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(284, 292);
+            this.Controls.Add(this.radioHabilitado);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.listFuncionalidades);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textNombreRol);
             this.Controls.Add(this.label1);
             this.Name = "AltaRolWindow";
             this.Text = "AltaRolWindow";
@@ -99,9 +113,10 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textNombreRol;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox listFuncionalidades;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.RadioButton radioHabilitado;
     }
 }

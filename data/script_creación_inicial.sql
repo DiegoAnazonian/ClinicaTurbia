@@ -66,6 +66,14 @@ IF OBJECT_ID('ClinicaTurbia.LISTADO_FUNCIONALIDADES', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.LISTADO_FUNCIONALIDADES
 GO
 
+IF OBJECT_ID('ClinicaTurbia.NUEVO_ROL', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.NUEVO_ROL
+GO
+
+IF OBJECT_ID('ClinicaTurbia.MODIFICAR_ROL', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.MODIFICAR_ROL
+GO
+
 IF OBJECT_ID('ClinicaTurbia.CREARTABLAS', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.CREARTABLAS
 GO
@@ -93,7 +101,8 @@ CREATE PROCEDURE ClinicaTurbia.CREARTABLAS AS
 ----ROL----
 CREATE TABLE ClinicaTurbia.Rol(
 	ROL_ID [int] PRIMARY KEY IDENTITY(1, 1) NOT NULL,
-	ROL_NOMBRE [nvarchar] (255) NOT NULL
+	ROL_NOMBRE [nvarchar] (255) NOT NULL,
+	ROL_HABILITADO [bit] NOT NULL
 );
 
 ----FUNCIONALIDAD----
@@ -169,11 +178,11 @@ GO
 --------------------------------------------------------
 CREATE PROCEDURE ClinicaTurbia.MIGRACION AS
 
-INSERT INTO ClinicaTurbia.Rol(ROL_NOMBRE) VALUES
-	('Administrativo'), ('Afiliado'), ('Profesional');
+INSERT INTO ClinicaTurbia.Rol(ROL_NOMBRE, ROL_HABILITADO) VALUES
+	('Administrativo', 1), ('Afiliado', 1), ('Profesional', 1);
 	
 INSERT INTO ClinicaTurbia.Funcionalidad(FUN_NOMBRE) VALUES
-	('Funcionalidad 1'), ('Funcionalidad 2'), ('Funcionalidad 3');
+	('Funcionalidad1'), ('Funcionalidad2'), ('Funcionalidad3');
 
 INSERT INTO ClinicaTurbia.Rol_Funcionalidad(ROL_ID, FUN_ID) VALUES
 	(1,1), (2,2), (3,3);
@@ -244,6 +253,27 @@ GO
 
 CREATE PROCEDURE ClinicaTurbia.LISTADO_FUNCIONALIDADES AS
 	SELECT FUN_NOMBRE FROM ClinicaTurbia.Funcionalidad
+GO
+
+CREATE PROCEDURE ClinicaTurbia.NUEVO_ROL
+	(@nombre nvarchar(255), @habilitado bit) AS
+	INSERT INTO ClinicaTurbia.Rol(ROL_NOMBRE, ROL_HABILITADO) OUTPUT Inserted.ROL_ID VALUES (@nombre, @habilitado)
+GO
+
+CREATE PROCEDURE ClinicaTurbia.MODIFICAR_ROL
+	(@idRol nvarchar(255),@nombreFunc nvarchar(255), @agregar bit) AS
+	BEGIN
+	DECLARE @IdFunc int;
+	SELECT @IdFunc = FUN_ID FROM ClinicaTurbia.Funcionalidad WHERE FUN_NOMBRE = @nombreFunc;
+	IF @agregar = 1
+		BEGIN
+		INSERT INTO ClinicaTurbia.Rol_Funcionalidad(ROL_ID, FUN_ID) VALUES (@idRol, @IdFunc);
+		END
+	ELSE
+		BEGIN
+		DELETE FROM ClinicaTurbia.Rol_Funcionalidad WHERE ROL_ID = @idRol AND FUN_ID = @IdFunc;
+		END
+	END	
 GO
 
 
