@@ -53,13 +53,16 @@
             // 
             // RolesWindow
             // 
+            this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 191);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.comboBox1);
             this.Name = "RolesWindow";
+            this.ShowInTaskbar = false;
             this.Text = "Seleccione su rol";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RolesWindow_FormClosing);
             this.ResumeLayout(false);
 
         }

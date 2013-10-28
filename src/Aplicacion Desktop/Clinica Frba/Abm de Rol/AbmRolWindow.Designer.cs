@@ -1,6 +1,6 @@
-﻿namespace Clinica_Frba.NewFolder1
+﻿namespace Clinica_Frba.Abm_de_Rol
 {
-    partial class Form1
+    partial class AbmRolWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -28,69 +28,83 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnAlta = new System.Windows.Forms.Button();
-            this.btnBaja = new System.Windows.Forms.Button();
-            this.btnModificacion = new System.Windows.Forms.Button();
-            this.btnListado = new System.Windows.Forms.Button();
+            this.dataGridRoles = new System.Windows.Forms.DataGridView();
+            this.nombreRol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnsEliminar = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.btnsModificar = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.btnNuevoRol = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridRoles)).BeginInit();
             this.SuspendLayout();
             // 
-            // btnAlta
+            // dataGridRoles
             // 
-            this.btnAlta.Location = new System.Drawing.Point(42, 29);
-            this.btnAlta.Name = "btnAlta";
-            this.btnAlta.Size = new System.Drawing.Size(106, 35);
-            this.btnAlta.TabIndex = 0;
-            this.btnAlta.Text = "Alta";
-            this.btnAlta.UseVisualStyleBackColor = true;
-            this.btnAlta.Click += new System.EventHandler(this.btnAlta_Click);
+            this.dataGridRoles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridRoles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.nombreRol,
+            this.btnsEliminar,
+            this.btnsModificar});
+            this.dataGridRoles.Location = new System.Drawing.Point(12, 12);
+            this.dataGridRoles.Name = "dataGridRoles";
+            this.dataGridRoles.Size = new System.Drawing.Size(593, 197);
+            this.dataGridRoles.TabIndex = 0;
+            this.dataGridRoles.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
-            // btnBaja
+            // nombreRol
             // 
-            this.btnBaja.Location = new System.Drawing.Point(42, 70);
-            this.btnBaja.Name = "btnBaja";
-            this.btnBaja.Size = new System.Drawing.Size(106, 35);
-            this.btnBaja.TabIndex = 1;
-            this.btnBaja.Text = "Baja";
-            this.btnBaja.UseVisualStyleBackColor = true;
+            this.nombreRol.HeaderText = "Nombre";
+            this.nombreRol.Name = "nombreRol";
+            this.nombreRol.ReadOnly = true;
+            this.nombreRol.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.nombreRol.Width = 350;
             // 
-            // btnModificacion
+            // btnsEliminar
             // 
-            this.btnModificacion.Location = new System.Drawing.Point(42, 111);
-            this.btnModificacion.Name = "btnModificacion";
-            this.btnModificacion.Size = new System.Drawing.Size(106, 35);
-            this.btnModificacion.TabIndex = 2;
-            this.btnModificacion.Text = "Modificacion";
-            this.btnModificacion.UseVisualStyleBackColor = true;
+            this.btnsEliminar.HeaderText = "Eliminar";
+            this.btnsEliminar.Name = "btnsEliminar";
+            this.btnsEliminar.ReadOnly = true;
+            this.btnsEliminar.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.btnsEliminar.Text = "Eliminar";
+            this.btnsEliminar.UseColumnTextForButtonValue = true;
             // 
-            // btnListado
+            // btnsModificar
             // 
-            this.btnListado.Location = new System.Drawing.Point(43, 152);
-            this.btnListado.Name = "btnListado";
-            this.btnListado.Size = new System.Drawing.Size(105, 35);
-            this.btnListado.TabIndex = 3;
-            this.btnListado.Text = "Listado";
-            this.btnListado.UseVisualStyleBackColor = true;
+            this.btnsModificar.HeaderText = "Modificar";
+            this.btnsModificar.Name = "btnsModificar";
+            this.btnsModificar.ReadOnly = true;
+            this.btnsModificar.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.btnsModificar.Text = "Modificar";
+            this.btnsModificar.UseColumnTextForButtonValue = true;
             // 
-            // Form1
+            // btnNuevoRol
+            // 
+            this.btnNuevoRol.Location = new System.Drawing.Point(462, 234);
+            this.btnNuevoRol.Name = "btnNuevoRol";
+            this.btnNuevoRol.Size = new System.Drawing.Size(143, 24);
+            this.btnNuevoRol.TabIndex = 2;
+            this.btnNuevoRol.Text = "Nuevo Rol";
+            this.btnNuevoRol.UseVisualStyleBackColor = true;
+            this.btnNuevoRol.Click += new System.EventHandler(this.btnNuevoRol_Click);
+            // 
+            // AbmRolWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(186, 262);
-            this.Controls.Add(this.btnListado);
-            this.Controls.Add(this.btnModificacion);
-            this.Controls.Add(this.btnBaja);
-            this.Controls.Add(this.btnAlta);
-            this.Name = "Form1";
-            this.Text = "ABM de Roles";
+            this.ClientSize = new System.Drawing.Size(617, 270);
+            this.Controls.Add(this.btnNuevoRol);
+            this.Controls.Add(this.dataGridRoles);
+            this.Name = "AbmRolWindow";
+            this.Text = "BajaRolWindow";
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridRoles)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button btnAlta;
-        private System.Windows.Forms.Button btnBaja;
-        private System.Windows.Forms.Button btnModificacion;
-        private System.Windows.Forms.Button btnListado;
+        private System.Windows.Forms.DataGridView dataGridRoles;
+        private System.Windows.Forms.Button btnNuevoRol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nombreRol;
+        private System.Windows.Forms.DataGridViewButtonColumn btnsEliminar;
+        private System.Windows.Forms.DataGridViewButtonColumn btnsModificar;
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Clinica_Frba.Abm_de_Rol
 {
-    partial class AltaRolWindow
+    partial class RolWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -33,7 +33,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.listFuncionalidades = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.radioHabilitado = new System.Windows.Forms.RadioButton();
+            this.checkBoxHabilitado = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -69,6 +69,7 @@
             this.listFuncionalidades.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.listFuncionalidades.Size = new System.Drawing.Size(209, 121);
             this.listFuncionalidades.TabIndex = 3;
+            this.listFuncionalidades.SelectedIndexChanged += new System.EventHandler(this.listFuncionalidades_SelectedIndexChanged);
             // 
             // button1
             // 
@@ -80,30 +81,29 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // radioHabilitado
+            // checkBoxHabilitado
             // 
-            this.radioHabilitado.AutoSize = true;
-            this.radioHabilitado.Checked = true;
-            this.radioHabilitado.Location = new System.Drawing.Point(15, 212);
-            this.radioHabilitado.Name = "radioHabilitado";
-            this.radioHabilitado.Size = new System.Drawing.Size(72, 17);
-            this.radioHabilitado.TabIndex = 6;
-            this.radioHabilitado.TabStop = true;
-            this.radioHabilitado.Text = "Habilitado";
-            this.radioHabilitado.UseVisualStyleBackColor = true;
+            this.checkBoxHabilitado.AutoSize = true;
+            this.checkBoxHabilitado.Location = new System.Drawing.Point(15, 212);
+            this.checkBoxHabilitado.Name = "checkBoxHabilitado";
+            this.checkBoxHabilitado.Size = new System.Drawing.Size(73, 17);
+            this.checkBoxHabilitado.TabIndex = 5;
+            this.checkBoxHabilitado.Text = "Habilitado";
+            this.checkBoxHabilitado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxHabilitado.UseVisualStyleBackColor = true;
             // 
-            // AltaRolWindow
+            // RolWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 292);
-            this.Controls.Add(this.radioHabilitado);
+            this.Controls.Add(this.checkBoxHabilitado);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listFuncionalidades);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textNombreRol);
             this.Controls.Add(this.label1);
-            this.Name = "AltaRolWindow";
+            this.Name = "RolWindow";
             this.Text = "AltaRolWindow";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -117,6 +117,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListBox listFuncionalidades;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.RadioButton radioHabilitado;
+        private System.Windows.Forms.CheckBox checkBoxHabilitado;
     }
 }

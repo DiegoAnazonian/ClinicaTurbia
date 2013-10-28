@@ -12,6 +12,8 @@ namespace Clinica_Frba.Login
 {
     public partial class RolesWindow : Form
     {
+
+        public String rolSeleccionado { get; set; } 
         public RolesWindow(List<String> roles)
         {
             InitializeComponent();
@@ -37,8 +39,21 @@ namespace Clinica_Frba.Login
 
         private void button1_Click(object sender, EventArgs e)
         {
-            new FuncionalidadesWindow(comboBox1.Text).Show();
             this.Close();
+        }
+
+        private void RolesWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            String rol = this.comboBox1.Text;
+            if ("".Equals(rol))
+            {
+                MessageBox.Show("Seleccione un rol antes de cerrar esta ventana");
+                e.Cancel = true;
+            }
+            else
+            {
+                rolSeleccionado = rol;
+            }
         }
     }
 }
