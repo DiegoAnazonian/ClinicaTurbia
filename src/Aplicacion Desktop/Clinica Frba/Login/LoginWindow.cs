@@ -77,7 +77,7 @@ namespace Clinica_Frba.NewFolder10
             btnLogout.Width = 100;
             btnLogout.Click += (otroSender, args) =>
             {
-                //LOGOUT();
+                logout();
             };
             this.Controls.Add(btnLogout);
         }
@@ -137,6 +137,16 @@ namespace Clinica_Frba.NewFolder10
                 this.Controls.Add(btn);
                 topOffset += 30;
             }
+        }
+
+        private void logout()
+        {
+            Panel panelLogin = this.panelLogin;
+            this.Controls.Clear();
+            this.Controls.Add(panelLogin);
+            txtUsuario.Clear();
+            txtPassword.Clear();
+            this.Controls[0].Show();
         }
     }
 }
