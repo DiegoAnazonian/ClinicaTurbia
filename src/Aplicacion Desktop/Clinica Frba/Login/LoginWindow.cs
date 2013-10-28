@@ -17,11 +17,10 @@ namespace Clinica_Frba.NewFolder10
             this.ActiveControl = txtUsuario;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnLogin_Click(object sender, EventArgs e)
         {
             btnLogin.Enabled = false;
-            List<SqlParameter> checkUsuarioParam = new List<SqlParameter>();
-            checkUsuarioParam.Add(new SqlParameter("usuario", txtUsuario.Text));
+            List<SqlParameter> checkUsuarioParam = Database.GenerarListaParametros("usuario", txtUsuario.Text);
             DataTable tablaUsuario = Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[CONSULTA_LOGIN]", checkUsuarioParam);
             if (tablaUsuario == null)
             {
@@ -39,73 +38,18 @@ namespace Clinica_Frba.NewFolder10
                     btnLogin.Enabled = true;
                     return;
                 }
-                if (reg["USUARIO_PASSWORD"].ToString().Equals(txtPassword.Text))
-                {
-                    this.Text = "Clinica Turbia";
-                    panelLogin.Hide();
-                    Button btnLogout = new Button();
-                    btnLogout.Text = "Logout";
-                    btnLogout.Top = 10;
-                    btnLogout.Left = 525;
-                    btnLogout.Width = 100;
-                    btnLogout.Click += (ssender, args) =>
-                    {
-                        //LOGOUT();
-                    };
-                    this.Controls.Add(btnLogout);
-                    List<SqlParameter> checkRolesParam = new List<SqlParameter>();
-                    checkRolesParam.Add(new SqlParameter("usuario", txtUsuario.Text));
-                    DataTable tablaRoles = Database.GetInstance.ExecuteQuery(
-                        "[ClinicaTurbia].[CONSULTA_ROLES]", checkRolesParam);
-                    String rol;
-                    if (tablaRoles.Rows.Count > 1)
-                    {
-                        List<string> roles = new List<string>();
-                        foreach (DataRow row in tablaRoles.Rows)
-                        {
-                            roles.Add(row[0].ToString());
-                        }
-                        RolesWindow rolesForm = new RolesWindow(roles);
-                        rolesForm.ShowDialog();
-                        rol = rolesForm.rolSeleccionado;
-                    }
-                    else
-                    {
-                        rol = tablaRoles.Rows[0][0].ToString();
-                    }
-                    List<SqlParameter> checkFuncionalidades = new List<SqlParameter>();
-                    checkFuncionalidades.Add(new SqlParameter("rol", rol));
-                    DataTable tablaFuncs = Database.GetInstance
-                        .ExecuteQuery("[ClinicaTurbia].[CONSULTA_FUNCIONALIDADES]", checkFuncionalidades);
-                    int leftOffset = 30;
-                    int topOffset = 60;
-                    foreach (DataRow row in tablaFuncs.Rows)
-                    {
-                        String nombreFunc = row[0].ToString();
-                        //                switch (nombreFunc)
-                        //                {
-                        //                    case "ASD":
-                        Button btn = new Button();
-                        btn.Text = nombreFunc;
-                        btn.Top = topOffset;
-                        btn.Left = leftOffset;
-                        btn.Width = (int) this.CreateGraphics().MeasureString(nombreFunc, btn.Font).Width;
-                        this.Controls.Add(btn);
-                        btn.Click += (ssender, args) =>
-                        {
-                            new AbmRolWindow().ShowDialog();
-                        };
-                        //                        break;
-                        //                }
-                        topOffset += 30;
-                    }
-                }
-                else
+                if (!reg["USUARIO_PASSWORD"].ToString().Equals(txtPassword.Text))
                 {
                     MessageBox.Show("Password incorrecta.\n", "Error de login",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     btnLogin.Enabled = true;
                     return;
+                }
+                else
+                {
+                    String rol = obtenerRolDelUsuario();
+                    ocultarLoginYMostrarLogout(rol);
+                    obtenerYMostrarFuncionesDeUnRol(rol);                    
                 }
             }
         }
@@ -119,6 +63,79 @@ namespace Clinica_Frba.NewFolder10
             else
             {
                 btnLogin.Enabled = true;
+            }
+        }
+
+        private void ocultarLoginYMostrarLogout(String nombreRol)
+        {
+            this.Text = "Clinica Turbia - " + nombreRol;
+            panelLogin.Hide();
+            Button btnLogout = new Button();
+            btnLogout.Text = "Logout";
+            btnLogout.Top = 10;
+            btnLogout.Left = 525;
+            btnLogout.Width = 100;
+            btnLogout.Click += (otroSender, args) =>
+            {
+                //LOGOUT();
+            };
+            this.Controls.Add(btnLogout);
+        }
+
+        /**
+         * Retorna el nombre del rol seleccionado por el usuario.
+         */
+        private String obtenerRolDelUsuario()
+        {
+            List<SqlParameter> checkRolesParam = Database.GenerarListaParametros("usuario", txtUsuario.Text);
+            DataTable tablaRoles = Database.GetInstance.ExecuteQuery(
+                "[ClinicaTurbia].[CONSULTA_ROLES]", checkRolesParam);
+            String rol;
+            if (tablaRoles.Rows.Count > 1)
+            {
+                List<string> roles = new List<string>();
+                foreach (DataRow row in tablaRoles.Rows)
+                {
+                    roles.Add(row[0].ToString());
+                }
+                RolesWindow rolesForm = new RolesWindow(roles);
+                rolesForm.ShowDialog();
+                rol = rolesForm.rolSeleccionado;
+            }
+            else
+            {
+                rol = tablaRoles.Rows[0][0].ToString();
+            }
+            return rol;
+        }
+
+        private void obtenerYMostrarFuncionesDeUnRol(String rol)
+        {
+            List<SqlParameter> checkFuncionalidades = Database.GenerarListaParametros("rol", rol);
+            DataTable tablaFuncs = Database.GetInstance
+                .ExecuteQuery("[ClinicaTurbia].[CONSULTA_FUNCIONALIDADES]", checkFuncionalidades);
+            int leftOffset = 30;
+            int topOffset = 60;
+            foreach (DataRow row in tablaFuncs.Rows)
+            {
+                String nombreFunc = row[0].ToString();
+                Button btn = new Button();
+                btn.Text = nombreFunc;
+                btn.Top = topOffset;
+                btn.Left = leftOffset;
+                int nombreFuncWidth = (int)this.CreateGraphics().MeasureString(nombreFunc, btn.Font).Width;
+                btn.Width = nombreFuncWidth + 15;
+                switch (nombreFunc)
+                {
+                    case "ABM de Roles":
+                        btn.Click += (ssender, args) =>
+                        {
+                            new AbmRolWindow().ShowDialog();
+                        };
+                        break;
+                }
+                this.Controls.Add(btn);
+                topOffset += 30;
             }
         }
     }

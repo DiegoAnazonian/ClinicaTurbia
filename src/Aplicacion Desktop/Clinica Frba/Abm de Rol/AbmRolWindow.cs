@@ -19,31 +19,29 @@ namespace Clinica_Frba.Abm_de_Rol
             refrescarDatagrid();        
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridRoles_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.ColumnIndex == 0)
+            {
+                return;
+            }
             int columnIndex = e.ColumnIndex;
             int rowIndex = e.RowIndex;
             String nombreRol = dataGridRoles.Rows.SharedRow(rowIndex).Cells[0].Value.ToString();
             if (e.ColumnIndex == 2)
             {
-                Rol_Id_Habilitado idHab = (Rol_Id_Habilitado)dataGridRoles.Rows.SharedRow(rowIndex).Tag;
-                List<SqlParameter> checkFuncionalidades = new List<SqlParameter>();
-                checkFuncionalidades.Add(new SqlParameter("rol", nombreRol));
-                DataTable tablaFuncsRol = Database.GetInstance
-                    .ExecuteQuery("[ClinicaTurbia].[CONSULTA_FUNCIONALIDADES]", checkFuncionalidades);
-                List<String> funcsRol = new List<String>();
-                foreach(DataRow row in tablaFuncsRol.Rows)
-                {
-                    funcsRol.Add(row[0].ToString());
-                }
-                new RolWindow(nombreRol, funcsRol, idHab.habilitado, idHab.id).ShowDialog();
+                modificarRol(nombreRol, rowIndex);
+            }
+            else if (e.ColumnIndex == 1)
+            {
+                //ELIMINAR ROL
             }
             refrescarDatagrid();
         }
 
         private void btnNuevoRol_Click(object sender, EventArgs e)
         {
-            new RolWindow().ShowDialog();
+            new DetallesRolWindow().ShowDialog();
             refrescarDatagrid();
         }
 
@@ -51,7 +49,7 @@ namespace Clinica_Frba.Abm_de_Rol
         {
             dataGridRoles.Rows.Clear();
             DataTable tablaUsuario = Database.GetInstance.ExecuteQuery(
-                "[ClinicaTurbia].[LISTADO_ROLES]", new List<SqlParameter>());
+                "[ClinicaTurbia].[LISTADO_ROLES]", Database.GenerarListaParametros());
             foreach (DataRow datarow in tablaUsuario.Rows)
             {
                 DataGridViewRow tempRow = new DataGridViewRow();
@@ -61,6 +59,25 @@ namespace Clinica_Frba.Abm_de_Rol
                 tempRow.Cells.Add(cellRolName);
                 dataGridRoles.Rows.Add(tempRow);
             }
+        }
+
+        private void modificarRol(String nombreRol, int rowIndex)
+        {
+            Rol_Id_Habilitado idHab = (Rol_Id_Habilitado) dataGridRoles.Rows.SharedRow(rowIndex).Tag;
+            List<SqlParameter> checkFuncionalidades = Database.GenerarListaParametros("rol", nombreRol);
+            DataTable tablaFuncsRol = Database.GetInstance
+                .ExecuteQuery("[ClinicaTurbia].[CONSULTA_FUNCIONALIDADES]", checkFuncionalidades);
+            if (tablaFuncsRol == null)
+            {
+                MessageBox.Show("La tabla era null");
+                return;
+            }
+            List<String> funcsRol = new List<String>();
+            foreach (DataRow row in tablaFuncsRol.Rows)
+            {
+                funcsRol.Add(row[0].ToString());
+            }
+            new DetallesRolWindow(nombreRol, funcsRol, idHab.habilitado, idHab.id).ShowDialog();
         }
     }
 }

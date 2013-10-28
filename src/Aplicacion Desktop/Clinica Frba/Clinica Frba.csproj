@@ -64,11 +64,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abm de Rol\RolWindow.cs">
+    <Compile Include="Abm de Rol\DetallesRolWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Abm de Rol\RolWindow.Designer.cs">
-      <DependentUpon>RolWindow.cs</DependentUpon>
+    <Compile Include="Abm de Rol\DetallesRolWindow.Designer.cs">
+      <DependentUpon>DetallesRolWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm de Rol\AbmRolWindow.cs">
       <SubType>Form</SubType>
@@ -171,8 +171,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Abm de Rol\RolWindow.resx">
-      <DependentUpon>RolWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Abm de Rol\DetallesRolWindow.resx">
+      <DependentUpon>DetallesRolWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm de Rol\AbmRolWindow.resx">
       <DependentUpon>AbmRolWindow.cs</DependentUpon>

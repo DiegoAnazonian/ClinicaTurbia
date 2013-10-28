@@ -1,6 +1,6 @@
 ﻿namespace Clinica_Frba.Abm_de_Rol
 {
-    partial class RolWindow
+    partial class DetallesRolWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -32,7 +32,7 @@
             this.textNombreRol = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.listFuncionalidades = new System.Windows.Forms.ListBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnAceptar = new System.Windows.Forms.Button();
             this.checkBoxHabilitado = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
@@ -71,15 +71,15 @@
             this.listFuncionalidades.TabIndex = 3;
             this.listFuncionalidades.SelectedIndexChanged += new System.EventHandler(this.listFuncionalidades_SelectedIndexChanged);
             // 
-            // button1
+            // btnAceptar
             // 
-            this.button1.Location = new System.Drawing.Point(177, 253);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(95, 27);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Aceptar";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnAceptar.Location = new System.Drawing.Point(177, 253);
+            this.btnAceptar.Name = "btnAceptar";
+            this.btnAceptar.Size = new System.Drawing.Size(95, 27);
+            this.btnAceptar.TabIndex = 4;
+            this.btnAceptar.Text = "Aceptar";
+            this.btnAceptar.UseVisualStyleBackColor = true;
+            this.btnAceptar.Click += new System.EventHandler(this.btnAceptar_Click);
             // 
             // checkBoxHabilitado
             // 
@@ -92,18 +92,18 @@
             this.checkBoxHabilitado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxHabilitado.UseVisualStyleBackColor = true;
             // 
-            // RolWindow
+            // DetallesRolWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 292);
             this.Controls.Add(this.checkBoxHabilitado);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnAceptar);
             this.Controls.Add(this.listFuncionalidades);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textNombreRol);
             this.Controls.Add(this.label1);
-            this.Name = "RolWindow";
+            this.Name = "DetallesRolWindow";
             this.Text = "AltaRolWindow";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -116,7 +116,7 @@
         private System.Windows.Forms.TextBox textNombreRol;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListBox listFuncionalidades;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnAceptar;
         private System.Windows.Forms.CheckBox checkBoxHabilitado;
     }
 }

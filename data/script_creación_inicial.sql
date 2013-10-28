@@ -190,10 +190,10 @@ INSERT INTO ClinicaTurbia.Rol(ROL_NOMBRE, ROL_HABILITADO) VALUES
 	('Administrativo', 1), ('Afiliado', 1), ('Profesional', 1);
 	
 INSERT INTO ClinicaTurbia.Funcionalidad(FUN_NOMBRE) VALUES
-	('Funcionalidad1'), ('Funcionalidad2'), ('Funcionalidad3');
+	('ABM de Roles'), ('Funcionalidad2'), ('Funcionalidad3'), ('Funcionalidad4'), ('Funcionalidad5');
 
 INSERT INTO ClinicaTurbia.Rol_Funcionalidad(ROL_ID, FUN_ID) VALUES
-	(1,1), (2,2), (3,3);
+	(1,1), (2,1), (3,1), (2,5), (3,4), (1,3), (1,2), (2,2), (3,3);
 
 INSERT INTO ClinicaTurbia.TipoDocumento(TIDOC_DESCRIPCION) VALUES
 	('Documento Nacional de Identidad'), ('Cédula de Identidad'),
@@ -260,7 +260,7 @@ CREATE PROCEDURE ClinicaTurbia.CONSULTA_FUNCIONALIDADES
 GO
 
 CREATE PROCEDURE ClinicaTurbia.LISTADO_FUNCIONALIDADES AS
-	SELECT FUN_NOMBRE FROM ClinicaTurbia.Funcionalidad
+	SELECT * FROM ClinicaTurbia.Funcionalidad
 GO
 
 CREATE PROCEDURE ClinicaTurbia.LISTADO_ROLES AS
@@ -279,17 +279,15 @@ CREATE PROCEDURE ClinicaTurbia.MODIFICAR_ROL
 GO
 
 CREATE PROCEDURE ClinicaTurbia.MODIFICAR_FUNCIONES_ROL
-	(@idRol nvarchar(255),@nombreFunc nvarchar(255), @agregar bit) AS
+	(@idRol int,@idFunc int, @agregar bit) AS
 	BEGIN
-	DECLARE @IdFunc int;
-	SELECT @IdFunc = FUN_ID FROM ClinicaTurbia.Funcionalidad WHERE FUN_NOMBRE = @nombreFunc;
 	IF @agregar = 1
 		BEGIN
-		INSERT INTO ClinicaTurbia.Rol_Funcionalidad(ROL_ID, FUN_ID) VALUES (@idRol, @IdFunc);
+		INSERT INTO ClinicaTurbia.Rol_Funcionalidad(ROL_ID, FUN_ID) VALUES (@idRol, @idFunc);
 		END
 	ELSE
 		BEGIN
-		DELETE FROM ClinicaTurbia.Rol_Funcionalidad WHERE ROL_ID = @idRol AND FUN_ID = @IdFunc;
+		DELETE FROM ClinicaTurbia.Rol_Funcionalidad WHERE ROL_ID = @idRol AND FUN_ID = @idFunc;
 		END
 	END	
 GO

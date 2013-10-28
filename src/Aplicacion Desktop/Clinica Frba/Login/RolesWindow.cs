@@ -17,34 +17,34 @@ namespace Clinica_Frba.Login
         public RolesWindow(List<String> roles)
         {
             InitializeComponent();
-            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            button1.Enabled = false;
+            comboBoxRoles.DropDownStyle = ComboBoxStyle.DropDownList;
+            btnAceptar.Enabled = false;
             foreach (String rol in roles)
             {
-                comboBox1.Items.Add(rol);
+                comboBoxRoles.Items.Add(rol);
             }
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBoxRoles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox1.Text == "")
+            if (comboBoxRoles.Text == "")
             {
-                button1.Enabled = false;
+                btnAceptar.Enabled = false;
             }
             else
             {
-                button1.Enabled = true;
+                btnAceptar.Enabled = true;
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnAceptar_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
         private void RolesWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            String rol = this.comboBox1.Text;
+            String rol = this.comboBoxRoles.Text;
             if ("".Equals(rol))
             {
                 MessageBox.Show("Seleccione un rol antes de cerrar esta ventana");
