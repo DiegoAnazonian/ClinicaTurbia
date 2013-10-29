@@ -102,8 +102,13 @@ namespace Clinica_Frba
          * Recibe el nombre del parametro y luego el objeto, por cada parametro.
          * Ej: generarParamentros("uno", 1, "dos", 2, "tres", 3)
          */
-        public static List<SqlParameter> GenerarListaParametros(params object[] values)
+        public static List<SqlParameter> GenerarListaDeParametros(params object[] values)
         {
+            if (values.Length % 2 != 0)
+            {
+                throw new ArgumentException("La cantidad de argumentos no puede ser impar " +
+                    "ya que son pares clave-valor");
+            }
             List<SqlParameter> paramList = new List<SqlParameter>();
             for (int i = 0; i < values.Length; i ++)
             {
@@ -111,14 +116,7 @@ namespace Clinica_Frba
                 {
                     String nombreParam = values[i].ToString();
                     object paramValue = values[i + 1];
-                    if (paramValue != null)
-                    {
-                        paramList.Add(new SqlParameter(nombreParam, paramValue));
-                    }
-                    else
-                    {
-                        throw new ArgumentNullException("Valor del parametro " + nombreParam); 
-                    }
+                    paramList.Add(new SqlParameter(nombreParam, paramValue));
                 }
             }
             return paramList;

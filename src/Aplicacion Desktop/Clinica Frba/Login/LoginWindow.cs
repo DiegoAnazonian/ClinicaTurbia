@@ -21,7 +21,7 @@ namespace Clinica_Frba.NewFolder10
         private void btnLogin_Click(object sender, EventArgs e)
         {
             btnLogin.Enabled = false;
-            List<SqlParameter> checkUsuarioParam = Database.GenerarListaParametros("usuario", txtUsuario.Text);
+            List<SqlParameter> checkUsuarioParam = Database.GenerarListaDeParametros("usuario", txtUsuario.Text);
             DataTable tablaUsuario = Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[CONSULTA_LOGIN]", checkUsuarioParam);
             if (tablaUsuario == null)
             {
@@ -51,7 +51,7 @@ namespace Clinica_Frba.NewFolder10
                     if ((bool)reg["USUARIO_PRIMER_LOGIN"])
                     {
                         List<SqlParameter> afiliadoParam = 
-                            Database.GenerarListaParametros("dni", txtUsuario.Text);
+                            Database.GenerarListaDeParametros("dni", txtUsuario.Text);
                         DataTable tablaAfiliado = Database.GetInstance.ExecuteQuery
                             ("[ClinicaTurbia].[EXISTE_AFILIADO]", afiliadoParam);
                         if (tablaAfiliado.Rows.Count > 0)
@@ -106,7 +106,7 @@ namespace Clinica_Frba.NewFolder10
          */
         private String obtenerRolDelUsuario()
         {
-            List<SqlParameter> checkRolesParam = Database.GenerarListaParametros("usuario", txtUsuario.Text);
+            List<SqlParameter> checkRolesParam = Database.GenerarListaDeParametros("usuario", txtUsuario.Text);
             DataTable tablaRoles = Database.GetInstance.ExecuteQuery(
                 "[ClinicaTurbia].[CONSULTA_ROLES_POR_USUARIO]", checkRolesParam);
             String rol;
@@ -130,7 +130,7 @@ namespace Clinica_Frba.NewFolder10
 
         private void obtenerYMostrarFuncionesDeUnRol(String rol)
         {
-            List<SqlParameter> checkFuncionalidades = Database.GenerarListaParametros("rol", rol);
+            List<SqlParameter> checkFuncionalidades = Database.GenerarListaDeParametros("rol", rol);
             DataTable tablaFuncs = Database.GetInstance
                 .ExecuteQuery("[ClinicaTurbia].[CONSULTA_FUNCIONALIDADES_POR_ROL]", checkFuncionalidades);
             int leftOffset = 30;

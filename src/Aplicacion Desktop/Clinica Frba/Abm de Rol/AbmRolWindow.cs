@@ -49,7 +49,7 @@ namespace Clinica_Frba.Abm_de_Rol
         {
             dataGridRoles.Rows.Clear();
             DataTable tablaUsuario = Database.GetInstance.ExecuteQuery(
-                "[ClinicaTurbia].[LISTADO_ROLES]", Database.GenerarListaParametros());
+                "[ClinicaTurbia].[LISTADO_ROLES]", Database.GenerarListaDeParametros());
             foreach (DataRow datarow in tablaUsuario.Rows)
             {
                 DataGridViewRow tempRow = new DataGridViewRow();
@@ -64,7 +64,7 @@ namespace Clinica_Frba.Abm_de_Rol
         private void modificarRol(String nombreRol, int rowIndex)
         {
             Rol_Id_Habilitado idHab = (Rol_Id_Habilitado) dataGridRoles.Rows.SharedRow(rowIndex).Tag;
-            List<SqlParameter> checkFuncionalidades = Database.GenerarListaParametros("rol", nombreRol);
+            List<SqlParameter> checkFuncionalidades = Database.GenerarListaDeParametros("rol", nombreRol);
             DataTable tablaFuncsRol = Database.GetInstance
                 .ExecuteQuery("[ClinicaTurbia].[CONSULTA_FUNCIONALIDADES_POR_ROL]", checkFuncionalidades);
             List<String> funcsRol = new List<String>();

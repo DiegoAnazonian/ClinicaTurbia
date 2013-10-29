@@ -26,7 +26,7 @@ namespace Clinica_Frba.Abm_de_Rol
         {
             InitializeComponent();
             DataTable tablaUsuario = Database.GetInstance
-                .ExecuteQuery("[ClinicaTurbia].[LISTADO_FUNCIONALIDADES]", Database.GenerarListaParametros());
+                .ExecuteQuery("[ClinicaTurbia].[LISTADO_FUNCIONALIDADES]", Database.GenerarListaDeParametros());
             listFuncionalidades.DataSource = tablaUsuario;
             listFuncionalidades.DisplayMember = "FUN_NOMBRE";
             esNuevoRol = true;
@@ -45,7 +45,7 @@ namespace Clinica_Frba.Abm_de_Rol
             textNombreRol.Text = nombreRol;
             checkBoxHabilitado.Checked = hab;
             DataTable tablaUsuario = Database.GetInstance
-                .ExecuteQuery("[ClinicaTurbia].[LISTADO_FUNCIONALIDADES]", Database.GenerarListaParametros());
+                .ExecuteQuery("[ClinicaTurbia].[LISTADO_FUNCIONALIDADES]", Database.GenerarListaDeParametros());
             listFuncionalidades.DataSource = tablaUsuario;
             listFuncionalidades.DisplayMember = "FUN_NOMBRE";
             listFuncionalidades.SelectedItems.Clear();
@@ -99,7 +99,7 @@ namespace Clinica_Frba.Abm_de_Rol
 
         private void crearRol()
         {
-            List<SqlParameter> nuevoRolParams = Database.GenerarListaParametros(
+            List<SqlParameter> nuevoRolParams = Database.GenerarListaDeParametros(
                     "nombre", textNombreRol.Text, "habilitado", checkBoxHabilitado.Checked);
             DataTable tablaRol = Database.GetInstance
                 .ExecuteQuery("[ClinicaTurbia].[NUEVO_ROL]", nuevoRolParams);
@@ -112,7 +112,7 @@ namespace Clinica_Frba.Abm_de_Rol
 
         private void modificarNombreYHabilitado()
         {
-            List<SqlParameter> rolModificadoParam = Database.GenerarListaParametros(
+            List<SqlParameter> rolModificadoParam = Database.GenerarListaDeParametros(
                         "nombre", textNombreRol.Text, "habilitado", checkBoxHabilitado.Checked,
                         "id", this.idRol);
             DataTable tablaRol = Database.GetInstance
@@ -121,14 +121,14 @@ namespace Clinica_Frba.Abm_de_Rol
 
         private void quitarFuncionalidad(String idFunc)
         {
-            List<SqlParameter> funcionalidadRolParam = Database.GenerarListaParametros(
+            List<SqlParameter> funcionalidadRolParam = Database.GenerarListaDeParametros(
                                 "idRol", this.idRol, "idFunc", int.Parse(idFunc), "agregar", false);
             Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[MODIFICAR_FUNCIONES_ROL]", funcionalidadRolParam);
         }
 
         private void agregarFuncionalidad(String idFunc)
         {
-            List<SqlParameter> funcionalidadRolParam = Database.GenerarListaParametros(
+            List<SqlParameter> funcionalidadRolParam = Database.GenerarListaDeParametros(
                                 "idRol", this.idRol, "idFunc", int.Parse(idFunc), "agregar", true);
             Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[MODIFICAR_FUNCIONES_ROL]", funcionalidadRolParam);
         }

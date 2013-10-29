@@ -148,6 +148,7 @@
             // 
             // comboTipoDoc
             // 
+            this.comboTipoDoc.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboTipoDoc.FormattingEnabled = true;
             this.comboTipoDoc.Location = new System.Drawing.Point(119, 76);
             this.comboTipoDoc.Name = "comboTipoDoc";
@@ -192,6 +193,7 @@
             // 
             // comboSexo
             // 
+            this.comboSexo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboSexo.FormattingEnabled = true;
             this.comboSexo.Location = new System.Drawing.Point(119, 204);
             this.comboSexo.Name = "comboSexo";
@@ -209,6 +211,7 @@
             // 
             // comboEstadoCivil
             // 
+            this.comboEstadoCivil.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboEstadoCivil.FormattingEnabled = true;
             this.comboEstadoCivil.Location = new System.Drawing.Point(119, 231);
             this.comboEstadoCivil.Name = "comboEstadoCivil";
@@ -226,6 +229,7 @@
             // 
             // comboPlanMedico
             // 
+            this.comboPlanMedico.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboPlanMedico.FormattingEnabled = true;
             this.comboPlanMedico.Location = new System.Drawing.Point(119, 258);
             this.comboPlanMedico.Name = "comboPlanMedico";
@@ -256,6 +260,7 @@
             this.btnLimipiar.TabIndex = 12;
             this.btnLimipiar.Text = "Limpiar";
             this.btnLimipiar.UseVisualStyleBackColor = true;
+            this.btnLimipiar.Click += new System.EventHandler(this.btnLimipiar_Click);
             // 
             // btnGuardar
             // 
@@ -265,6 +270,7 @@
             this.btnGuardar.TabIndex = 12;
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.UseVisualStyleBackColor = true;
+            this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
             // lblMail
             // 

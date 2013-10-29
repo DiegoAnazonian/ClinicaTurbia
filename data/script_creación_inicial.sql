@@ -102,6 +102,10 @@ IF OBJECT_ID('ClinicaTurbia.EXISTE_AFILIADO', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.EXISTE_AFILIADO
 GO
 
+IF OBJECT_ID('ClinicaTurbia.MODIFICAR_AFILIADO', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.MODIFICAR_AFILIADO
+GO
+
 IF OBJECT_ID('ClinicaTurbia.CREARTABLAS', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.CREARTABLAS
 GO
@@ -353,6 +357,14 @@ CREATE PROCEDURE ClinicaTurbia.EXISTE_AFILIADO
 	WHERE PAC_DNI = @dni AND PAC_PLAN_MEDICO_CODIGO = PLAN_CODIGO
 GO
 
+CREATE PROCEDURE ClinicaTurbia.MODIFICAR_AFILIADO
+	(@tiDoc int = NULL, @dire nvarchar(255), @tel nvarchar(255), @mail nvarchar(255),
+	@sexo char = NULL, @estCivil int = NULL, @planMed int, @cantFam int, @numDoc nvarchar(255)) AS
+	UPDATE ClinicaTurbia.Paciente SET PAC_TIPO_DOCUMENTO=@tiDoc, PAC_SEXO=@sexo,
+		PAC_ESTADO_CIVIL=@estCivil, PAC_DIRECCION=@dire, PAC_TELEFONO=@tel,
+		PAC_MAIL=@mail, PAC_CANT_HIJOS=@cantFam, PAC_PLAN_MEDICO_CODIGO=@planMed
+		WHERE PAC_DNI=@numDoc;
+GO
 
 ------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------
