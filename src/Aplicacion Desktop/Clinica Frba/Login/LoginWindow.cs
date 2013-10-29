@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using Clinica_Frba.Login;
 using Clinica_Frba.Abm_de_Rol;
+using Clinica_Frba.NewFolder12;
 
 namespace Clinica_Frba.NewFolder10
 {
@@ -47,6 +48,24 @@ namespace Clinica_Frba.NewFolder10
                 }
                 else
                 {
+                    if ((bool)reg["USUARIO_PRIMER_LOGIN"])
+                    {
+                        List<SqlParameter> afiliadoParam = 
+                            Database.GenerarListaParametros("dni", txtUsuario.Text);
+                        DataTable tablaAfiliado = Database.GetInstance.ExecuteQuery
+                            ("[ClinicaTurbia].[EXISTE_AFILIADO]", afiliadoParam);
+                        if (tablaAfiliado.Rows.Count > 0)
+                        {
+                            //ES UN PACIENTE
+                            new AbmAfiliadoWindow(tablaAfiliado).ShowDialog();
+                        }
+                        else
+                        {
+                            //DataTable tablaMedico = Database.GetInstance.ExecuteQuery
+                            //("[ClinicaTurbia].[EXISTE_MEDICO]", afiliadoParam);
+                            MessageBox.Show("Es un medico");
+                        }
+                    }
                     String rol = obtenerRolDelUsuario();
                     ocultarLoginYMostrarLogout(rol);
                     obtenerYMostrarFuncionesDeUnRol(rol);                    
@@ -89,7 +108,7 @@ namespace Clinica_Frba.NewFolder10
         {
             List<SqlParameter> checkRolesParam = Database.GenerarListaParametros("usuario", txtUsuario.Text);
             DataTable tablaRoles = Database.GetInstance.ExecuteQuery(
-                "[ClinicaTurbia].[CONSULTA_ROLES]", checkRolesParam);
+                "[ClinicaTurbia].[CONSULTA_ROLES_POR_USUARIO]", checkRolesParam);
             String rol;
             if (tablaRoles.Rows.Count > 1)
             {
@@ -113,7 +132,7 @@ namespace Clinica_Frba.NewFolder10
         {
             List<SqlParameter> checkFuncionalidades = Database.GenerarListaParametros("rol", rol);
             DataTable tablaFuncs = Database.GetInstance
-                .ExecuteQuery("[ClinicaTurbia].[CONSULTA_FUNCIONALIDADES]", checkFuncionalidades);
+                .ExecuteQuery("[ClinicaTurbia].[CONSULTA_FUNCIONALIDADES_POR_ROL]", checkFuncionalidades);
             int leftOffset = 30;
             int topOffset = 60;
             foreach (DataRow row in tablaFuncs.Rows)

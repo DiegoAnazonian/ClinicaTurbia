@@ -8,5 +8,6 @@ C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Deskt
 C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica Frba.exe
 C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica Frba.pdb
 C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.Login.RolesWindow.resources
-C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.Abm_de_Rol.RolWindow.resources
 C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.Abm_de_Rol.AbmRolWindow.resources
+C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.NewFolder12.AbmAfiliadoWindow.resources
+C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.Abm_de_Rol.DetallesRolWindow.resources

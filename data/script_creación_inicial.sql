@@ -42,6 +42,10 @@ IF OBJECT_ID('ClinicaTurbia.Usuario', 'U') IS NOT NULL
 	DROP TABLE ClinicaTurbia.Usuario
 GO
 
+IF OBJECT_ID('ClinicaTurbia.PlanMedico', 'U') IS NOT NULL
+	DROP TABLE ClinicaTurbia.PlanMedico
+GO
+
 IF OBJECT_ID('ClinicaTurbia.Rol', 'U') IS NOT NULL
 	DROP TABLE ClinicaTurbia.Rol
 GO
@@ -54,12 +58,12 @@ IF OBJECT_ID('ClinicaTurbia.CONSULTA_LOGIN', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.CONSULTA_LOGIN
 GO
 
-IF OBJECT_ID('ClinicaTurbia.CONSULTA_ROLES', 'P') IS NOT NULL
-	DROP PROCEDURE ClinicaTurbia.CONSULTA_ROLES
+IF OBJECT_ID('ClinicaTurbia.CONSULTA_ROLES_POR_USUARIO', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.CONSULTA_ROLES_POR_USUARIO
 GO
 
-IF OBJECT_ID('ClinicaTurbia.CONSULTA_FUNCIONALIDADES', 'P') IS NOT NULL
-	DROP PROCEDURE ClinicaTurbia.CONSULTA_FUNCIONALIDADES
+IF OBJECT_ID('ClinicaTurbia.CONSULTA_FUNCIONALIDADES_POR_ROL', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.CONSULTA_FUNCIONALIDADES_POR_ROL
 GO
 
 IF OBJECT_ID('ClinicaTurbia.LISTADO_FUNCIONALIDADES', 'P') IS NOT NULL
@@ -68,6 +72,18 @@ GO
 
 IF OBJECT_ID('ClinicaTurbia.LISTADO_ROLES', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.LISTADO_ROLES
+GO
+
+IF OBJECT_ID('ClinicaTurbia.LISTADO_PLAN_MEDICO', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.LISTADO_PLAN_MEDICO
+GO
+
+IF OBJECT_ID('ClinicaTurbia.LISTADO_TIPO_DOCUMENTO', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.LISTADO_TIPO_DOCUMENTO
+GO
+
+IF OBJECT_ID('ClinicaTurbia.LISTADO_ESTADO_CIVIL', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.LISTADO_ESTADO_CIVIL
 GO
 
 IF OBJECT_ID('ClinicaTurbia.NUEVO_ROL', 'P') IS NOT NULL
@@ -80,6 +96,10 @@ GO
 
 IF OBJECT_ID('ClinicaTurbia.MODIFICAR_FUNCIONES_ROL', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.MODIFICAR_FUNCIONES_ROL
+GO
+
+IF OBJECT_ID('ClinicaTurbia.EXISTE_AFILIADO', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.EXISTE_AFILIADO
 GO
 
 IF OBJECT_ID('ClinicaTurbia.CREARTABLAS', 'P') IS NOT NULL
@@ -128,14 +148,22 @@ CREATE TABLE ClinicaTurbia.Rol_Funcionalidad(
 ----TIPO DOCUMENTO----
 CREATE TABLE ClinicaTurbia.TipoDocumento(
 	TIDOC_ID [int] PRIMARY KEY IDENTITY(1, 1) NOT NULL,
-	TIDOC_DESCRIPCION [nvarchar] (255) NOT NULL
+	TIDOC_NOMBRE [nvarchar] (255) NOT NULL
 );
 
 ----ESTADO CIVIL----
 CREATE TABLE ClinicaTurbia.EstadoCivil(
 	ECIVIL_ID [int] PRIMARY KEY IDENTITY(1, 1) NOT NULL,
-	ECIVIL_DESCRIPCION [nvarchar] (255) NOT NULL
+	ECIVIL_NOMBRE [nvarchar] (255) NOT NULL
 );
+
+----PLAN MEDICO----
+CREATE TABLE ClinicaTurbia.PlanMedico(
+	PLAN_CODIGO [int] NOT NULL PRIMARY KEY,
+	PLAN_DESCRIPCION [nvarchar] (255),
+	PLAN_PRECIO_BONO_CONSULTA [int] NOT NULL,
+	PLAN_PRECIO_BONO_FARMACIA [int] NOT NULL
+);	
 
 ----PACIENTE----
 CREATE TABLE ClinicaTurbia.Paciente(
@@ -150,7 +178,7 @@ CREATE TABLE ClinicaTurbia.Paciente(
 	PAC_TELEFONO [numeric](18, 0)  NOT NULL,
 	PAC_MAIL [nvarchar] (255) NOT NULL,
 	PAC_CANT_HIJOS [numeric] (2, 0),
-	PAC_PLAN_MEDICO [numeric] (10, 0),
+	PAC_PLAN_MEDICO_CODIGO [int] FOREIGN KEY REFERENCES ClinicaTurbia.PlanMedico(PLAN_CODIGO),
 	PAC_NUMERO_AFILIADO [numeric] (18, 0)
 );
 
@@ -169,7 +197,8 @@ CREATE TABLE ClinicaTurbia.Medico(
 CREATE TABLE ClinicaTurbia.Usuario(
 	USUARIO_NOMBRE [nvarchar] (255) NOT NULL PRIMARY KEY,
 	USUARIO_PASSWORD [nvarchar] (255) NOT NULL,
-	USUARIO_HABILITADO [bit] NOT NULL
+	USUARIO_HABILITADO [bit] NOT NULL,
+	USUARIO_PRIMER_LOGIN [bit] NOT NULL
 );
 
 ----USUARIO_ROL----
@@ -177,7 +206,6 @@ CREATE TABLE ClinicaTurbia.Usuario_Rol(
 	USUARIO_NOMBRE [nvarchar] (255) FOREIGN KEY REFERENCES ClinicaTurbia.Usuario(USUARIO_NOMBRE) NOT NULL,
 	ROL_ID [int] FOREIGN KEY REFERENCES ClinicaTurbia.Rol(ROL_ID) NOT NULL
 );
-	
 
 GO
 
@@ -195,15 +223,24 @@ INSERT INTO ClinicaTurbia.Funcionalidad(FUN_NOMBRE) VALUES
 INSERT INTO ClinicaTurbia.Rol_Funcionalidad(ROL_ID, FUN_ID) VALUES
 	(1,1), (2,1), (3,1), (2,5), (3,4), (1,3), (1,2), (2,2), (3,3);
 
-INSERT INTO ClinicaTurbia.TipoDocumento(TIDOC_DESCRIPCION) VALUES
+INSERT INTO ClinicaTurbia.TipoDocumento(TIDOC_NOMBRE) VALUES
 	('Documento Nacional de Identidad'), ('Cédula de Identidad'),
 	('Libreta de Enrolamiento'), ('Libreta Cívica');
 	
-INSERT INTO ClinicaTurbia.EstadoCivil(ECIVIL_DESCRIPCION) VALUES
-	('Soltero/a'), ('Casado/a'), ('Viudo'), ('Concubinato'), ('Divorciado/a');
+INSERT INTO ClinicaTurbia.EstadoCivil(ECIVIL_NOMBRE) VALUES
+	('Soltero/a'), ('Casado/a'), ('Viudo/a'), ('Concubinato'), ('Divorciado/a');
+
+INSERT INTO ClinicaTurbia.PlanMedico(PLAN_CODIGO, PLAN_DESCRIPCION,
+	PLAN_PRECIO_BONO_CONSULTA, PLAN_PRECIO_BONO_FARMACIA)
+SELECT DISTINCT
+	m.Plan_Med_Codigo,
+    m.Plan_Med_Descripcion,
+    m.Plan_Med_Precio_Bono_Consulta,
+    m.Plan_Med_Precio_Bono_Farmacia
+FROM gd_esquema.Maestra m;
 
 INSERT INTO ClinicaTurbia.Paciente(PAC_DNI, PAC_NOMBRE, PAC_APELLIDO, PAC_DIRECCION,
-	PAC_TELEFONO, PAC_MAIL, PAC_FECHA_NACIMIENTO)
+	PAC_TELEFONO, PAC_MAIL, PAC_FECHA_NACIMIENTO, PAC_PLAN_MEDICO_CODIGO)
 SELECT DISTINCT
 	m.Paciente_Dni,
 	m.Paciente_Nombre,
@@ -211,7 +248,8 @@ SELECT DISTINCT
 	m.Paciente_Direccion,
 	m.Paciente_Telefono,
 	m.Paciente_Mail,
-	m.Paciente_Fecha_Nac
+	m.Paciente_Fecha_Nac,
+	M.Plan_Med_Codigo
 FROM gd_esquema.Maestra m;
 
 INSERT INTO ClinicaTurbia.Medico(MED_DNI, MED_NOMBRE, MED_APELLIDO, MED_DIRECCION,
@@ -226,10 +264,13 @@ SELECT DISTINCT
 	m.Medico_Fecha_Nac
 FROM gd_esquema.Maestra m WHERE m.Medico_Dni IS NOT NULL;
 
-INSERT INTO ClinicaTurbia.Usuario(USUARIO_NOMBRE, USUARIO_PASSWORD, USUARIO_HABILITADO)
-	SELECT PAC_DNI, 1234, 1 FROM ClinicaTurbia.Paciente
+INSERT INTO ClinicaTurbia.Usuario(USUARIO_NOMBRE, USUARIO_PASSWORD, USUARIO_HABILITADO, USUARIO_PRIMER_LOGIN)
+	SELECT PAC_DNI, 1234, 1, 1 FROM ClinicaTurbia.Paciente
 	UNION
-	SELECT MED_DNI, 1234, 1 FROM ClinicaTurbia.Medico;
+	SELECT MED_DNI, 1234, 1, 1 FROM ClinicaTurbia.Medico;
+	
+INSERT INTO ClinicaTurbia.Usuario(USUARIO_NOMBRE, USUARIO_PASSWORD, USUARIO_HABILITADO, USUARIO_PRIMER_LOGIN)
+	VALUES ('admin', 'w23e', 1, 0);
 
 INSERT INTO ClinicaTurbia.Usuario_Rol(USUARIO_NOMBRE, ROL_ID)
 	SELECT PAC_DNI, 2 FROM ClinicaTurbia.Paciente
@@ -246,13 +287,13 @@ CREATE PROCEDURE ClinicaTurbia.CONSULTA_LOGIN
 	SELECT * FROM ClinicaTurbia.Usuario WHERE USUARIO_NOMBRE = @usuario 
 GO
 
-CREATE PROCEDURE ClinicaTurbia.CONSULTA_ROLES
+CREATE PROCEDURE ClinicaTurbia.CONSULTA_ROLES_POR_USUARIO
 	(@usuario nvarchar(255)) AS
 	SELECT R.ROL_NOMBRE FROM ClinicaTurbia.Rol R, ClinicaTurbia.Usuario_Rol UR
 	WHERE UR.USUARIO_NOMBRE = @usuario AND R.ROL_ID = UR.ROL_ID
 GO
 
-CREATE PROCEDURE ClinicaTurbia.CONSULTA_FUNCIONALIDADES
+CREATE PROCEDURE ClinicaTurbia.CONSULTA_FUNCIONALIDADES_POR_ROL
 	(@rol nvarchar(255)) AS
 	SELECT F.FUN_NOMBRE FROM ClinicaTurbia.Rol R, ClinicaTurbia.Rol_Funcionalidad RF,
 	ClinicaTurbia.Funcionalidad F WHERE 
@@ -265,6 +306,18 @@ GO
 
 CREATE PROCEDURE ClinicaTurbia.LISTADO_ROLES AS
 	SELECT * FROM ClinicaTurbia.Rol
+GO
+
+CREATE PROCEDURE ClinicaTurbia.LISTADO_PLAN_MEDICO AS
+	SELECT PLAN_CODIGO, PLAN_DESCRIPCION FROM ClinicaTurbia.PlanMedico
+GO
+
+CREATE PROCEDURE ClinicaTurbia.LISTADO_TIPO_DOCUMENTO AS
+	SELECT * FROM ClinicaTurbia.TipoDocumento
+GO
+
+CREATE PROCEDURE ClinicaTurbia.LISTADO_ESTADO_CIVIL AS
+	SELECT * FROM ClinicaTurbia.EstadoCivil
 GO
 
 CREATE PROCEDURE ClinicaTurbia.NUEVO_ROL
@@ -290,6 +343,14 @@ CREATE PROCEDURE ClinicaTurbia.MODIFICAR_FUNCIONES_ROL
 		DELETE FROM ClinicaTurbia.Rol_Funcionalidad WHERE ROL_ID = @idRol AND FUN_ID = @idFunc;
 		END
 	END	
+GO
+
+CREATE PROCEDURE ClinicaTurbia.EXISTE_AFILIADO 
+	(@dni nvarchar(255)) AS
+	SELECT PAC_NOMBRE, PAC_APELLIDO, PAC_TIPO_DOCUMENTO, PAC_DNI, PAC_SEXO, PAC_FECHA_NACIMIENTO, 
+		PAC_ESTADO_CIVIL, PAC_DIRECCION, PAC_TELEFONO, PAC_MAIL, PAC_CANT_HIJOS, PLAN_DESCRIPCION
+	FROM ClinicaTurbia.Paciente, ClinicaTurbia.PlanMedico
+	WHERE PAC_DNI = @dni AND PAC_PLAN_MEDICO_CODIGO = PLAN_CODIGO
 GO
 
 

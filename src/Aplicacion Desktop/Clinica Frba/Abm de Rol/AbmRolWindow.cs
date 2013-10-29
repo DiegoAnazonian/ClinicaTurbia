@@ -66,12 +66,7 @@ namespace Clinica_Frba.Abm_de_Rol
             Rol_Id_Habilitado idHab = (Rol_Id_Habilitado) dataGridRoles.Rows.SharedRow(rowIndex).Tag;
             List<SqlParameter> checkFuncionalidades = Database.GenerarListaParametros("rol", nombreRol);
             DataTable tablaFuncsRol = Database.GetInstance
-                .ExecuteQuery("[ClinicaTurbia].[CONSULTA_FUNCIONALIDADES]", checkFuncionalidades);
-            if (tablaFuncsRol == null)
-            {
-                MessageBox.Show("La tabla era null");
-                return;
-            }
+                .ExecuteQuery("[ClinicaTurbia].[CONSULTA_FUNCIONALIDADES_POR_ROL]", checkFuncionalidades);
             List<String> funcsRol = new List<String>();
             foreach (DataRow row in tablaFuncsRol.Rows)
             {
