@@ -49,7 +49,7 @@ namespace Clinica_Frba.Abm_de_Rol
         {
             dataGridRoles.Rows.Clear();
             DataTable tablaUsuario = Database.GetInstance.ExecuteQuery(
-                "[ClinicaTurbia].[LISTADO_ROLES]", Database.GenerarListaDeParametros());
+                "[ClinicaTurbia].[LISTADO_ROLES]");
             foreach (DataRow datarow in tablaUsuario.Rows)
             {
                 DataGridViewRow tempRow = new DataGridViewRow();

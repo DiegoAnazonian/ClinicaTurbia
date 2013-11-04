@@ -40,21 +40,21 @@ namespace Clinica_Frba.NewFolder12
             comboSexo.SelectedItem = null;
             //TIPO DOCUMENTO
             DataTable tablaTipoDoc = Database.GetInstance.ExecuteQuery(
-                "[ClinicaTurbia].[LISTADO_TIPO_DOCUMENTO]", Database.GenerarListaDeParametros());
+                "[ClinicaTurbia].[LISTADO_TIPO_DOCUMENTO]");
             comboTipoDoc.DataSource = tablaTipoDoc;
             comboTipoDoc.DisplayMember = "TIDOC_NOMBRE";
             comboTipoDoc.ValueMember = "TIDOC_ID";
             comboTipoDoc.SelectedItem = null;
             //ESTADO CIVIL
             DataTable tablaEstadoCivil = Database.GetInstance.ExecuteQuery(
-                "[ClinicaTurbia].[LISTADO_ESTADO_CIVIL]", Database.GenerarListaDeParametros());
+                "[ClinicaTurbia].[LISTADO_ESTADO_CIVIL]");
             comboEstadoCivil.DataSource = tablaEstadoCivil;
             comboEstadoCivil.DisplayMember = "ECIVIL_NOMBRE";
             comboEstadoCivil.ValueMember = "ECIVIL_ID";
             comboEstadoCivil.SelectedItem = null;
             //PLAN MEDICO
             DataTable tablaPlanMedico = Database.GetInstance.ExecuteQuery(
-                "[ClinicaTurbia].[LISTADO_PLAN_MEDICO]", Database.GenerarListaDeParametros());
+                "[ClinicaTurbia].[LISTADO_PLAN_MEDICO]");
             comboPlanMedico.DataSource = tablaPlanMedico;
             comboPlanMedico.DisplayMember = "PLAN_DESCRIPCION";
             comboPlanMedico.ValueMember = "PLAN_CODIGO";

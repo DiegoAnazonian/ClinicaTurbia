@@ -26,7 +26,7 @@ namespace Clinica_Frba.Abm_de_Rol
         {
             InitializeComponent();
             DataTable tablaUsuario = Database.GetInstance
-                .ExecuteQuery("[ClinicaTurbia].[LISTADO_FUNCIONALIDADES]", Database.GenerarListaDeParametros());
+                .ExecuteQuery("[ClinicaTurbia].[LISTADO_FUNCIONALIDADES]");
             listFuncionalidades.DataSource = tablaUsuario;
             listFuncionalidades.DisplayMember = "FUN_NOMBRE";
             esNuevoRol = true;
@@ -45,7 +45,7 @@ namespace Clinica_Frba.Abm_de_Rol
             textNombreRol.Text = nombreRol;
             checkBoxHabilitado.Checked = hab;
             DataTable tablaUsuario = Database.GetInstance
-                .ExecuteQuery("[ClinicaTurbia].[LISTADO_FUNCIONALIDADES]", Database.GenerarListaDeParametros());
+                .ExecuteQuery("[ClinicaTurbia].[LISTADO_FUNCIONALIDADES]");
             listFuncionalidades.DataSource = tablaUsuario;
             listFuncionalidades.DisplayMember = "FUN_NOMBRE";
             listFuncionalidades.SelectedItems.Clear();

@@ -71,6 +71,11 @@ namespace Clinica_Frba
             }
         }
 
+        public DataTable ExecuteQuery(string spName)
+        {
+            return ExecuteQuery(spName, GenerarListaDeParametros());
+        }
+
         public DataTable ExecuteCustomQuery(string strQuery, List<SqlParameter> parameters)
         {
             SqlDataAdapter da = null;
