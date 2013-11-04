@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using Clinica_Frba.Login;
 using Clinica_Frba.Abm_de_Rol;
 using Clinica_Frba.NewFolder12;
+using Clinica_Frba.Abm_de_Especialidades_Medicas;
 
 namespace Clinica_Frba.NewFolder10
 {
@@ -152,6 +153,18 @@ namespace Clinica_Frba.NewFolder10
                             new AbmRolWindow().ShowDialog();
                         };
                         break;
+                    case "ABM de Afiliado":
+                        btn.Click += (ssender, args) =>
+                        {
+                            new AbmAfiliadoWindow().ShowDialog();
+                        };
+                        break;
+                    case "ABM de Especialidad":
+                    btn.Click += (ssender, args) =>
+                    {
+                        new EspecialidadesWindow().ShowDialog();
+                    };
+                    break;
                 }
                 this.Controls.Add(btn);
                 topOffset += 30;

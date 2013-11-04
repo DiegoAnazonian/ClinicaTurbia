@@ -55,6 +55,12 @@
             this.btnGuardar = new System.Windows.Forms.Button();
             this.lblMail = new System.Windows.Forms.Label();
             this.txtMail = new System.Windows.Forms.TextBox();
+            this.lblNombreInc = new System.Windows.Forms.Label();
+            this.lblNroDocInc = new System.Windows.Forms.Label();
+            this.lblFechaInc = new System.Windows.Forms.Label();
+            this.lblApellidoInc = new System.Windows.Forms.Label();
+            this.lblPlanInc = new System.Windows.Forms.Label();
+            this.calendarNac = new System.Windows.Forms.MonthCalendar();
             this.SuspendLayout();
             // 
             // lblApellido
@@ -181,6 +187,7 @@
             this.btnSelecFecha.TabIndex = 11;
             this.btnSelecFecha.Text = "Seleccionar";
             this.btnSelecFecha.UseVisualStyleBackColor = true;
+            this.btnSelecFecha.Click += new System.EventHandler(this.btnSelecFecha_Click);
             // 
             // lblSexo
             // 
@@ -288,11 +295,93 @@
             this.txtMail.Size = new System.Drawing.Size(142, 20);
             this.txtMail.TabIndex = 9;
             // 
+            // lblNombreInc
+            // 
+            this.lblNombreInc.AutoSize = true;
+            this.lblNombreInc.BackColor = System.Drawing.SystemColors.Control;
+            this.lblNombreInc.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNombreInc.ForeColor = System.Drawing.Color.Red;
+            this.lblNombreInc.Location = new System.Drawing.Point(267, 48);
+            this.lblNombreInc.Name = "lblNombreInc";
+            this.lblNombreInc.Size = new System.Drawing.Size(25, 20);
+            this.lblNombreInc.TabIndex = 13;
+            this.lblNombreInc.Text = "(*)";
+            this.lblNombreInc.Visible = false;
+            // 
+            // lblNroDocInc
+            // 
+            this.lblNroDocInc.AutoSize = true;
+            this.lblNroDocInc.BackColor = System.Drawing.SystemColors.Control;
+            this.lblNroDocInc.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNroDocInc.ForeColor = System.Drawing.Color.Red;
+            this.lblNroDocInc.Location = new System.Drawing.Point(536, 74);
+            this.lblNroDocInc.Name = "lblNroDocInc";
+            this.lblNroDocInc.Size = new System.Drawing.Size(25, 20);
+            this.lblNroDocInc.TabIndex = 13;
+            this.lblNroDocInc.Text = "(*)";
+            this.lblNroDocInc.Visible = false;
+            // 
+            // lblFechaInc
+            // 
+            this.lblFechaInc.AutoSize = true;
+            this.lblFechaInc.BackColor = System.Drawing.SystemColors.Control;
+            this.lblFechaInc.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFechaInc.ForeColor = System.Drawing.Color.Red;
+            this.lblFechaInc.Location = new System.Drawing.Point(400, 176);
+            this.lblFechaInc.Name = "lblFechaInc";
+            this.lblFechaInc.Size = new System.Drawing.Size(25, 20);
+            this.lblFechaInc.TabIndex = 13;
+            this.lblFechaInc.Text = "(*)";
+            this.lblFechaInc.Visible = false;
+            // 
+            // lblApellidoInc
+            // 
+            this.lblApellidoInc.AutoSize = true;
+            this.lblApellidoInc.BackColor = System.Drawing.SystemColors.Control;
+            this.lblApellidoInc.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblApellidoInc.ForeColor = System.Drawing.Color.Red;
+            this.lblApellidoInc.Location = new System.Drawing.Point(267, 22);
+            this.lblApellidoInc.Name = "lblApellidoInc";
+            this.lblApellidoInc.Size = new System.Drawing.Size(25, 20);
+            this.lblApellidoInc.TabIndex = 13;
+            this.lblApellidoInc.Text = "(*)";
+            this.lblApellidoInc.Visible = false;
+            // 
+            // lblPlanInc
+            // 
+            this.lblPlanInc.AutoSize = true;
+            this.lblPlanInc.BackColor = System.Drawing.SystemColors.Control;
+            this.lblPlanInc.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPlanInc.ForeColor = System.Drawing.Color.Red;
+            this.lblPlanInc.Location = new System.Drawing.Point(267, 256);
+            this.lblPlanInc.Name = "lblPlanInc";
+            this.lblPlanInc.Size = new System.Drawing.Size(25, 20);
+            this.lblPlanInc.TabIndex = 13;
+            this.lblPlanInc.Text = "(*)";
+            this.lblPlanInc.Visible = false;
+            // 
+            // calendarNac
+            // 
+            this.calendarNac.Location = new System.Drawing.Point(316, 108);
+            this.calendarNac.MaxSelectionCount = 1;
+            this.calendarNac.Name = "calendarNac";
+            this.calendarNac.ShowToday = false;
+            this.calendarNac.ShowTodayCircle = false;
+            this.calendarNac.TabIndex = 14;
+            this.calendarNac.Visible = false;
+            this.calendarNac.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.calendarNac_DateSelected);
+            // 
             // AbmAfiliadoWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(573, 357);
+            this.Controls.Add(this.calendarNac);
+            this.Controls.Add(this.lblNroDocInc);
+            this.Controls.Add(this.lblApellidoInc);
+            this.Controls.Add(this.lblPlanInc);
+            this.Controls.Add(this.lblFechaInc);
+            this.Controls.Add(this.lblNombreInc);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.btnLimipiar);
             this.Controls.Add(this.btnSelecFecha);
@@ -357,5 +446,11 @@
         private System.Windows.Forms.Button btnGuardar;
         private System.Windows.Forms.Label lblMail;
         private System.Windows.Forms.TextBox txtMail;
+        private System.Windows.Forms.Label lblNombreInc;
+        private System.Windows.Forms.Label lblNroDocInc;
+        private System.Windows.Forms.Label lblFechaInc;
+        private System.Windows.Forms.Label lblApellidoInc;
+        private System.Windows.Forms.Label lblPlanInc;
+        private System.Windows.Forms.MonthCalendar calendarNac;
     }
 }

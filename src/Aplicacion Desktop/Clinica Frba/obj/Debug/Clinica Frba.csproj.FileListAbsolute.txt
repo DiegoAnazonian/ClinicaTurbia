@@ -11,3 +11,4 @@ C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Deskt
 C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Abm_de_Rol.DetallesRolWindow.resources
 C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.NewFolder12.AbmAfiliadoWindow.resources
 C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica Frba.exe
+C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Abm_de_Especialidades_Medicas.EspecialidadesWindow.resources

@@ -93,9 +93,6 @@ namespace Clinica_Frba.NewFolder12
             {
                 comboEstadoCivil.SelectedIndex = (int) rowAfiliado[6] - 1;
             }
-            //PAC_NOMBRE, PAC_APELLIDO, PAC_TIPO_DOCUMENTO, PAC_DNI, PAC_SEXO, PAC_FECHA_NACIMIENTO, 
-		    //PAC_ESTADO_CIVIL, PAC_DIRECCION, PAC_TELEFONO, PAC_MAIL, PAC_CANT_HIJOS, PLAN_DESCRIPCION
-            //if (rowAfiliado[9].ToString())
         }
 
         private void AbmAfiliadoWindow_Shown(object sender, EventArgs e)
@@ -110,7 +107,6 @@ namespace Clinica_Frba.NewFolder12
         private void btnLimipiar_Click(object sender, EventArgs e)
         {
             comboEstadoCivil.SelectedItem = null;
-            comboPlanMedico.SelectedItem = null;
             comboSexo.SelectedItem = null;
             comboTipoDoc.SelectedItem = null;
             txtDireccion.Text = "";
@@ -119,6 +115,7 @@ namespace Clinica_Frba.NewFolder12
             txtTelefono.Text = "";
             if (nuevoAfiliado)
             {
+                comboPlanMedico.SelectedItem = null;
                 txtNroDoc.Text = "";
                 txtNombre.Text = "";
                 txtFechaNac.Text = "";
@@ -130,7 +127,7 @@ namespace Clinica_Frba.NewFolder12
         {
             if (nuevoAfiliado)
             {
-                //REGISTRAR NUEVO AFILIADO EN LA BASE DE PACIENTES Y DE USUARIOS
+                registrarNuevoAfiliado();
             }
             else
             {
@@ -140,17 +137,151 @@ namespace Clinica_Frba.NewFolder12
 
         private void actualizarDatosDelAfiliado()
         {
+            if (hayCamposVacios())
+            {
+                var confirmResult = MessageBox.Show(
+                    "Algunos de sus datos estan incompletos, desea continuar de todas formas?",
+                    "Hay datos incompletos", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (confirmResult == DialogResult.No)
+                {
+                    return;
+                }
+            }
             String sexoAfiliado = comboSexo.SelectedItem != null ? 
                 comboSexo.SelectedItem.ToString().Substring(0, 1) : null;
+            String tel = "".Equals(txtTelefono.Text) ? null : txtTelefono.Text;
             List<SqlParameter> paramsAfiliado = Database.GenerarListaDeParametros(
                 "tiDoc", comboTipoDoc.SelectedValue, "dire", txtDireccion.Text,
-                "tel", txtTelefono.Text, "mail", txtMail.Text,
-                "sexo", sexoAfiliado, "estCivil", comboEstadoCivil.SelectedValue, 
-                "planMed", comboPlanMedico.SelectedValue, "cantFam", txtFamiliares.Text,
-                "numDoc", txtNroDoc.Text);
+                "tel", tel, "mail", txtMail.Text, "sexo", sexoAfiliado,
+                "estCivil", comboEstadoCivil.SelectedValue, "cantFam", txtFamiliares.Text, 
+                "planMed", comboPlanMedico.SelectedValue, "numDoc", txtNroDoc.Text);
             DataTable tablaPlanMedico = Database.GetInstance.ExecuteQuery(
                 "[ClinicaTurbia].[MODIFICAR_AFILIADO]", paramsAfiliado);
+            List<SqlParameter> paramsPrimerLogeo = Database.GenerarListaDeParametros(
+                "numDoc", txtNroDoc.Text);
+            Database.GetInstance.ExecuteQuery(
+                "[ClinicaTurbia].[PRIMER_LOGIN_USUARIO]", paramsPrimerLogeo);
             this.Close();
         }
+
+        private void registrarNuevoAfiliado()
+        {
+            ocultarMarcasDeFaltanDatos();
+            if (faltanDatosObligatorios())
+            {
+                MessageBox.Show("Debe completar todos los datos obligatorios",
+                    "Faltan datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (hayCamposVacios())
+            {
+                var confirmResult = MessageBox.Show(
+                    "Algunos de sus datos estan incompletos, desea continuar de todas formas?",
+                    "Hay datos incompletos", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (confirmResult == DialogResult.No)
+                {
+                    return;
+                }
+            }
+            String sexoAfiliado = comboSexo.SelectedItem != null ?
+                comboSexo.SelectedItem.ToString().Substring(0, 1) : null;
+            String tel = "".Equals(txtTelefono.Text) ? null : txtTelefono.Text;
+            List<SqlParameter> paramsAfiliado = Database.GenerarListaDeParametros(
+                "nom", txtNombre.Text, "ape", txtApellido.Text, "fecha", txtFechaNac.Text,
+                "tiDoc", comboTipoDoc.SelectedValue, "dire", txtDireccion.Text,
+                "tel", tel, "mail", txtMail.Text, "sexo", sexoAfiliado,
+                "estCivil", comboEstadoCivil.SelectedValue, "cantFam", txtFamiliares.Text,
+                "planMed", comboPlanMedico.SelectedValue, "numDoc", txtNroDoc.Text);
+            DataTable tablaPlanMedico = Database.GetInstance.ExecuteQuery(
+                "[ClinicaTurbia].[CREAR_AFILIADO]", paramsAfiliado);
+        }
+
+        private bool hayCamposVacios()
+        {
+            if (comboSexo.SelectedItem == null)
+            {
+                return true;
+            }
+            if (comboEstadoCivil.SelectedItem == null)
+            {
+                return true;
+            }
+            if (comboTipoDoc.SelectedItem == null)
+            {
+                return true;
+            }
+            if ("".Equals(txtDireccion.Text))
+            {
+                return true;
+            }
+            if ("".Equals(txtFamiliares.Text))
+            {
+                return true;
+            }
+            if ("".Equals(txtMail.Text))
+            {
+                return true;
+            }
+            if ("".Equals(txtTelefono.Text))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * Retorna false si hay datos obligatorios sin completar, de lo contrario retorna true.
+         */
+        private bool faltanDatosObligatorios()
+        {
+            bool incompleto = false;
+            if ("".Equals(txtNroDoc.Text))
+            {
+                incompleto = true;
+                lblNroDocInc.Show();
+            }
+            if ("".Equals(txtNombre.Text))
+            {
+                incompleto = true;
+                lblNombreInc.Show();
+            }
+            if ("".Equals(txtApellido.Text))
+            {
+                incompleto = true;
+                lblApellidoInc.Show();
+            }
+            if ("".Equals(txtFechaNac.Text))
+            {
+                incompleto = true;
+                lblFechaInc.Show();
+            }
+            if (comboPlanMedico.SelectedItem == null)
+            {
+                incompleto = true;
+                lblPlanInc.Show();
+            }
+            return incompleto;
+        }
+
+        private void ocultarMarcasDeFaltanDatos()
+        {
+            lblPlanInc.Hide();
+            lblNroDocInc.Hide();
+            lblNombreInc.Hide();
+            lblFechaInc.Hide();
+            lblApellidoInc.Hide();
+        }
+
+        private void btnSelecFecha_Click(object sender, EventArgs e)
+        {
+            calendarNac.Show();
+        }
+
+        private void calendarNac_DateSelected(object sender, DateRangeEventArgs e)
+        {
+            txtFechaNac.Text = calendarNac.SelectionStart.ToShortDateString();
+            calendarNac.Hide();
+        }
+
     }
 }
