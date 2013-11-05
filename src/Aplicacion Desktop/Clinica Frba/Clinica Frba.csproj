@@ -71,6 +71,12 @@
     <Compile Include="Abm de Especialidades Medicas\EspecialidadesWindow.Designer.cs">
       <DependentUpon>EspecialidadesWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm de Profesional\AbmProfesional.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm de Profesional\AbmProfesional.Designer.cs">
+      <DependentUpon>AbmProfesional.cs</DependentUpon>
+    </Compile>
     <Compile Include="Abm de Rol\DetallesRolWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,12 +115,6 @@
     </Compile>
     <Compile Include="Abm de Afiliado\AbmAfiliadoWindow.Designer.cs">
       <DependentUpon>AbmAfiliadoWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Abm de Profesional\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Abm de Profesional\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm de Planes\Form1.cs">
       <SubType>Form</SubType>
@@ -178,8 +178,8 @@
     <EmbeddedResource Include="Abm de Especialidades Medicas\EspecialidadesWindow.resx">
       <DependentUpon>EspecialidadesWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Abm de Profesional\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Abm de Profesional\AbmProfesional.resx">
+      <DependentUpon>AbmProfesional.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm de Rol\DetallesRolWindow.resx">
       <DependentUpon>DetallesRolWindow.cs</DependentUpon>

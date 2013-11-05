@@ -7,6 +7,7 @@ using Clinica_Frba.Login;
 using Clinica_Frba.Abm_de_Rol;
 using Clinica_Frba.NewFolder12;
 using Clinica_Frba.Abm_de_Especialidades_Medicas;
+using Clinica_Frba.Abm_de_Profesional;
 
 namespace Clinica_Frba.NewFolder10
 {
@@ -167,7 +168,11 @@ namespace Clinica_Frba.NewFolder10
                         new EspecialidadesWindow().ShowDialog();
                     };
                     break;
-                    //case "ABS de Profesional"
+                    case "ABM de Profesional":
+                    {
+                        new AbmProfesional().ShowDialog();
+                    }
+                    break;
                 }
                 this.Controls.Add(btn);
                 topOffset += 30;

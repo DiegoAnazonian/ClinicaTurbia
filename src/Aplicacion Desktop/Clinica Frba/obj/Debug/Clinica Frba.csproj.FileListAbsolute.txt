@@ -26,4 +26,4 @@ C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica F
 C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Login.RolesWindow.resources
 C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Properties.Resources.resources
 C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica Frba.csproj.GenerateResource.Cache
-C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.NewFolder13.Form1.resources
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Abm_de_Profesional.AbmProfesional.resources
