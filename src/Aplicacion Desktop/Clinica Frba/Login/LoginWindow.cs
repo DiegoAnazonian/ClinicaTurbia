@@ -65,6 +65,7 @@ namespace Clinica_Frba.NewFolder10
                             //DataTable tablaMedico = Database.GetInstance.ExecuteQuery
                             //("[ClinicaTurbia].[EXISTE_MEDICO]", afiliadoParam);
                             MessageBox.Show("Es un medico");
+
                         }
                     }
                     String rol = obtenerRolDelUsuario();
@@ -162,9 +163,11 @@ namespace Clinica_Frba.NewFolder10
                     case "ABM de Especialidad":
                     btn.Click += (ssender, args) =>
                     {
+
                         new EspecialidadesWindow().ShowDialog();
                     };
                     break;
+                    //case "ABS de Profesional"
                 }
                 this.Controls.Add(btn);
                 topOffset += 30;

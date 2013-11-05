@@ -178,6 +178,9 @@
     <EmbeddedResource Include="Abm de Especialidades Medicas\EspecialidadesWindow.resx">
       <DependentUpon>EspecialidadesWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Abm de Profesional\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Abm de Rol\DetallesRolWindow.resx">
       <DependentUpon>DetallesRolWindow.cs</DependentUpon>
     </EmbeddedResource>
