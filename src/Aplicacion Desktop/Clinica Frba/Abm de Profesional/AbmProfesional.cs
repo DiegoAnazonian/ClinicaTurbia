@@ -17,16 +17,29 @@ namespace Clinica_Frba.Abm_de_Profesional
 
         public AbmProfesional()
         {
-            this.ActiveControl = searchBox;
+
             InitializeComponent();
+            alta.Click += new EventHandler(this.mostrarAlta);
+            medicosBox.Click += new EventHandler(this.activarBotones);
+            this.ActiveControl = searchBox;
             DataTable medicos = this.traerTodosLosMedicos();
             this.llenarCheckedBoxMedicos(medicos);
             
         }
 
+        private void activarBotones(Object sender, EventArgs e)
+        {
+            baja.Enabled = true;
+            modificar.Enabled = true;
+        }
+
+        private void mostrarAlta(Object sender,EventArgs e)
+        {
+            MessageBox.Show("Muestro alta");
+        }
         private void searchBox_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Hola");
+            
         }
 
         private void searchBox_KeyDown(object sender, EventArgs e)
@@ -38,16 +51,17 @@ namespace Clinica_Frba.Abm_de_Profesional
             
             this.llenarCheckedBoxMedicos(tablaMedicos);
         }
+
         private void llenarCheckedBoxMedicos(DataTable medicos)
         {
             List<String> medNombres = new List<string>();
 
             foreach(DataRow reg in medicos.Rows){
 
-                medNombres.Add(reg["MED_NOMBRE"].ToString() +" "+ reg["MED_APELLIDO"].ToString().ToUpper());
+                medNombres.Add(reg["MED_APELLIDO"].ToString().ToUpper() +" "+ reg["MED_NOMBRE"].ToString());
                 
             }
-            
+            cantidadMedicos.Text = new StringConverter().ConvertToString(medicos.Rows.Count);
             this.medicosBox.DataSource = medNombres;
         }
 
@@ -65,6 +79,17 @@ namespace Clinica_Frba.Abm_de_Profesional
 
         }
 
+        private void medicosBox_Changed()
+        {
+            MessageBox.Show("HOLI");
+        }
+
+        private void medicosBox_Click(object sender, EventArgs e)
+        {
+            
+            MessageBox.Show(medicosBox.SelectedItem.ToString());
+        }
+
         private void searchBox_TextChanged(object sender, EventArgs e)
         {
             List<SqlParameter> nomParcial = Database.GenerarListaDeParametros("nombreParcial", searchBox.Text);
@@ -74,9 +99,15 @@ namespace Clinica_Frba.Abm_de_Profesional
             this.llenarCheckedBoxMedicos(tablaMedicos);
         }
 
-        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
+        private void alta_OnClick(object sender, EventArgs e)
+        {
+            MessageBox.Show(medicosBox.SelectedItem.ToString());
+        }
+
+        private void medicosBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.modificar.Enabled = true;
         }
     }
 }

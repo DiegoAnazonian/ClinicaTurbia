@@ -142,9 +142,15 @@ IF OBJECT_ID('ClinicaTurbia.TRAER_TODOS_MEDICOS','P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.TRAER_TODOS_MEDICOS
 GO
 
+IF OBJECT_ID('ClinicaTurbia.FILTRAR_POR_NOMBRE_MEDICO','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.FILTRAR_POR_NOMBRE_MEDICO
+GO
+
 IF SCHEMA_ID('ClinicaTurbia') IS NOT NULL
 	DROP SCHEMA [ClinicaTurbia]
 GO
+
+
 
 CREATE SCHEMA [ClinicaTurbia] AUTHORIZATION [gd]
 GO
@@ -257,10 +263,10 @@ INSERT INTO ClinicaTurbia.Rol(ROL_NOMBRE, ROL_HABILITADO) VALUES
 	('Administrativo', 1), ('Afiliado', 1), ('Profesional', 1);
 	
 INSERT INTO ClinicaTurbia.Funcionalidad(FUN_NOMBRE) VALUES
-	('ABM de Roles'), ('ABM de Afiliado'), ('ABM de Especialidad'), ('Funcionalidad4'), ('Funcionalidad5');
+	('ABM de Roles'), ('ABM de Afiliado'), ('ABM de Especialidad'), ('ABM de Profesional'), ('Funcionalidad5');
 
 INSERT INTO ClinicaTurbia.Rol_Funcionalidad(ROL_ID, FUN_ID) VALUES
-	(1,1), (2,1), (3,1), (1,2), (2,2), (3,2), (1,3), (2,3), (3,3), (2,5), (3,4);
+	(1,1), (2,1), (3,1), (1,2), (2,2), (3,2), (1,3), (2,3),(1,4), (3,3), (2,5), (3,4);
 
 INSERT INTO ClinicaTurbia.TipoDocumento(TIDOC_NOMBRE) VALUES
 	('Documento Nacional de Identidad'), ('Cédula de Identidad'),
@@ -333,10 +339,20 @@ GO
 --------------------------------------------------------
 ---------------------    LOGIN     ---------------------
 --------------------------------------------------------
+CREATE PROCEDURE ClinicaTurbia.FILTRAR_POR_NOMBRE_MEDICO
+	(@nombreParcial nvarchar(255)) 
+	AS
+	SELECT medico.MED_NOMBRE,medico.MED_APELLIDO 
+	FROM ClinicaTurbia.Medico as medico
+	WHERE medico.MED_NOMBRE like @nombreParcial+'%' OR medico.MED_APELLIDO like @nombreParcial+'%'
+	ORDER BY medico.MED_APELLIDO ASC;
+GO
+
 CREATE PROCEDURE ClinicaTurbia.TRAER_TODOS_MEDICOS
 	AS
 	SELECT * FROM ClinicaTurbia.Medico as medico
 	WHERE medico.MED_DNI IS NOT NULL
+	ORDER BY medico.MED_APELLIDO ASC;
 GO
 
 CREATE PROCEDURE ClinicaTurbia.CONSULTA_LOGIN
