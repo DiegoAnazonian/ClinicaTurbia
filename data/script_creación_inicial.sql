@@ -138,6 +138,10 @@ IF OBJECT_ID('ClinicaTurbia.MIGRACION', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.MIGRACION
 GO
 
+IF OBJECT_ID('ClinicaTurbia.TRAER_TODOS_MEDICOS','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.TRAER_TODOS_MEDICOS
+GO
+
 IF SCHEMA_ID('ClinicaTurbia') IS NOT NULL
 	DROP SCHEMA [ClinicaTurbia]
 GO
@@ -317,6 +321,9 @@ INSERT INTO ClinicaTurbia.Usuario(USUARIO_NOMBRE, USUARIO_PASSWORD, USUARIO_HABI
 	VALUES ('admin', 'w23e', 1, 0);
 
 INSERT INTO ClinicaTurbia.Usuario_Rol(USUARIO_NOMBRE, ROL_ID)
+	VALUES ('admin',1);
+	
+INSERT INTO ClinicaTurbia.Usuario_Rol(USUARIO_NOMBRE, ROL_ID)
 	SELECT PAC_NUMDOC, 2 FROM ClinicaTurbia.Paciente
 	UNION
 	SELECT MED_DNI, 3 FROM ClinicaTurbia.Medico;
@@ -326,6 +333,12 @@ GO
 --------------------------------------------------------
 ---------------------    LOGIN     ---------------------
 --------------------------------------------------------
+CREATE PROCEDURE ClinicaTurbia.TRAER_TODOS_MEDICOS
+	AS
+	SELECT * FROM ClinicaTurbia.Medico as medico
+	WHERE medico.MED_DNI IS NOT NULL
+GO
+
 CREATE PROCEDURE ClinicaTurbia.CONSULTA_LOGIN
 	(@usuario nvarchar(255)) AS
 	SELECT * FROM ClinicaTurbia.Usuario WHERE USUARIO_NOMBRE = @usuario 

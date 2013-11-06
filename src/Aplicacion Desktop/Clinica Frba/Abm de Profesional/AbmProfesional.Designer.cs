@@ -32,8 +32,8 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.searchBox = new System.Windows.Forms.TextBox();
+            this.medicosBox = new System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
             // 
             // button1
@@ -76,29 +76,31 @@
             this.label1.Text = "ABM de un Profesional";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
-            // checkedListBox1
-            // 
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Location = new System.Drawing.Point(172, 62);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(381, 169);
-            this.checkedListBox1.TabIndex = 2;
-            // 
             // searchBox
             // 
+            this.searchBox.AccessibleDescription = "";
             this.searchBox.AccessibleName = "";
             this.searchBox.Location = new System.Drawing.Point(172, 24);
             this.searchBox.Name = "searchBox";
             this.searchBox.Size = new System.Drawing.Size(381, 20);
             this.searchBox.TabIndex = 3;
+            this.searchBox.TextChanged += new System.EventHandler(this.searchBox_TextChanged);
+            // 
+            // medicosBox
+            // 
+            this.medicosBox.FormattingEnabled = true;
+            this.medicosBox.Location = new System.Drawing.Point(172, 62);
+            this.medicosBox.Name = "medicosBox";
+            this.medicosBox.Size = new System.Drawing.Size(381, 169);
+            this.medicosBox.TabIndex = 4;
             // 
             // AbmProfesional
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(565, 253);
+            this.Controls.Add(this.medicosBox);
             this.Controls.Add(this.searchBox);
-            this.Controls.Add(this.checkedListBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -116,7 +118,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.CheckedListBox medicosBox;
         private System.Windows.Forms.TextBox searchBox;
     }
 }

@@ -11,3 +11,19 @@ C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Deskt
 C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.Abm_de_Rol.AbmRolWindow.resources
 C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.NewFolder12.AbmAfiliadoWindow.resources
 C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.Abm_de_Rol.DetallesRolWindow.resources
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\bin\Release\Clinica Frba.exe.config
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\bin\Release\Clinica Frba.exe
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\bin\Release\Clinica Frba.pdb
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.NewFolder12.AbmAfiliadoWindow.resources
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.Abm_de_Especialidades_Medicas.Alta.resources
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.Abm_de_Especialidades_Medicas.EspecialidadesWindow.resources
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.Abm_de_Profesional.AbmProfesional.resources
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.Abm_de_Rol.DetallesRolWindow.resources
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.Abm_de_Rol.AbmRolWindow.resources
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.NewFolder10.LoginWindow.resources
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.Login.RolesWindow.resources
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica_Frba.Properties.Resources.resources
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica Frba.csproj.GenerateResource.Cache
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica Frba.exe
+C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica Frba.pdb

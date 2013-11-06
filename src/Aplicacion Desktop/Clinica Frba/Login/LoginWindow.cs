@@ -162,16 +162,17 @@ namespace Clinica_Frba.NewFolder10
                         };
                         break;
                     case "ABM de Especialidad":
-                    btn.Click += (ssender, args) =>
+                        btn.Click += (ssender, args) =>
                     {
 
                         new EspecialidadesWindow().ShowDialog();
                     };
                     break;
                     case "ABM de Profesional":
+                    btn.Click += (ssender, args) =>
                     {
                         new AbmProfesional().ShowDialog();
-                    }
+                    };
                     break;
                 }
                 this.Controls.Add(btn);
@@ -187,6 +188,11 @@ namespace Clinica_Frba.NewFolder10
             txtUsuario.Clear();
             txtPassword.Clear();
             this.Controls[0].Show();
+        }
+
+        private void txtPassword_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
