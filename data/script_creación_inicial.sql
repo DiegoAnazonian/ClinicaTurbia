@@ -342,10 +342,15 @@ GO
 CREATE PROCEDURE ClinicaTurbia.FILTRAR_POR_NOMBRE_MEDICO
 	(@nombreParcial nvarchar(255)) 
 	AS
-	SELECT * 
-	FROM ClinicaTurbia.Medico as medico
-	WHERE medico.MED_NOMBRE like @nombreParcial+'%' OR medico.MED_APELLIDO like @nombreParcial+'%'
-	ORDER BY medico.MED_APELLIDO ASC;
+	SELECT *  
+	FROM ClinicaTurbia.Medico as m
+	WHERE m.MED_NOMBRE like @nombreParcial+'%' OR 
+		  m.MED_APELLIDO like @nombreParcial+'%' OR
+		  m.MED_DNI like @nombreParcial+'%' OR
+		  m.MED_TELEFONO like @nombreParcial+'%' OR
+		  m.MED_DIRECCION like @nombreParcial+'%' OR
+		  m.MED_MAIL like @nombreParcial+'%' OR
+		  m.MED_FECHA_NACIMIENTO like @nombreParcial+'%'
 GO
 
 CREATE PROCEDURE ClinicaTurbia.TRAER_TODOS_MEDICOS
