@@ -134,6 +134,10 @@ IF OBJECT_ID('ClinicaTurbia.CREARPK', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.CREARPK
 GO
 
+IF OBJECT_ID('ClinicaTurbia.MODIFICAR_MEDICO','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.MODIFICAR_MEDICO
+GO
+
 IF OBJECT_ID('ClinicaTurbia.MIGRACION', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.MIGRACION
 GO
@@ -335,10 +339,22 @@ INSERT INTO ClinicaTurbia.Usuario_Rol(USUARIO_NOMBRE, ROL_ID)
 	SELECT MED_DNI, 3 FROM ClinicaTurbia.Medico;
 
 GO
+--------------------------------------------------------
+---------------- CONSULTA_MEDICOS  ---------------------
+--------------------------------------------------------
 
---------------------------------------------------------
----------------------    LOGIN     ---------------------
---------------------------------------------------------
+CREATE PROCEDURE ClinicaTurbia.MODIFICAR_MEDICO
+	(@dni numeric,@nombre nvarchar(255),@apellido nvarchar(255),
+	 @direccion nvarchar(255) = NULL, @telefono nvarchar(255) = NULL,
+	 @mail nvarchar(255) = NULL, @fecha datetime) AS
+	UPDATE ClinicaTurbia.Medico SET 
+		MED_DNI = @dni,MED_NOMBRE = @nombre,MED_APELLIDO = @apellido,
+		MED_DIRECCION = @direccion,MED_TELEFONO = @telefono,MED_MAIL = @mail,
+		MED_FECHA_NACIMIENTO = @fecha
+		
+		WHERE MED_DNI=@dni;
+GO
+
 CREATE PROCEDURE ClinicaTurbia.FILTRAR_POR_NOMBRE_MEDICO
 	(@nombreParcial nvarchar(255)) 
 	AS
@@ -359,6 +375,10 @@ CREATE PROCEDURE ClinicaTurbia.TRAER_TODOS_MEDICOS
 	WHERE medico.MED_DNI IS NOT NULL
 	ORDER BY medico.MED_APELLIDO ASC;
 GO
+
+--------------------------------------------------------
+---------------------    LOGIN     ---------------------
+--------------------------------------------------------
 
 CREATE PROCEDURE ClinicaTurbia.CONSULTA_LOGIN
 	(@usuario nvarchar(255)) AS

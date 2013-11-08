@@ -56,7 +56,6 @@
             this.alta.TabIndex = 0;
             this.alta.Text = "Alta";
             this.alta.UseVisualStyleBackColor = true;
-            this.alta.Click += new System.EventHandler(this.button1_Click);
             // 
             // baja
             // 
@@ -67,7 +66,6 @@
             this.baja.TabIndex = 0;
             this.baja.Text = "Baja";
             this.baja.UseVisualStyleBackColor = true;
-            this.baja.Click += new System.EventHandler(this.button1_Click);
             // 
             // modificar
             // 
@@ -78,7 +76,7 @@
             this.modificar.TabIndex = 0;
             this.modificar.Text = "Modificar";
             this.modificar.UseVisualStyleBackColor = true;
-            this.modificar.Click += new System.EventHandler(this.button1_Click);
+            this.modificar.Click += new System.EventHandler(this.modificar_Click);
             // 
             // label1
             // 
@@ -94,9 +92,9 @@
             // 
             this.palabraClave.AccessibleDescription = "";
             this.palabraClave.AccessibleName = "";
-            this.palabraClave.Location = new System.Drawing.Point(172, 28);
+            this.palabraClave.Location = new System.Drawing.Point(287, 51);
             this.palabraClave.Name = "palabraClave";
-            this.palabraClave.Size = new System.Drawing.Size(381, 20);
+            this.palabraClave.Size = new System.Drawing.Size(246, 20);
             this.palabraClave.TabIndex = 3;
             this.palabraClave.TextChanged += new System.EventHandler(this.palabraClave_TextChanged);
             // 
@@ -112,7 +110,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(169, 9);
+            this.label2.Location = new System.Drawing.Point(286, 35);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(73, 13);
             this.label2.TabIndex = 1;
@@ -124,21 +122,21 @@
             this.medicosBox.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.medicosBox.Location = new System.Drawing.Point(12, 199);
             this.medicosBox.Name = "medicosBox";
-            this.medicosBox.ReadOnly = true;
-            this.medicosBox.Size = new System.Drawing.Size(541, 150);
+            this.medicosBox.Size = new System.Drawing.Size(630, 242);
             this.medicosBox.TabIndex = 7;
             // 
             // nombre
             // 
-            this.nombre.Location = new System.Drawing.Point(172, 71);
+            this.nombre.Location = new System.Drawing.Point(287, 96);
             this.nombre.Name = "nombre";
             this.nombre.Size = new System.Drawing.Size(100, 20);
             this.nombre.TabIndex = 8;
+            this.nombre.TextChanged += new System.EventHandler(this.nombre_TextChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(171, 55);
+            this.label3.Location = new System.Drawing.Point(288, 81);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(44, 13);
             this.label3.TabIndex = 9;
@@ -146,7 +144,7 @@
             // 
             // apellido
             // 
-            this.apellido.Location = new System.Drawing.Point(174, 109);
+            this.apellido.Location = new System.Drawing.Point(287, 135);
             this.apellido.Name = "apellido";
             this.apellido.Size = new System.Drawing.Size(100, 20);
             this.apellido.TabIndex = 10;
@@ -154,7 +152,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(172, 93);
+            this.label4.Location = new System.Drawing.Point(289, 119);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(44, 13);
             this.label4.TabIndex = 11;
@@ -162,7 +160,7 @@
             // 
             // dni
             // 
-            this.dni.Location = new System.Drawing.Point(316, 72);
+            this.dni.Location = new System.Drawing.Point(433, 98);
             this.dni.Name = "dni";
             this.dni.Size = new System.Drawing.Size(100, 20);
             this.dni.TabIndex = 12;
@@ -170,7 +168,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(315, 58);
+            this.label5.Location = new System.Drawing.Point(432, 84);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(26, 13);
             this.label5.TabIndex = 13;
@@ -178,7 +176,7 @@
             // 
             // direccion
             // 
-            this.direccion.Location = new System.Drawing.Point(318, 108);
+            this.direccion.Location = new System.Drawing.Point(433, 134);
             this.direccion.Name = "direccion";
             this.direccion.Size = new System.Drawing.Size(100, 20);
             this.direccion.TabIndex = 14;
@@ -186,7 +184,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(315, 93);
+            this.label6.Location = new System.Drawing.Point(432, 119);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(52, 13);
             this.label6.TabIndex = 15;
@@ -194,7 +192,7 @@
             // 
             // limpiar
             // 
-            this.limpiar.Location = new System.Drawing.Point(478, 165);
+            this.limpiar.Location = new System.Drawing.Point(567, 165);
             this.limpiar.Name = "limpiar";
             this.limpiar.Size = new System.Drawing.Size(75, 23);
             this.limpiar.TabIndex = 16;
@@ -205,7 +203,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(565, 372);
+            this.ClientSize = new System.Drawing.Size(665, 453);
             this.Controls.Add(this.limpiar);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.direccion);

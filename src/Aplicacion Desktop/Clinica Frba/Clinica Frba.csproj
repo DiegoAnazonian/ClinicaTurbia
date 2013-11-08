@@ -83,6 +83,12 @@
     <Compile Include="Abm de Profesional\AbmProfesional.Designer.cs">
       <DependentUpon>AbmProfesional.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm de Profesional\Modificar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm de Profesional\Modificar.Designer.cs">
+      <DependentUpon>Modificar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Abm de Rol\DetallesRolWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +116,7 @@
     <Compile Include="Login\RolesWindow.Designer.cs">
       <DependentUpon>RolesWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Persona.cs" />
     <Compile Include="Registro de Usuario\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -189,6 +196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Abm de Profesional\AbmProfesional.resx">
       <DependentUpon>AbmProfesional.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm de Profesional\Modificar.resx">
+      <DependentUpon>Modificar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm de Rol\DetallesRolWindow.resx">
       <DependentUpon>DetallesRolWindow.cs</DependentUpon>
