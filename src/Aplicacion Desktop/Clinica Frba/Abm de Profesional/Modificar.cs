@@ -42,10 +42,16 @@ namespace Clinica_Frba.Abm_de_Profesional
 
         private void guardar_Click(object sender, EventArgs e)
         {
-            List<SqlParameter> parametros = Database.GenerarListaDeParametros("dni", Convert.ToInt64(dni.Text),"nombre",nombre.Text,"apellido",apellido.Text,"direccion",direccion.Text,"telefono",Convert.ToInt64(telefono.Text),"mail",mail.Text,"fecha",Convert.ToDateTime(fecha_nacimiento.Text));
-            DataTable tablaMedicos = Database.GetInstance
-                .ExecuteQuery("[ClinicaTurbia].[MODIFICAR_MEDICO]", parametros);
-           
+            try
+            {
+                List<SqlParameter> parametros = Database.GenerarListaDeParametros("dni", Convert.ToInt64(dni.Text), "nombre", nombre.Text, "apellido", apellido.Text, "direccion", direccion.Text, "telefono", Convert.ToInt64(telefono.Text), "mail", mail.Text, "fecha", Convert.ToDateTime(fecha_nacimiento.Text));
+                DataTable tablaMedicos = Database.GetInstance
+                    .ExecuteQuery("[ClinicaTurbia].[MODIFICAR_MEDICO]", parametros);
+            }
+            catch (Exception ex)
+            {
+                new SqlRequestError().ShowDialog();
+            }
         }
     }
 }

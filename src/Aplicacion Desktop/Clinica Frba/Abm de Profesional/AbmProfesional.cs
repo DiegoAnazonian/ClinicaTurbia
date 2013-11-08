@@ -121,6 +121,15 @@ namespace Clinica_Frba.Abm_de_Profesional
 
         }
 
+        private void refrescarTabla()
+        {
+            List<SqlParameter> nomParcial = Database.GenerarListaDeParametros("nombreParcial", "");
+            DataTable tablaMedicos = Database.GetInstance
+                .ExecuteQuery("[ClinicaTurbia].[FILTRAR_POR_NOMBRE_MEDICO]", nomParcial);
+
+            this.llenarCheckedBoxMedicos(tablaMedicos);
+        }
+
         private void modificar_Click(object sender, EventArgs e)
         {
             Persona persona = new Persona();
@@ -135,6 +144,8 @@ namespace Clinica_Frba.Abm_de_Profesional
             persona.fecha = (DateTime) medicosBox.Rows[medicosBox.CurrentRow.Index].Cells[6].Value;
 
             new Modificar(persona).ShowDialog();
+            this.refrescarTabla();
+
         }
     }
 }
