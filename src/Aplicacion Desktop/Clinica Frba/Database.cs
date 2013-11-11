@@ -63,6 +63,7 @@ namespace Clinica_Frba
             }
             catch (Exception ex)
             {
+                
                 throw new Exception("Hubo inconvenientes al querer ejecutar el SP", ex);
             }
             finally

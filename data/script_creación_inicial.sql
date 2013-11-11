@@ -146,8 +146,33 @@ IF OBJECT_ID('ClinicaTurbia.TRAER_TODOS_MEDICOS','P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.TRAER_TODOS_MEDICOS
 GO
 
+IF OBJECT_ID('ClinicaTurbia.FILTRAR_X_NOMBRE','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.FILTRAR_X_NOMBRE
+GO
+
 IF OBJECT_ID('ClinicaTurbia.FILTRAR_POR_NOMBRE_MEDICO','P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.FILTRAR_POR_NOMBRE_MEDICO
+GO
+
+IF OBJECT_ID('ClinicaTurbia.FILTRAR_X_DNI','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.FILTRAR_X_DNI
+GO
+
+
+IF OBJECT_ID('ClinicaTurbia.FILTRAR_X_DIRECCION','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.FILTRAR_X_DIRECCION
+GO
+
+IF OBJECT_ID('ClinicaTurbia.AGREGAR_MEDICO','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.AGREGAR_MEDICO
+GO
+
+IF OBJECT_ID('ClinicaTurbia.FILTRAR_X_APELLIDO','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.FILTRAR_X_APELLIDO
+GO
+
+IF OBJECT_ID('ClinicaTurbia.BORRAR_MEDICO','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.BORRAR_MEDICO
 GO
 
 IF SCHEMA_ID('ClinicaTurbia') IS NOT NULL
@@ -342,6 +367,53 @@ GO
 --------------------------------------------------------
 ---------------- CONSULTA_MEDICOS  ---------------------
 --------------------------------------------------------
+
+CREATE PROCEDURE ClinicaTurbia.BORRAR_MEDICO
+	(@dni int) AS
+	DELETE FROM ClinicaTurbia.Medico 
+	WHERE ClinicaTurbia.Medico.MED_DNI = @dni;
+GO
+
+CREATE PROCEDURE ClinicaTurbia.AGREGAR_MEDICO
+	(@dni numeric,@nombre nvarchar(255),@apellido nvarchar(255),
+	 @direccion nvarchar(255) = NULL, @telefono nvarchar(255) = NULL,
+	 @mail nvarchar(255) = NULL, @fecha datetime) AS
+	INSERT INTO ClinicaTurbia.Medico(MED_DNI,MED_NOMBRE,MED_APELLIDO,MED_DIRECCION,MED_TELEFONO,MED_MAIL,MED_FECHA_NACIMIENTO) 
+	VALUES (@dni,@nombre,@apellido,@direccion,@telefono,@mail,@fecha);
+		
+GO
+
+CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_DIRECCION
+	(@direccion nvarchar(255))
+	AS
+	SELECT *
+	FROM ClinicaTurbia.Medico as med
+	WHERE med.MED_DIRECCION LIKE @direccion+'%';
+GO
+
+CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_NOMBRE
+	(@nombre nvarchar(255))
+	AS
+	SELECT *
+	FROM ClinicaTurbia.Medico as med
+	where med.MED_NOMBRE LIKE @nombre+'%';
+GO
+
+CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_DNI
+	(@dni nvarchar(255))
+	AS
+	SELECT *
+	FROM ClinicaTurbia.Medico as med
+	where med.MED_DNI LIKE @dni+'%';
+GO
+
+CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_APELLIDO
+	(@apellido nvarchar(255))
+	AS
+	SELECT *
+	FROM ClinicaTurbia.Medico as med
+	where med.MED_APELLIDO LIKE @apellido+'%';
+GO
 
 CREATE PROCEDURE ClinicaTurbia.MODIFICAR_MEDICO
 	(@dni numeric,@nombre nvarchar(255),@apellido nvarchar(255),

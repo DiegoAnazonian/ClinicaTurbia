@@ -1,6 +1,6 @@
 ﻿namespace Clinica_Frba.Abm_de_Profesional
 {
-    partial class Modificar
+    partial class Alta
     {
         /// <summary>
         /// Required designer variable.
@@ -28,10 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.cancelar = new System.Windows.Forms.Button();
             this.guardar = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.fecha_nacimiento = new System.Windows.Forms.TextBox();
+            this.fechaNacimiento = new System.Windows.Forms.TextBox();
             this.mail = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.telefono = new System.Windows.Forms.TextBox();
@@ -43,15 +44,24 @@
             this.apellido = new System.Windows.Forms.TextBox();
             this.nombre = new System.Windows.Forms.TextBox();
             this.dni = new System.Windows.Forms.TextBox();
-            this.cancelar = new System.Windows.Forms.Button();
             this.SuspendLayout();
+            // 
+            // cancelar
+            // 
+            this.cancelar.Location = new System.Drawing.Point(76, 204);
+            this.cancelar.Name = "cancelar";
+            this.cancelar.Size = new System.Drawing.Size(75, 23);
+            this.cancelar.TabIndex = 46;
+            this.cancelar.Text = "Cancelar";
+            this.cancelar.UseVisualStyleBackColor = true;
+            this.cancelar.Click += new System.EventHandler(this.cancelar_Click);
             // 
             // guardar
             // 
-            this.guardar.Location = new System.Drawing.Point(181, 217);
+            this.guardar.Location = new System.Drawing.Point(183, 204);
             this.guardar.Name = "guardar";
             this.guardar.Size = new System.Drawing.Size(75, 23);
-            this.guardar.TabIndex = 29;
+            this.guardar.TabIndex = 45;
             this.guardar.Text = "Guardar";
             this.guardar.UseVisualStyleBackColor = true;
             this.guardar.Click += new System.EventHandler(this.guardar_Click);
@@ -59,144 +69,126 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 149);
+            this.label7.Location = new System.Drawing.Point(9, 136);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(93, 13);
-            this.label7.TabIndex = 28;
+            this.label7.TabIndex = 44;
             this.label7.Text = "Fecha Nacimiento";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(153, 105);
+            this.label6.Location = new System.Drawing.Point(155, 92);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(26, 13);
-            this.label6.TabIndex = 27;
+            this.label6.TabIndex = 43;
             this.label6.Text = "Mail";
-            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
-            // fecha_nacimiento
+            // fechaNacimiento
             // 
-            this.fecha_nacimiento.Location = new System.Drawing.Point(10, 165);
-            this.fecha_nacimiento.Name = "fecha_nacimiento";
-            this.fecha_nacimiento.Size = new System.Drawing.Size(130, 20);
-            this.fecha_nacimiento.TabIndex = 26;
-            this.fecha_nacimiento.TextChanged += new System.EventHandler(this.fecha_nacimiento_TextChanged);
+            this.fechaNacimiento.Location = new System.Drawing.Point(12, 152);
+            this.fechaNacimiento.Name = "fechaNacimiento";
+            this.fechaNacimiento.Size = new System.Drawing.Size(130, 20);
+            this.fechaNacimiento.TabIndex = 42;
+            this.fechaNacimiento.TextChanged += new System.EventHandler(this.fechaNacimiento_TextChanged);
             // 
             // mail
             // 
-            this.mail.Location = new System.Drawing.Point(158, 122);
+            this.mail.Location = new System.Drawing.Point(160, 109);
             this.mail.Name = "mail";
             this.mail.Size = new System.Drawing.Size(151, 20);
-            this.mail.TabIndex = 25;
-            this.mail.TextChanged += new System.EventHandler(this.mail_TextChanged);
+            this.mail.TabIndex = 41;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(153, 63);
+            this.label5.Location = new System.Drawing.Point(155, 50);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(49, 13);
-            this.label5.TabIndex = 24;
+            this.label5.TabIndex = 40;
             this.label5.Text = "Telefono";
             // 
             // telefono
             // 
-            this.telefono.Location = new System.Drawing.Point(155, 79);
+            this.telefono.Location = new System.Drawing.Point(157, 66);
             this.telefono.Name = "telefono";
             this.telefono.Size = new System.Drawing.Size(151, 20);
-            this.telefono.TabIndex = 23;
-            this.telefono.TextChanged += new System.EventHandler(this.telefono_TextChanged);
+            this.telefono.TabIndex = 39;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(153, 24);
+            this.label4.Location = new System.Drawing.Point(155, 11);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(52, 13);
-            this.label4.TabIndex = 22;
+            this.label4.TabIndex = 38;
             this.label4.Text = "Direccion";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // direccion
             // 
-            this.direccion.Location = new System.Drawing.Point(155, 40);
+            this.direccion.Location = new System.Drawing.Point(157, 27);
             this.direccion.Name = "direccion";
             this.direccion.Size = new System.Drawing.Size(151, 20);
-            this.direccion.TabIndex = 21;
-            this.direccion.TextChanged += new System.EventHandler(this.direccion_TextChanged);
+            this.direccion.TabIndex = 37;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(11, 105);
+            this.label3.Location = new System.Drawing.Point(13, 92);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(44, 13);
-            this.label3.TabIndex = 20;
+            this.label3.TabIndex = 36;
             this.label3.Text = "Apellido";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 64);
+            this.label2.Location = new System.Drawing.Point(11, 51);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(44, 13);
-            this.label2.TabIndex = 19;
+            this.label2.TabIndex = 35;
             this.label2.Text = "Nombre";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 25);
+            this.label1.Location = new System.Drawing.Point(12, 12);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(26, 13);
-            this.label1.TabIndex = 18;
+            this.label1.TabIndex = 34;
             this.label1.Text = "DNI";
             // 
             // apellido
             // 
-            this.apellido.Location = new System.Drawing.Point(10, 122);
+            this.apellido.Location = new System.Drawing.Point(12, 109);
             this.apellido.Name = "apellido";
             this.apellido.Size = new System.Drawing.Size(130, 20);
-            this.apellido.TabIndex = 17;
-            this.apellido.TextChanged += new System.EventHandler(this.apellido_TextChanged);
+            this.apellido.TabIndex = 33;
             // 
             // nombre
             // 
-            this.nombre.Location = new System.Drawing.Point(10, 79);
+            this.nombre.Location = new System.Drawing.Point(12, 66);
             this.nombre.Name = "nombre";
             this.nombre.Size = new System.Drawing.Size(130, 20);
-            this.nombre.TabIndex = 16;
-            this.nombre.TextChanged += new System.EventHandler(this.nombre_TextChanged);
+            this.nombre.TabIndex = 32;
             // 
             // dni
             // 
-            this.dni.Location = new System.Drawing.Point(10, 40);
+            this.dni.Location = new System.Drawing.Point(12, 27);
             this.dni.Name = "dni";
             this.dni.Size = new System.Drawing.Size(130, 20);
-            this.dni.TabIndex = 15;
-            this.dni.TextChanged += new System.EventHandler(this.dni_TextChanged);
+            this.dni.TabIndex = 31;
             // 
-            // cancelar
-            // 
-            this.cancelar.Location = new System.Drawing.Point(74, 217);
-            this.cancelar.Name = "cancelar";
-            this.cancelar.Size = new System.Drawing.Size(75, 23);
-            this.cancelar.TabIndex = 30;
-            this.cancelar.Text = "Cancelar";
-            this.cancelar.UseVisualStyleBackColor = true;
-            this.cancelar.Click += new System.EventHandler(this.cancelar_Click);
-            // 
-            // Modificar
+            // Alta
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(318, 252);
+            this.ClientSize = new System.Drawing.Size(327, 267);
             this.Controls.Add(this.cancelar);
             this.Controls.Add(this.guardar);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.fecha_nacimiento);
+            this.Controls.Add(this.fechaNacimiento);
             this.Controls.Add(this.mail);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.telefono);
@@ -208,9 +200,8 @@
             this.Controls.Add(this.apellido);
             this.Controls.Add(this.nombre);
             this.Controls.Add(this.dni);
-            this.Name = "Modificar";
-            this.Text = "Modificar";
-            this.Load += new System.EventHandler(this.Modificar_Load);
+            this.Name = "Alta";
+            this.Text = "Alta";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -218,10 +209,11 @@
 
         #endregion
 
+        private System.Windows.Forms.Button cancelar;
         private System.Windows.Forms.Button guardar;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox fecha_nacimiento;
+        private System.Windows.Forms.TextBox fechaNacimiento;
         private System.Windows.Forms.TextBox mail;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox telefono;
@@ -233,7 +225,5 @@
         private System.Windows.Forms.TextBox apellido;
         private System.Windows.Forms.TextBox nombre;
         private System.Windows.Forms.TextBox dni;
-        private System.Windows.Forms.Button cancelar;
-
     }
 }

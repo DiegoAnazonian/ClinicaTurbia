@@ -20,9 +20,9 @@ namespace Clinica_Frba.Abm_de_Profesional
 
             InitializeComponent();
             limpiar.Click += new EventHandler(this.modoDefecto);
-            alta.Click += new EventHandler(this.mostrarAlta);
             medicosBox.Click += new EventHandler(this.activarBotones);
             this.ActiveControl = palabraClave;
+            
             DataTable medicos = this.traerTodosLosMedicos();
             this.llenarCheckedBoxMedicos(medicos);
             this.cambiarNombreColumnas();
@@ -48,10 +48,7 @@ namespace Clinica_Frba.Abm_de_Profesional
             
         }
 
-        private void mostrarAlta(Object sender,EventArgs e)
-        {
-            MessageBox.Show("Muestro alta");
-        }
+       
         private void palabraClave_Click(object sender, EventArgs e)
         {
             
@@ -75,11 +72,7 @@ namespace Clinica_Frba.Abm_de_Profesional
 
         }
 
-        private void medicosBox_Changed()
-        {
-            MessageBox.Show("HOLI");
-        }
-
+        
         private void medicosBox_Click(object sender, EventArgs e)
         {
             
@@ -118,7 +111,10 @@ namespace Clinica_Frba.Abm_de_Profesional
 
         private void nombre_TextChanged(object sender, EventArgs e)
         {
-
+            List<SqlParameter> nomParcial = Database.GenerarListaDeParametros("nombre", nombre.Text);
+            DataTable tablaMedicos = Database.GetInstance
+                .ExecuteQuery("[ClinicaTurbia].[FILTRAR_X_NOMBRE]", nomParcial);
+            this.llenarCheckedBoxMedicos(tablaMedicos);
         }
 
         private void refrescarTabla()
@@ -144,7 +140,99 @@ namespace Clinica_Frba.Abm_de_Profesional
             persona.fecha = (DateTime) medicosBox.Rows[medicosBox.CurrentRow.Index].Cells[6].Value;
 
             new Modificar(persona).ShowDialog();
+            this.asDefault();
+
+        }
+
+        private void buscar_Click(object sender, EventArgs e)
+        {
+
+
+        }
+
+        private void volver_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void apellido_TextChanged(object sender, EventArgs e)
+        {
+            List<SqlParameter> apeParcial = Database.GenerarListaDeParametros("apellido", apellido.Text);
+            DataTable tablaMedicos = Database.GetInstance
+                .ExecuteQuery("[ClinicaTurbia].[FILTRAR_X_APELLIDO]", apeParcial);
+            this.llenarCheckedBoxMedicos(tablaMedicos);
+        }
+
+        private void dni_TextChanged(object sender, EventArgs e)
+        {
+                        
+            List<SqlParameter> dniParcial = Database.GenerarListaDeParametros("dni", this.dni.Text);
+            DataTable tablaMedicos = Database.GetInstance
+                .ExecuteQuery("[ClinicaTurbia].[FILTRAR_X_DNI]", dniParcial);
+            this.llenarCheckedBoxMedicos(tablaMedicos);
+
+        }
+
+        private void direccion_TextChanged(object sender, EventArgs e)
+        {
+            List<SqlParameter> direParcial = Database.GenerarListaDeParametros("direccion", direccion.Text);
+            DataTable tablaMedicos = Database.GetInstance
+                .ExecuteQuery("[ClinicaTurbia].[FILTRAR_X_DIRECCION]", direParcial);
+            this.llenarCheckedBoxMedicos(tablaMedicos);
+        }
+
+        private void medicosBox_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void alta_Click(object sender, EventArgs e)
+        {
+            new Alta().ShowDialog();
+            this.asDefault();
+        }
+
+        private void eliminarMedico(long documento)
+        {
+            try
+            {
+                List<SqlParameter> parametros = Database.GenerarListaDeParametros("dni", Convert.ToInt64(documento));
+                DataTable tablaMedicos = Database.GetInstance
+                    .ExecuteQuery("[ClinicaTurbia].[BORRAR_MEDICO]", parametros);
+                MessageBox.Show("El medico se ha eliminado exitosamente", "Clinica FRBA", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Probelmas al eliminar el medico", "Error de carga", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
             this.refrescarTabla();
+
+        }
+
+        private void asDefault()
+        {
+            this.modificar.Enabled = false;
+            this.baja.Enabled = false;
+            this.refrescarTabla();
+        }
+
+        private void baja_Click(object sender, EventArgs e)
+        {
+            long documento = Convert.ToInt64(medicosBox.Rows[medicosBox.CurrentRow.Index].Cells[0].Value);
+            string nom = Convert.ToString(medicosBox.Rows[medicosBox.CurrentRow.Index].Cells[1].Value);
+            string ape = Convert.ToString(medicosBox.Rows[medicosBox.CurrentRow.Index].Cells[2].Value);
+
+            if(MessageBox.Show("Seguro desea eliminar a " + ape + ", " + nom + ".\n DNI: " + documento + "", "ClinicaTurbia FRBA", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                this.eliminarMedico(documento);
+            }
+
+            this.asDefault();
+        }
+
+        private void AbmProfesional_Load(object sender, EventArgs e)
+        {
 
         }
     }

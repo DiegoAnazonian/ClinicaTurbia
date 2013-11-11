@@ -57,7 +57,7 @@
             // lblPassword
             // 
             this.lblPassword.AutoSize = true;
-            this.lblPassword.Location = new System.Drawing.Point(290, 12);
+            this.lblPassword.Location = new System.Drawing.Point(303, 16);
             this.lblPassword.Name = "lblPassword";
             this.lblPassword.Size = new System.Drawing.Size(53, 13);
             this.lblPassword.TabIndex = 2;
@@ -65,14 +65,14 @@
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(349, 9);
+            this.txtPassword.Location = new System.Drawing.Point(362, 13);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(173, 20);
+            this.txtPassword.Size = new System.Drawing.Size(162, 20);
             this.txtPassword.TabIndex = 3;
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(541, 6);
+            this.btnLogin.Location = new System.Drawing.Point(605, 6);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(72, 24);
             this.btnLogin.TabIndex = 4;
@@ -89,7 +89,7 @@
             this.panelLogin.Controls.Add(this.txtUsuario);
             this.panelLogin.Location = new System.Drawing.Point(11, 11);
             this.panelLogin.Name = "panelLogin";
-            this.panelLogin.Size = new System.Drawing.Size(623, 37);
+            this.panelLogin.Size = new System.Drawing.Size(710, 200);
             this.panelLogin.TabIndex = 5;
             // 
             // LoginWindow
@@ -97,7 +97,7 @@
             this.AcceptButton = this.btnLogin;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(639, 229);
+            this.ClientSize = new System.Drawing.Size(730, 223);
             this.Controls.Add(this.panelLogin);
             this.Name = "LoginWindow";
             this.Text = "Login";

@@ -45,6 +45,7 @@
             this.direccion = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.limpiar = new System.Windows.Forms.Button();
+            this.volver = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.medicosBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,6 +57,7 @@
             this.alta.TabIndex = 0;
             this.alta.Text = "Alta";
             this.alta.UseVisualStyleBackColor = true;
+            this.alta.Click += new System.EventHandler(this.alta_Click);
             // 
             // baja
             // 
@@ -66,6 +68,7 @@
             this.baja.TabIndex = 0;
             this.baja.Text = "Baja";
             this.baja.UseVisualStyleBackColor = true;
+            this.baja.Click += new System.EventHandler(this.baja_Click);
             // 
             // modificar
             // 
@@ -124,6 +127,7 @@
             this.medicosBox.Name = "medicosBox";
             this.medicosBox.Size = new System.Drawing.Size(630, 242);
             this.medicosBox.TabIndex = 7;
+            this.medicosBox.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.medicosBox_CellContentClick);
             // 
             // nombre
             // 
@@ -148,6 +152,7 @@
             this.apellido.Name = "apellido";
             this.apellido.Size = new System.Drawing.Size(100, 20);
             this.apellido.TabIndex = 10;
+            this.apellido.TextChanged += new System.EventHandler(this.apellido_TextChanged);
             // 
             // label4
             // 
@@ -164,6 +169,7 @@
             this.dni.Name = "dni";
             this.dni.Size = new System.Drawing.Size(100, 20);
             this.dni.TabIndex = 12;
+            this.dni.TextChanged += new System.EventHandler(this.dni_TextChanged);
             // 
             // label5
             // 
@@ -180,6 +186,7 @@
             this.direccion.Name = "direccion";
             this.direccion.Size = new System.Drawing.Size(100, 20);
             this.direccion.TabIndex = 14;
+            this.direccion.TextChanged += new System.EventHandler(this.direccion_TextChanged);
             // 
             // label6
             // 
@@ -199,11 +206,22 @@
             this.limpiar.Text = "Limpiar";
             this.limpiar.UseVisualStyleBackColor = true;
             // 
+            // volver
+            // 
+            this.volver.Location = new System.Drawing.Point(474, 165);
+            this.volver.Name = "volver";
+            this.volver.Size = new System.Drawing.Size(75, 23);
+            this.volver.TabIndex = 18;
+            this.volver.Text = "Volver";
+            this.volver.UseVisualStyleBackColor = true;
+            this.volver.Click += new System.EventHandler(this.volver_Click);
+            // 
             // AbmProfesional
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(665, 453);
+            this.Controls.Add(this.volver);
             this.Controls.Add(this.limpiar);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.direccion);
@@ -223,6 +241,7 @@
             this.Controls.Add(this.alta);
             this.Name = "AbmProfesional";
             this.Text = "AbmProfesional";
+            this.Load += new System.EventHandler(this.AbmProfesional_Load);
             ((System.ComponentModel.ISupportInitialize)(this.medicosBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -248,5 +267,6 @@
         private System.Windows.Forms.TextBox direccion;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button limpiar;
+        private System.Windows.Forms.Button volver;
     }
 }
