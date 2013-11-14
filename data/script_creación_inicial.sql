@@ -14,12 +14,17 @@ GO
 --------------------------------------------------------
 ----------    LIMPIEZA DE LA BASE DE DATOS    ----------
 --------------------------------------------------------
-IF OBJECT_ID('ClinicaTurbia.Paciente', 'U') IS NOT NULL
-	DROP TABLE ClinicaTurbia.Paciente
+
+IF OBJECT_ID('ClinicaTurbia.Diagnostico', 'U') IS NOT NULL
+	DROP TABLE ClinicaTurbia.Diagnostico
 GO
 
-IF OBJECT_ID('ClinicaTurbia.Medico', 'U') IS NOT NULL
-	DROP TABLE ClinicaTurbia.Medico
+IF OBJECT_ID('ClinicaTurbia.Turno', 'U') IS NOT NULL
+	DROP TABLE ClinicaTurbia.Turno
+GO
+
+IF OBJECT_ID('ClinicaTurbia.Paciente', 'U') IS NOT NULL
+	DROP TABLE ClinicaTurbia.Paciente
 GO
 
 IF OBJECT_ID('ClinicaTurbia.EstadoCivil', 'U') IS NOT NULL
@@ -56,6 +61,18 @@ GO
 
 IF OBJECT_ID('ClinicaTurbia.Rol', 'U') IS NOT NULL
 	DROP TABLE ClinicaTurbia.Rol
+GO
+
+IF OBJECT_ID('ClinicaTurbia.Profesional_Dia_Horario', 'U') IS NOT NULL
+	DROP TABLE ClinicaTurbia.Profesional_Dia_Horario
+GO
+
+IF OBJECT_ID('ClinicaTurbia.Medico', 'U') IS NOT NULL
+	DROP TABLE ClinicaTurbia.Medico
+GO
+
+IF OBJECT_ID('ClinicaTurbia.Horario', 'U') IS NOT NULL
+	DROP TABLE ClinicaTurbia.Horario
 GO
 
 IF OBJECT_ID('ClinicaTurbia.Funcionalidad', 'U') IS NOT NULL
@@ -130,8 +147,8 @@ IF OBJECT_ID('ClinicaTurbia.CREARTABLAS', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.CREARTABLAS
 GO
 
-IF OBJECT_ID('ClinicaTurbia.CREARPK', 'P') IS NOT NULL
-	DROP PROCEDURE ClinicaTurbia.CREARPK
+IF OBJECT_ID('ClinicaTurbia.CARGAR_HORARIOS_PROFESIONALES', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.CARGAR_HORARIOS_PROFESIONALES
 GO
 
 IF OBJECT_ID('ClinicaTurbia.MODIFICAR_MEDICO','P') IS NOT NULL
@@ -242,7 +259,7 @@ CREATE TABLE ClinicaTurbia.Paciente(
 	PAC_MAIL [nvarchar] (255) NOT NULL,
 	PAC_CANT_HIJOS [numeric] (2, 0),
 	PAC_PLAN_MEDICO_CODIGO [int] FOREIGN KEY REFERENCES ClinicaTurbia.PlanMedico(PLAN_CODIGO),
-	PAC_NUMERO_AFILIADO [int] NOT NULL IDENTITY
+	PAC_NUMERO_AFILIADO [int] NOT NULL IDENTITY(1, 100)
 );
 
 ----MEDICO----
@@ -271,15 +288,45 @@ CREATE TABLE ClinicaTurbia.Usuario_Rol(
 );
 
 CREATE TABLE ClinicaTurbia.TipoEspecialidad(
-	TIPOESP_CODIGO numeric(18, 0) NOT NULL PRIMARY KEY, 
-	TIPOESP_DESCRIPCION varchar(255)
+	TIPOESP_CODIGO [numeric] (18, 0) NOT NULL PRIMARY KEY, 
+	TIPOESP_DESCRIPCION [varchar] (255)
 );
 
 CREATE TABLE ClinicaTurbia.Especialidad(
-	ESP_CODIGO numeric(18, 0) NOT NULL PRIMARY KEY, 
-	ESP_DESCRIPCION varchar(255),
-	ESP_TIPOESP_CODIGO numeric (18, 0) FOREIGN KEY REFERENCES ClinicaTurbia.TipoEspecialidad(TIPOESP_CODIGO) NOT NULL
+	ESP_CODIGO [numeric] (18, 0) NOT NULL PRIMARY KEY, 
+	ESP_DESCRIPCION [varchar] (255),
+	ESP_TIPOESP_CODIGO [numeric] (18, 0) FOREIGN KEY REFERENCES ClinicaTurbia.TipoEspecialidad(TIPOESP_CODIGO) NOT NULL
 );
+
+CREATE TABLE ClinicaTurbia.Horario(
+	HOR_COD [int] PRIMARY KEY NOT NULL IDENTITY,
+	HOR_NOMBRE [varchar] (255) NOT NULL,
+	HOR_HORA_DESDE [int] NOT NULL,
+	HOR_HORA_HASTA [int] NOT NULL
+);
+
+CREATE TABLE ClinicaTurbia.Profesional_Dia_Horario(
+	PDH_PROF_COD [numeric] (18,0) NOT NULL FOREIGN KEY REFERENCES ClinicaTurbia.Medico(MED_DNI),
+	PDH_HORARIO_COD [int] NOT NULL FOREIGN KEY REFERENCES ClinicaTurbia.Horario(HOR_COD),
+	PDH_DIA [int] NOT NULL
+);
+
+CREATE TABLE ClinicaTurbia.Turno(
+	TURN_NUMERO [numeric] (18,0) PRIMARY KEY,
+	TURN_FECHA [datetime] NOT NULL,
+	TURN_PROF_COD [numeric] (18,0) NOT NULL FOREIGN KEY REFERENCES ClinicaTurbia.Medico(MED_DNI),
+	TURN_PAC_COD [numeric] (18,0) NOT NULL FOREIGN KEY REFERENCES ClinicaTurbia.Paciente(PAC_NUMDOC)
+);
+
+CREATE TABLE ClinicaTurbia.Diagnostico(
+	DIAG_COD [numeric] (18,0) PRIMARY KEY IDENTITY,
+	DIAG_TURN_NUMERO [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.Turno(TURN_NUMERO),
+	DIAG_CONSULTA_SINTOMAS [varchar] (255),
+	DIAG_CONSULTA_ENFERMEDADES [varchar] (255),
+	DIAG_BONO_CONSULTA [numeric] (18,0),
+	DIAG_BONO_FARMACIA [numeric] (18,0),
+);
+
 
 GO
 
@@ -356,12 +403,45 @@ INSERT INTO ClinicaTurbia.Usuario(USUARIO_NOMBRE, USUARIO_PASSWORD, USUARIO_HABI
 	VALUES ('admin', 'w23e', 1, 0);
 
 INSERT INTO ClinicaTurbia.Usuario_Rol(USUARIO_NOMBRE, ROL_ID)
-	VALUES ('admin',1);
+	SELECT PAC_NUMDOC, 2 FROM ClinicaTurbia.Paciente;
 	
 INSERT INTO ClinicaTurbia.Usuario_Rol(USUARIO_NOMBRE, ROL_ID)
-	SELECT PAC_NUMDOC, 2 FROM ClinicaTurbia.Paciente
-	UNION
-	SELECT MED_DNI, 3 FROM ClinicaTurbia.Medico;
+	VALUES ('admin', 1), ('admin', 2), ('admin', 3); 
+
+INSERT INTO ClinicaTurbia.Horario(HOR_NOMBRE, HOR_HORA_DESDE, HOR_HORA_HASTA)
+	VALUES ('Mañana', 7, 14), ('Tarde', 13, 20),
+	('Part-Time Mañana', 8, 11), ('Part-Time Tarde', 15, 18),
+	('Sabado Tarde', 11, 15), ('Sabado Mañana', 8, 12);
+
+INSERT INTO ClinicaTurbia.Turno(TURN_NUMERO, TURN_FECHA, TURN_PROF_COD, TURN_PAC_COD)
+	SELECT DISTINCT Turno_Numero, Turno_Fecha, Medico_Dni, Paciente_Dni FROM GD2C2013.gd_esquema.Maestra
+			WHERE DATEPART(DW, Turno_Fecha) != 7;
+
+INSERT INTO ClinicaTurbia.Diagnostico(DIAG_TURN_NUMERO, DIAG_CONSULTA_SINTOMAS, DIAG_CONSULTA_ENFERMEDADES,
+		DIAG_BONO_CONSULTA, DIAG_BONO_FARMACIA)
+	SELECT Turno_Numero, Consulta_Sintomas, Consulta_Enfermedades, Bono_Consulta_Numero, Bono_Farmacia_Numero
+		FROM gd_esquema.Maestra 
+		WHERE Consulta_Sintomas IS NOT NULL AND DATEPART(DW, Turno_Fecha) != 7
+		ORDER BY Turno_Numero;
+
+GO
+
+CREATE PROCEDURE ClinicaTurbia.CARGAR_HORARIOS_PROFESIONALES AS	
+	DECLARE @medDoc numeric (18, 0);
+	DECLARE cursorProfs CURSOR FOR SELECT MED_DNI FROM ClinicaTurbia.Medico;
+	OPEN cursorProfs;
+	FETCH cursorProfs INTO @medDoc;
+	WHILE @@FETCH_STATUS = 0
+	BEGIN;
+		INSERT INTO ClinicaTurbia.Profesional_Dia_Horario(PDH_PROF_COD, PDH_HORARIO_COD, PDH_DIA)
+			VALUES (@medDoc, ROUND(RAND()*4+1, 0, 1), 1), (@medDoc, ROUND(RAND()*4+1, 0, 1), 2),
+			(@medDoc, ROUND(RAND()*4+1, 0, 1), 3), (@medDoc, ROUND(RAND()*4+1, 0, 1), 4),
+			(@medDoc, ROUND(RAND()*4+1, 0, 1), 5), (@medDoc, ROUND(RAND()*2+5, 0, 1), 6);
+		FETCH NEXT FROM cursorProfs INTO @medDoc;
+	END;
+	CLOSE cursorProfs;
+	DEALLOCATE cursorProfs;
+>>>>>>> Principio de turnos
 
 GO
 --------------------------------------------------------
@@ -562,3 +642,4 @@ GO
 
 EXEC ClinicaTurbia.CREARTABLAS
 EXEC ClinicaTurbia.MIGRACION
+EXEC ClinicaTurbia.CARGAR_HORARIOS_PROFESIONALES
