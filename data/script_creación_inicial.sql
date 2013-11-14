@@ -441,7 +441,6 @@ CREATE PROCEDURE ClinicaTurbia.CARGAR_HORARIOS_PROFESIONALES AS
 	END;
 	CLOSE cursorProfs;
 	DEALLOCATE cursorProfs;
->>>>>>> Principio de turnos
 
 GO
 --------------------------------------------------------
