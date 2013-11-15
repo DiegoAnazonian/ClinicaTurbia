@@ -15,6 +15,10 @@ GO
 ----------    LIMPIEZA DE LA BASE DE DATOS    ----------
 --------------------------------------------------------
 
+IF OBJECT_ID('ClinicaTurbia.Medico_Especialidad', 'U') IS NOT NULL
+	DROP TABLE ClinicaTurbia.Medico_Especialidad
+GO
+
 IF OBJECT_ID('ClinicaTurbia.Diagnostico', 'U') IS NOT NULL
 	DROP TABLE ClinicaTurbia.Diagnostico
 GO
@@ -115,6 +119,10 @@ IF OBJECT_ID('ClinicaTurbia.LISTADO_ESTADO_CIVIL', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.LISTADO_ESTADO_CIVIL
 GO
 
+IF OBJECT_ID('ClinicaTurbia.LISTADO_PACIENTES', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.LISTADO_PACIENTES
+GO
+
 IF OBJECT_ID('ClinicaTurbia.NUEVO_ROL', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.NUEVO_ROL
 GO
@@ -159,8 +167,20 @@ IF OBJECT_ID('ClinicaTurbia.MIGRACION', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.MIGRACION
 GO
 
+IF OBJECT_ID('ClinicaTurbia.CREAR_TURNO','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.CREAR_TURNO
+GO
+
 IF OBJECT_ID('ClinicaTurbia.TRAER_TODOS_MEDICOS','P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.TRAER_TODOS_MEDICOS
+GO
+
+IF OBJECT_ID('ClinicaTurbia.TRAER_HORARIOS_MEDICO','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.TRAER_HORARIOS_MEDICO
+GO
+
+IF OBJECT_ID('ClinicaTurbia.FILTRAR_X_ESPECIALIDAD','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.FILTRAR_X_ESPECIALIDAD
 GO
 
 IF OBJECT_ID('ClinicaTurbia.FILTRAR_X_NOMBRE','P') IS NOT NULL
@@ -174,7 +194,6 @@ GO
 IF OBJECT_ID('ClinicaTurbia.FILTRAR_X_DNI','P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.FILTRAR_X_DNI
 GO
-
 
 IF OBJECT_ID('ClinicaTurbia.FILTRAR_X_DIRECCION','P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.FILTRAR_X_DIRECCION
@@ -190,6 +209,30 @@ GO
 
 IF OBJECT_ID('ClinicaTurbia.BORRAR_MEDICO','P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.BORRAR_MEDICO
+GO
+
+IF OBJECT_ID('ClinicaTurbia.TRAER_TURNOS_DE_MEDICO_PARA_FECHA','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.TRAER_TURNOS_DE_MEDICO_PARA_FECHA
+GO
+
+IF OBJECT_ID('ClinicaTurbia.FILTRAR_X_APELLIDO_PACIENTES','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.FILTRAR_X_APELLIDO_PACIENTES
+GO
+
+IF OBJECT_ID('ClinicaTurbia.FILTRAR_X_DNI_PACIENTES','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.FILTRAR_X_DNI_PACIENTES
+GO
+
+IF OBJECT_ID('ClinicaTurbia.FILTRAR_X_NOMBRE_PACIENTES','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.FILTRAR_X_NOMBRE_PACIENTES
+GO
+
+IF OBJECT_ID('ClinicaTurbia.FILTRAR_X_DIRECCION_PACIENTES','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.FILTRAR_X_DIRECCION_PACIENTES
+GO
+
+IF OBJECT_ID('ClinicaTurbia.FILTRAR_POR_PALABRACLAVE_PACIENTE','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.FILTRAR_POR_PALABRACLAVE_PACIENTE
 GO
 
 IF SCHEMA_ID('ClinicaTurbia') IS NOT NULL
@@ -301,8 +344,8 @@ CREATE TABLE ClinicaTurbia.Especialidad(
 CREATE TABLE ClinicaTurbia.Horario(
 	HOR_COD [int] PRIMARY KEY NOT NULL IDENTITY,
 	HOR_NOMBRE [varchar] (255) NOT NULL,
-	HOR_HORA_DESDE [int] NOT NULL,
-	HOR_HORA_HASTA [int] NOT NULL
+	HOR_HORA_DESDE [varchar] (10) NOT NULL,
+	HOR_HORA_HASTA [varchar] (10) NOT NULL
 );
 
 CREATE TABLE ClinicaTurbia.Profesional_Dia_Horario(
@@ -312,7 +355,7 @@ CREATE TABLE ClinicaTurbia.Profesional_Dia_Horario(
 );
 
 CREATE TABLE ClinicaTurbia.Turno(
-	TURN_NUMERO [numeric] (18,0) PRIMARY KEY,
+	TURN_NUMERO [numeric] (18,0) PRIMARY KEY IDENTITY,
 	TURN_FECHA [datetime] NOT NULL,
 	TURN_PROF_COD [numeric] (18,0) NOT NULL FOREIGN KEY REFERENCES ClinicaTurbia.Medico(MED_DNI),
 	TURN_PAC_COD [numeric] (18,0) NOT NULL FOREIGN KEY REFERENCES ClinicaTurbia.Paciente(PAC_NUMDOC)
@@ -327,6 +370,10 @@ CREATE TABLE ClinicaTurbia.Diagnostico(
 	DIAG_BONO_FARMACIA [numeric] (18,0),
 );
 
+CREATE TABLE ClinicaTurbia.Medico_Especialidad(
+	MEDESP_MED [numeric] (18,0) NOT NULL FOREIGN KEY REFERENCES ClinicaTurbia.Medico(MED_DNI),
+	MEDESP_ESP [numeric] (18, 0) FOREIGN KEY REFERENCES ClinicaTurbia.Especialidad(ESP_CODIGO) NOT NULL
+);
 
 GO
 
@@ -336,13 +383,14 @@ GO
 CREATE PROCEDURE ClinicaTurbia.MIGRACION AS
 
 INSERT INTO ClinicaTurbia.Rol(ROL_NOMBRE, ROL_HABILITADO) VALUES
-	('Administrativo', 1), ('Afiliado', 1), ('Profesional', 1);
+	('Administrativo', 1), ('Afiliado', 1);
 	
 INSERT INTO ClinicaTurbia.Funcionalidad(FUN_NOMBRE) VALUES
-	('ABM de Roles'), ('ABM de Afiliado'), ('ABM de Especialidad'), ('ABM de Profesional'), ('Funcionalidad5');
+	('ABM de Roles'), ('ABM de Afiliado'), ('ABM de Especialidad'), ('ABM de Profesional'),
+	('Pedir Turno');
 
 INSERT INTO ClinicaTurbia.Rol_Funcionalidad(ROL_ID, FUN_ID) VALUES
-	(1,1), (2,1), (3,1), (1,2), (2,2), (3,2), (1,3), (2,3),(1,4), (3,3), (2,5), (3,4);
+	(1,1), (2,1), (1,2), (2,2), (1,3), (2,3), (1,4), (2,4), (2,5);
 
 INSERT INTO ClinicaTurbia.TipoDocumento(TIDOC_NOMBRE) VALUES
 	('Documento Nacional de Identidad'), ('Cédula de Identidad'),
@@ -395,9 +443,7 @@ INSERT INTO ClinicaTurbia.Medico(MED_DNI, MED_NOMBRE, MED_APELLIDO, MED_DIRECCIO
 	FROM gd_esquema.Maestra m WHERE m.Medico_Dni IS NOT NULL;
 
 INSERT INTO ClinicaTurbia.Usuario(USUARIO_NOMBRE, USUARIO_PASSWORD, USUARIO_HABILITADO, USUARIO_PRIMER_LOGIN)
-	SELECT PAC_NUMDOC, 1234, 1, 1 FROM ClinicaTurbia.Paciente
-	UNION
-	SELECT MED_DNI, 1234, 1, 1 FROM ClinicaTurbia.Medico;
+	SELECT PAC_NUMDOC, 1234, 1, 1 FROM ClinicaTurbia.Paciente;
 	
 INSERT INTO ClinicaTurbia.Usuario(USUARIO_NOMBRE, USUARIO_PASSWORD, USUARIO_HABILITADO, USUARIO_PRIMER_LOGIN)
 	VALUES ('admin', 'w23e', 1, 0);
@@ -406,16 +452,18 @@ INSERT INTO ClinicaTurbia.Usuario_Rol(USUARIO_NOMBRE, ROL_ID)
 	SELECT PAC_NUMDOC, 2 FROM ClinicaTurbia.Paciente;
 	
 INSERT INTO ClinicaTurbia.Usuario_Rol(USUARIO_NOMBRE, ROL_ID)
-	VALUES ('admin', 1), ('admin', 2), ('admin', 3); 
+	VALUES ('admin', 1); 
 
 INSERT INTO ClinicaTurbia.Horario(HOR_NOMBRE, HOR_HORA_DESDE, HOR_HORA_HASTA)
-	VALUES ('Mañana', 7, 14), ('Tarde', 13, 20),
-	('Part-Time Mañana', 8, 11), ('Part-Time Tarde', 15, 18),
-	('Sabado Tarde', 11, 15), ('Sabado Mañana', 8, 12);
+	VALUES ('Mañana', '07:00', '14:00'), ('Tarde', '13:00', '20:00'),
+	('Part-Time Mañana', '08:00', '11:00'), ('Part-Time Tarde', '15:00', '18:00'),
+	('Sabado Tarde', '11:00', '15:00'), ('Sabado Mañana', '08:00', '12:00');
 
+SET IDENTITY_INSERT ClinicaTurbia.Turno ON;
 INSERT INTO ClinicaTurbia.Turno(TURN_NUMERO, TURN_FECHA, TURN_PROF_COD, TURN_PAC_COD)
 	SELECT DISTINCT Turno_Numero, Turno_Fecha, Medico_Dni, Paciente_Dni FROM GD2C2013.gd_esquema.Maestra
 			WHERE DATEPART(DW, Turno_Fecha) != 7;
+SET IDENTITY_INSERT ClinicaTurbia.Turno OFF;
 
 INSERT INTO ClinicaTurbia.Diagnostico(DIAG_TURN_NUMERO, DIAG_CONSULTA_SINTOMAS, DIAG_CONSULTA_ENFERMEDADES,
 		DIAG_BONO_CONSULTA, DIAG_BONO_FARMACIA)
@@ -423,6 +471,12 @@ INSERT INTO ClinicaTurbia.Diagnostico(DIAG_TURN_NUMERO, DIAG_CONSULTA_SINTOMAS, 
 		FROM gd_esquema.Maestra 
 		WHERE Consulta_Sintomas IS NOT NULL AND DATEPART(DW, Turno_Fecha) != 7
 		ORDER BY Turno_Numero;
+		
+INSERT INTO ClinicaTurbia.Medico_Especialidad 
+	SELECT Medico_Dni, Especialidad_Codigo FROM GD2C2013.gd_esquema.Maestra
+	WHERE Medico_Dni IS NOT NULL
+	GROUP BY Medico_Dni, Especialidad_Codigo
+	ORDER BY Medico_Dni;
 
 GO
 
@@ -443,6 +497,117 @@ CREATE PROCEDURE ClinicaTurbia.CARGAR_HORARIOS_PROFESIONALES AS
 	DEALLOCATE cursorProfs;
 
 GO
+
+--------------------------------------------------------
+---------------- CONSULTA_PACIENTE  --------------------
+--------------------------------------------------------
+
+CREATE PROCEDURE ClinicaTurbia.LISTADO_PACIENTES AS
+	SELECT DISTINCT PAC_NOMBRE AS 'Nombre', PAC_APELLIDO AS 'Apellido', CASE WHEN PAC_TIPO_DOCUMENTO IS NULL THEN 
+		NULL ELSE TIDOC_NOMBRE END AS 'Tipo Documento', PAC_NUMDOC AS 'Documento', PAC_SEXO AS 'Sexo',
+		PAC_FECHA_NACIMIENTO AS 'Fecha Nacimiento',	CASE WHEN PAC_ESTADO_CIVIL IS NULL THEN NULL ELSE
+		ECIVIL_NOMBRE END AS 'Estado Civil', PAC_DIRECCION AS 'Direccion', PAC_TELEFONO AS 'Telefono',
+		PAC_MAIL AS 'Mail', PAC_CANT_HIJOS AS 'Familiares a cargo', PLAN_DESCRIPCION AS 'Plan Medico',
+		PAC_NUMERO_AFILIADO AS 'Numero Afiliado'
+	FROM ClinicaTurbia.Paciente, ClinicaTurbia.PlanMedico, ClinicaTurbia.TipoDocumento, ClinicaTurbia.EstadoCivil 
+	WHERE PAC_PLAN_MEDICO_CODIGO=PLAN_CODIGO
+	AND (PAC_TIPO_DOCUMENTO=TIDOC_ID OR PAC_TIPO_DOCUMENTO IS NULL)
+	AND (PAC_ESTADO_CIVIL=ECIVIL_ID OR PAC_ESTADO_CIVIL IS NULL)
+	ORDER BY 'Apellido', 'Nombre'
+GO
+
+CREATE PROCEDURE ClinicaTurbia.FILTRAR_POR_PALABRACLAVE_PACIENTE
+	(@nombreParcial nvarchar(255)) 
+	AS
+	SELECT DISTINCT PAC_NOMBRE AS 'Nombre', PAC_APELLIDO AS 'Apellido', CASE WHEN PAC_TIPO_DOCUMENTO IS NULL THEN 
+		NULL ELSE TIDOC_NOMBRE END AS 'Tipo Documento', PAC_NUMDOC AS 'Documento', PAC_SEXO AS 'Sexo',
+		PAC_FECHA_NACIMIENTO AS 'Fecha Nacimiento',	CASE WHEN PAC_ESTADO_CIVIL IS NULL THEN NULL ELSE
+		ECIVIL_NOMBRE END AS 'Estado Civil', PAC_DIRECCION AS 'Direccion', PAC_TELEFONO AS 'Telefono',
+		PAC_MAIL AS 'Mail', PAC_CANT_HIJOS AS 'Familiares a cargo', PLAN_DESCRIPCION AS 'Plan Medico',
+		PAC_NUMERO_AFILIADO AS 'Numero Afiliado'
+	FROM ClinicaTurbia.Paciente, ClinicaTurbia.PlanMedico, ClinicaTurbia.TipoDocumento, ClinicaTurbia.EstadoCivil 
+	WHERE (PAC_NOMBRE like @nombreParcial+'%' OR 
+		  PAC_APELLIDO like @nombreParcial+'%' OR
+		  PAC_NUMDOC like @nombreParcial+'%' OR
+		  PAC_TELEFONO like @nombreParcial+'%' OR
+		  PAC_DIRECCION like @nombreParcial+'%' OR
+		  PAC_MAIL like @nombreParcial+'%' OR
+		  PAC_FECHA_NACIMIENTO like @nombreParcial+'%')
+	AND PAC_PLAN_MEDICO_CODIGO=PLAN_CODIGO
+	AND (PAC_TIPO_DOCUMENTO=TIDOC_ID OR PAC_TIPO_DOCUMENTO IS NULL)
+	AND (PAC_ESTADO_CIVIL=ECIVIL_ID OR PAC_ESTADO_CIVIL IS NULL)
+	ORDER BY 'Apellido', 'Nombre'
+	
+GO
+
+CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_DIRECCION_PACIENTES
+	(@direccion nvarchar(255))
+	AS
+	SELECT DISTINCT PAC_NOMBRE AS 'Nombre', PAC_APELLIDO AS 'Apellido', CASE WHEN PAC_TIPO_DOCUMENTO IS NULL THEN 
+		NULL ELSE TIDOC_NOMBRE END AS 'Tipo Documento', PAC_NUMDOC AS 'Documento', PAC_SEXO AS 'Sexo',
+		PAC_FECHA_NACIMIENTO AS 'Fecha Nacimiento',	CASE WHEN PAC_ESTADO_CIVIL IS NULL THEN NULL ELSE
+		ECIVIL_NOMBRE END AS 'Estado Civil', PAC_DIRECCION AS 'Direccion', PAC_TELEFONO AS 'Telefono',
+		PAC_MAIL AS 'Mail', PAC_CANT_HIJOS AS 'Familiares a cargo', PLAN_DESCRIPCION AS 'Plan Medico',
+		PAC_NUMERO_AFILIADO AS 'Numero Afiliado'
+	FROM ClinicaTurbia.Paciente, ClinicaTurbia.PlanMedico, ClinicaTurbia.TipoDocumento, ClinicaTurbia.EstadoCivil 
+	WHERE PAC_DIRECCION like @direccion+'%'
+	AND PAC_PLAN_MEDICO_CODIGO=PLAN_CODIGO
+	AND (PAC_TIPO_DOCUMENTO=TIDOC_ID OR PAC_TIPO_DOCUMENTO IS NULL)
+	AND (PAC_ESTADO_CIVIL=ECIVIL_ID OR PAC_ESTADO_CIVIL IS NULL)
+	ORDER BY 'Apellido', 'Nombre'
+GO
+
+CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_NOMBRE_PACIENTES
+	(@nombre nvarchar(255))
+	AS
+	SELECT DISTINCT PAC_NOMBRE AS 'Nombre', PAC_APELLIDO AS 'Apellido', CASE WHEN PAC_TIPO_DOCUMENTO IS NULL THEN 
+		NULL ELSE TIDOC_NOMBRE END AS 'Tipo Documento', PAC_NUMDOC AS 'Documento', PAC_SEXO AS 'Sexo',
+		PAC_FECHA_NACIMIENTO AS 'Fecha Nacimiento',	CASE WHEN PAC_ESTADO_CIVIL IS NULL THEN NULL ELSE
+		ECIVIL_NOMBRE END AS 'Estado Civil', PAC_DIRECCION AS 'Direccion', PAC_TELEFONO AS 'Telefono',
+		PAC_MAIL AS 'Mail', PAC_CANT_HIJOS AS 'Familiares a cargo', PLAN_DESCRIPCION AS 'Plan Medico',
+		PAC_NUMERO_AFILIADO AS 'Numero Afiliado'
+	FROM ClinicaTurbia.Paciente, ClinicaTurbia.PlanMedico, ClinicaTurbia.TipoDocumento, ClinicaTurbia.EstadoCivil 
+	WHERE PAC_NOMBRE like @nombre+'%'
+	AND PAC_PLAN_MEDICO_CODIGO=PLAN_CODIGO
+	AND (PAC_TIPO_DOCUMENTO=TIDOC_ID OR PAC_TIPO_DOCUMENTO IS NULL)
+	AND (PAC_ESTADO_CIVIL=ECIVIL_ID OR PAC_ESTADO_CIVIL IS NULL)
+	ORDER BY 'Apellido', 'Nombre'
+GO
+
+CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_DNI_PACIENTES
+	(@dni nvarchar(255))
+	AS
+	SELECT DISTINCT PAC_NOMBRE AS 'Nombre', PAC_APELLIDO AS 'Apellido', CASE WHEN PAC_TIPO_DOCUMENTO IS NULL THEN 
+		NULL ELSE TIDOC_NOMBRE END AS 'Tipo Documento', PAC_NUMDOC AS 'Documento', PAC_SEXO AS 'Sexo',
+		PAC_FECHA_NACIMIENTO AS 'Fecha Nacimiento',	CASE WHEN PAC_ESTADO_CIVIL IS NULL THEN NULL ELSE
+		ECIVIL_NOMBRE END AS 'Estado Civil', PAC_DIRECCION AS 'Direccion', PAC_TELEFONO AS 'Telefono',
+		PAC_MAIL AS 'Mail', PAC_CANT_HIJOS AS 'Familiares a cargo', PLAN_DESCRIPCION AS 'Plan Medico',
+		PAC_NUMERO_AFILIADO AS 'Numero Afiliado'
+	FROM ClinicaTurbia.Paciente, ClinicaTurbia.PlanMedico, ClinicaTurbia.TipoDocumento, ClinicaTurbia.EstadoCivil 
+	WHERE PAC_NUMDOC like @dni+'%'
+	AND PAC_PLAN_MEDICO_CODIGO=PLAN_CODIGO
+	AND (PAC_TIPO_DOCUMENTO=TIDOC_ID OR PAC_TIPO_DOCUMENTO IS NULL)
+	AND (PAC_ESTADO_CIVIL=ECIVIL_ID OR PAC_ESTADO_CIVIL IS NULL)
+	ORDER BY 'Apellido', 'Nombre'
+GO
+
+CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_APELLIDO_PACIENTES
+	(@apellido nvarchar(255))
+	AS
+	SELECT DISTINCT PAC_NOMBRE AS 'Nombre', PAC_APELLIDO AS 'Apellido', CASE WHEN PAC_TIPO_DOCUMENTO IS NULL THEN 
+		NULL ELSE TIDOC_NOMBRE END AS 'Tipo Documento', PAC_NUMDOC AS 'Documento', PAC_SEXO AS 'Sexo',
+		PAC_FECHA_NACIMIENTO AS 'Fecha Nacimiento',	CASE WHEN PAC_ESTADO_CIVIL IS NULL THEN NULL ELSE
+		ECIVIL_NOMBRE END AS 'Estado Civil', PAC_DIRECCION AS 'Direccion', PAC_TELEFONO AS 'Telefono',
+		PAC_MAIL AS 'Mail', PAC_CANT_HIJOS AS 'Familiares a cargo', PLAN_DESCRIPCION AS 'Plan Medico',
+		PAC_NUMERO_AFILIADO AS 'Numero Afiliado'
+	FROM ClinicaTurbia.Paciente, ClinicaTurbia.PlanMedico, ClinicaTurbia.TipoDocumento, ClinicaTurbia.EstadoCivil 
+	WHERE PAC_APELLIDO like @apellido+'%'
+	AND PAC_PLAN_MEDICO_CODIGO=PLAN_CODIGO
+	AND (PAC_TIPO_DOCUMENTO=TIDOC_ID OR PAC_TIPO_DOCUMENTO IS NULL)
+	AND (PAC_ESTADO_CIVIL=ECIVIL_ID OR PAC_ESTADO_CIVIL IS NULL)
+	ORDER BY 'Apellido', 'Nombre'
+GO
+
 --------------------------------------------------------
 ---------------- CONSULTA_MEDICOS  ---------------------
 --------------------------------------------------------
@@ -468,6 +633,12 @@ CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_DIRECCION
 	SELECT *
 	FROM ClinicaTurbia.Medico as med
 	WHERE med.MED_DIRECCION LIKE @direccion+'%';
+GO
+
+CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_ESPECIALIDAD
+	(@esp numeric(18, 0)) AS
+	SELECT MED_DNI, MED_NOMBRE, MED_APELLIDO FROM ClinicaTurbia.Medico_Especialidad, ClinicaTurbia.Medico
+	WHERE MEDESP_ESP=@esp AND MED_DNI=MEDESP_MED;
 GO
 
 CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_NOMBRE
@@ -527,6 +698,23 @@ CREATE PROCEDURE ClinicaTurbia.TRAER_TODOS_MEDICOS
 	ORDER BY medico.MED_APELLIDO ASC;
 GO
 
+CREATE PROCEDURE ClinicaTurbia.TRAER_HORARIOS_MEDICO (@dni numeric(18,0), @dia int) AS
+	SELECT HOR_HORA_DESDE, HOR_HORA_HASTA FROM ClinicaTurbia.Profesional_Dia_Horario, ClinicaTurbia.Horario
+	WHERE PDH_PROF_COD=@dni AND PDH_DIA=@dia AND HOR_COD=PDH_HORARIO_COD;
+GO
+
+CREATE PROCEDURE ClinicaTurbia.TRAER_TURNOS_DE_MEDICO_PARA_FECHA
+	(@dni numeric(18,0), @fecha datetime) AS
+	SELECT TURN_FECHA FROM ClinicaTurbia.Turno 
+	WHERE TURN_PROF_COD=@dni AND CAST(TURN_FECHA AS DATE)=CAST(@fecha AS DATE);
+GO
+
+CREATE PROCEDURE ClinicaTurbia.CREAR_TURNO (@med numeric(18,0), @pac numeric(18,0), @fecha datetime) AS
+	INSERT INTO ClinicaTurbia.Turno(TURN_PROF_COD, TURN_FECHA, TURN_PAC_COD) 
+		VALUES (@med, @fecha, @pac);
+GO
+		
+		
 --------------------------------------------------------
 ---------------------    LOGIN     ---------------------
 --------------------------------------------------------
@@ -562,7 +750,7 @@ CREATE PROCEDURE ClinicaTurbia.LISTADO_PLAN_MEDICO AS
 GO
 
 CREATE PROCEDURE ClinicaTurbia.LISTADO_ESPECIALIDAD AS
-	SELECT ESP_DESCRIPCION, TIPOESP_DESCRIPCION FROM ClinicaTurbia.Especialidad,
+	SELECT ESP_CODIGO, ESP_DESCRIPCION, TIPOESP_DESCRIPCION FROM ClinicaTurbia.Especialidad,
 	ClinicaTurbia.TipoEspecialidad WHERE ESP_TIPOESP_CODIGO = TIPOESP_CODIGO
 GO
 

@@ -65,11 +65,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abm de Especialidades Medicas\Alta.cs">
+    <Compile Include="Abm de Afiliado\AbmAfiliado.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Abm de Especialidades Medicas\Alta.Designer.cs">
-      <DependentUpon>Alta.cs</DependentUpon>
+    <Compile Include="Abm de Afiliado\AbmAfiliado.Designer.cs">
+      <DependentUpon>AbmAfiliado.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm de Especialidades Medicas\EspecialidadesWindow.cs">
       <SubType>Form</SubType>
@@ -122,6 +122,12 @@
     <Compile Include="Login\RolesWindow.Designer.cs">
       <DependentUpon>RolesWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Pedir Turno\PedirTurno.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Pedir Turno\PedirTurno.Designer.cs">
+      <DependentUpon>PedirTurno.cs</DependentUpon>
+    </Compile>
     <Compile Include="Persona.cs" />
     <Compile Include="Registro de Usuario\Form1.cs">
       <SubType>Form</SubType>
@@ -129,11 +135,11 @@
     <Compile Include="Registro de Usuario\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Abm de Afiliado\AbmAfiliadoWindow.cs">
+    <Compile Include="Abm de Afiliado\AltaModifAfiliado.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Abm de Afiliado\AbmAfiliadoWindow.Designer.cs">
-      <DependentUpon>AbmAfiliadoWindow.cs</DependentUpon>
+    <Compile Include="Abm de Afiliado\AltaModifAfiliado.Designer.cs">
+      <DependentUpon>AltaModifAfiliado.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm de Planes\Form1.cs">
       <SubType>Form</SubType>
@@ -185,11 +191,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Abm de Afiliado\AbmAfiliadoWindow.resx">
-      <DependentUpon>AbmAfiliadoWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Abm de Afiliado\AbmAfiliado.resx">
+      <DependentUpon>AbmAfiliado.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Abm de Especialidades Medicas\Alta.resx">
-      <DependentUpon>Alta.cs</DependentUpon>
+    <EmbeddedResource Include="Abm de Afiliado\AltaModifAfiliado.resx">
+      <DependentUpon>AltaModifAfiliado.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm de Especialidades Medicas\EspecialidadesWindow.resx">
       <DependentUpon>EspecialidadesWindow.cs</DependentUpon>
@@ -214,6 +220,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Login\RolesWindow.resx">
       <DependentUpon>RolesWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pedir Turno\PedirTurno.resx">
+      <DependentUpon>PedirTurno.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -256,9 +265,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pedir Turno\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

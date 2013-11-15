@@ -1,6 +1,6 @@
 ﻿namespace Clinica_Frba.NewFolder12
 {
-    partial class AbmAfiliadoWindow
+    partial class AltaModifAfiliado
     {
         /// <summary>
         /// Required designer variable.
@@ -412,6 +412,7 @@
             this.Name = "AbmAfiliadoWindow";
             this.Text = "ClinicaTurbia - Nuevo Afiliado";
             this.Shown += new System.EventHandler(this.AbmAfiliadoWindow_Shown);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AbmAfiliadoWindow_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

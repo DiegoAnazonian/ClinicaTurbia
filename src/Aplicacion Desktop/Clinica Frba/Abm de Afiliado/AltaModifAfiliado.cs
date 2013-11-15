@@ -10,21 +10,24 @@ using System.Data.SqlClient;
 
 namespace Clinica_Frba.NewFolder12
 {
-    public partial class AbmAfiliadoWindow : Form
+    public partial class AltaModifAfiliado : Form
     {
         private bool nuevoAfiliado;
+        private bool btnGuardarClicked = false;
+        private bool owner;
 
-        public AbmAfiliadoWindow()
+        public AltaModifAfiliado()
         {
             InitializeComponent();
             nuevoAfiliado = true;
             completarCombos();
         }
 
-        public AbmAfiliadoWindow(DataTable tablaAfiliado)
+        public AltaModifAfiliado(DataTable tablaAfiliado, bool owner)
         {
             InitializeComponent();
             nuevoAfiliado = false;
+            this.owner = owner;
             completarCombos();
             completarDatos(tablaAfiliado);
         }
@@ -97,7 +100,7 @@ namespace Clinica_Frba.NewFolder12
 
         private void AbmAfiliadoWindow_Shown(object sender, EventArgs e)
         {
-            if (!nuevoAfiliado)
+            if (!nuevoAfiliado && owner)
             {
                 MessageBox.Show("Verifique que sus datos esten completos y sean correctos.\n",
                     "Verifique sus datos", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -125,6 +128,7 @@ namespace Clinica_Frba.NewFolder12
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+            btnGuardarClicked = true;
             if (nuevoAfiliado)
             {
                 registrarNuevoAfiliado();
@@ -144,6 +148,7 @@ namespace Clinica_Frba.NewFolder12
                     "Hay datos incompletos", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                 if (confirmResult == DialogResult.No)
                 {
+                    btnGuardarClicked = false;
                     return;
                 }
             }
@@ -171,6 +176,7 @@ namespace Clinica_Frba.NewFolder12
             {
                 MessageBox.Show("Debe completar todos los datos obligatorios",
                     "Faltan datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                btnGuardarClicked = false;
                 return;
             }
             if (hayCamposVacios())
@@ -180,6 +186,7 @@ namespace Clinica_Frba.NewFolder12
                     "Hay datos incompletos", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                 if (confirmResult == DialogResult.No)
                 {
+                    btnGuardarClicked = false;
                     return;
                 }
             }
@@ -281,6 +288,23 @@ namespace Clinica_Frba.NewFolder12
         {
             txtFechaNac.Text = calendarNac.SelectionStart.ToShortDateString();
             calendarNac.Hide();
+        }
+
+        private void AbmAfiliadoWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!btnGuardarClicked)
+            {
+                btnGuardarClicked = false;
+                var confirmResult = MessageBox.Show(
+                    "Sus cambios no seran guardados, desea salir de todas formas?",
+                    "Salir?", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (confirmResult == DialogResult.No)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+           
         }
 
     }

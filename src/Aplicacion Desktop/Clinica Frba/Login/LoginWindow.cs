@@ -8,6 +8,8 @@ using Clinica_Frba.Abm_de_Rol;
 using Clinica_Frba.NewFolder12;
 using Clinica_Frba.Abm_de_Especialidades_Medicas;
 using Clinica_Frba.Abm_de_Profesional;
+using Clinica_Frba.Pedir_Turno;
+using Clinica_Frba.Abm_de_Afiliado;
 
 namespace Clinica_Frba.NewFolder10
 {
@@ -20,12 +22,14 @@ namespace Clinica_Frba.NewFolder10
             this.ActiveControl = txtUsuario;
         }
 
+        public static String LOGGED_USER { get; private set; }
+
         private void btnLogin_Click(object sender, EventArgs e)
         {
             btnLogin.Enabled = false;
             List<SqlParameter> checkUsuarioParam = Database.GenerarListaDeParametros("usuario", txtUsuario.Text);
             DataTable tablaUsuario = Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[CONSULTA_LOGIN]", checkUsuarioParam);
-            if (tablaUsuario == null)
+            if (tablaUsuario == null || tablaUsuario.Rows.Count == 0)
             {
                 MessageBox.Show("El usuario no existe.\n", "Error de login",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -50,6 +54,7 @@ namespace Clinica_Frba.NewFolder10
                 }
                 else
                 {
+                    LOGGED_USER = txtUsuario.Text;
                     if ((bool)reg["USUARIO_PRIMER_LOGIN"])
                     {
                         List<SqlParameter> afiliadoParam = 
@@ -59,7 +64,7 @@ namespace Clinica_Frba.NewFolder10
                         if (tablaAfiliado.Rows.Count > 0)
                         {
                             //ES UN PACIENTE
-                            new AbmAfiliadoWindow(tablaAfiliado).ShowDialog();
+                            new AltaModifAfiliado(tablaAfiliado, true).ShowDialog();
                         }
                         else
                         {
@@ -158,22 +163,27 @@ namespace Clinica_Frba.NewFolder10
                     case "ABM de Afiliado":
                         btn.Click += (ssender, args) =>
                         {
-                            new AbmAfiliadoWindow().ShowDialog();
+                            new AbmAfiliado().ShowDialog();
                         };
                         break;
                     case "ABM de Especialidad":
                         btn.Click += (ssender, args) =>
-                    {
-
-                        new EspecialidadesWindow().ShowDialog();
-                    };
-                    break;
+                        {
+                            new EspecialidadesWindow().ShowDialog();
+                        };
+                        break;
                     case "ABM de Profesional":
-                    btn.Click += (ssender, args) =>
-                    {
-                        new AbmProfesional().ShowDialog();
-                    };
-                    break;
+                        btn.Click += (ssender, args) =>
+                        {
+                            new AbmProfesional().ShowDialog();
+                        };
+                        break;
+                    case "Pedir Turno":
+                        btn.Click += (ssender, args) =>
+                        {
+                            new PedirTurno().ShowDialog();
+                        };
+                        break;
                 }
                 this.Controls.Add(btn);
                 topOffset += 30;
@@ -188,6 +198,7 @@ namespace Clinica_Frba.NewFolder10
             txtUsuario.Clear();
             txtPassword.Clear();
             this.Controls[0].Show();
+            LOGGED_USER = null;
         }
 
         private void txtPassword_TextChanged(object sender, EventArgs e)

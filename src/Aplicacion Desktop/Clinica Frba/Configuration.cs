@@ -12,5 +12,9 @@ namespace Clinica_Frba
         {
             return ConfigurationManager.AppSettings["connectionString"];
         }
+        public static string getFecha()
+        {
+            return ConfigurationManager.AppSettings["fecha"];
+        }
     }
 }
