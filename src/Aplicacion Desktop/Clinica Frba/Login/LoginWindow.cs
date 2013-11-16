@@ -10,6 +10,8 @@ using Clinica_Frba.Abm_de_Especialidades_Medicas;
 using Clinica_Frba.Abm_de_Profesional;
 using Clinica_Frba.Pedir_Turno;
 using Clinica_Frba.Abm_de_Afiliado;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Clinica_Frba.NewFolder10
 {
@@ -20,9 +22,12 @@ namespace Clinica_Frba.NewFolder10
             InitializeComponent();
             btnLogin.Enabled = false;
             this.ActiveControl = txtUsuario;
+            loginFallidos = new Dictionary<string, int>();
         }
 
         public static String LOGGED_USER { get; private set; }
+
+        private Dictionary<string, int> loginFallidos;
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
@@ -45,8 +50,23 @@ namespace Clinica_Frba.NewFolder10
                     btnLogin.Enabled = true;
                     return;
                 }
-                if (!reg["USUARIO_PASSWORD"].ToString().Equals(txtPassword.Text))
+                if (!reg["USUARIO_PASSWORD"].ToString().Equals(SHA256(txtPassword.Text)))
                 {
+                    if (loginFallidos.ContainsKey(txtUsuario.Text))
+                    {
+                        loginFallidos[txtUsuario.Text] = loginFallidos[txtUsuario.Text] + 1;
+                        if (loginFallidos[txtUsuario.Text] == 3)
+                        {
+                            List<SqlParameter> paramList =
+                                Database.GenerarListaDeParametros("usuario", txtUsuario.Text);
+                                Database.GetInstance.ExecuteQuery(
+                                    "[ClinicaTurbia].[DESHABILITAR_USUARIO]", paramList);
+                        }
+                    }
+                    else
+                    {
+                        loginFallidos.Add(txtUsuario.Text, 1);
+                    }
                     MessageBox.Show("Password incorrecta.\n", "Error de login",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     btnLogin.Enabled = true;
@@ -201,9 +221,16 @@ namespace Clinica_Frba.NewFolder10
             LOGGED_USER = null;
         }
 
-        private void txtPassword_TextChanged(object sender, EventArgs e)
+        private string SHA256(string password)
         {
-
+            SHA256Managed crypt = new SHA256Managed();
+            string hash = String.Empty;
+            byte[] crypto = crypt.ComputeHash(Encoding.UTF8.GetBytes(password), 0, Encoding.UTF8.GetByteCount(password));
+            foreach (byte bit in crypto)
+            {
+                hash += bit.ToString("x2");
+            }
+            return hash;
         }
     }
 }

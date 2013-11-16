@@ -28,13 +28,13 @@ namespace Clinica_Frba.Abm_de_Rol
             int columnIndex = e.ColumnIndex;
             int rowIndex = e.RowIndex;
             String nombreRol = dataGridRoles.Rows.SharedRow(rowIndex).Cells[0].Value.ToString();
-            if (e.ColumnIndex == 2)
+            if (columnIndex == 2)
             {
                 modificarRol(nombreRol, rowIndex);
             }
-            else if (e.ColumnIndex == 1)
+            else if (columnIndex == 1)
             {
-                //ELIMINAR ROL
+                eliminarRol(rowIndex);
             }
             refrescarDatagrid();
         }
@@ -73,6 +73,13 @@ namespace Clinica_Frba.Abm_de_Rol
                 funcsRol.Add(row[0].ToString());
             }
             new DetallesRolWindow(nombreRol, funcsRol, idHab.habilitado, idHab.id).ShowDialog();
+        }
+
+        private void eliminarRol(int rowIndex)
+        {
+            int id = ((Rol_Id_Habilitado)dataGridRoles.Rows.SharedRow(rowIndex).Tag).id;
+            Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[ELIMINAR_ROL]",
+                Database.GenerarListaDeParametros("id", id));
         }
     }
 }

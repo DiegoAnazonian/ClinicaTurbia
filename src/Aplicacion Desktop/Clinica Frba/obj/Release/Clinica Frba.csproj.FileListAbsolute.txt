@@ -14,4 +14,3 @@ C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica F
 C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica Frba.csproj.GenerateResource.Cache
 C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica Frba.exe
 C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Release\Clinica Frba.pdb
-C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\bin\Release\Clinica Frba.exe.config

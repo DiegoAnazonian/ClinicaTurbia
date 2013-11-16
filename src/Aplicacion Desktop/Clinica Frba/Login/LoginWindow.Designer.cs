@@ -31,9 +31,9 @@
             this.txtUsuario = new System.Windows.Forms.TextBox();
             this.lblUsuario = new System.Windows.Forms.Label();
             this.lblPassword = new System.Windows.Forms.Label();
-            this.txtPassword = new System.Windows.Forms.TextBox();
             this.btnLogin = new System.Windows.Forms.Button();
             this.panelLogin = new System.Windows.Forms.Panel();
+            this.txtPassword = new System.Windows.Forms.MaskedTextBox();
             this.panelLogin.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,13 +63,6 @@
             this.lblPassword.TabIndex = 2;
             this.lblPassword.Text = "Password";
             // 
-            // txtPassword
-            // 
-            this.txtPassword.Location = new System.Drawing.Point(362, 13);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(162, 20);
-            this.txtPassword.TabIndex = 3;
-            // 
             // btnLogin
             // 
             this.btnLogin.Location = new System.Drawing.Point(605, 6);
@@ -82,8 +75,8 @@
             // 
             // panelLogin
             // 
-            this.panelLogin.Controls.Add(this.btnLogin);
             this.panelLogin.Controls.Add(this.txtPassword);
+            this.panelLogin.Controls.Add(this.btnLogin);
             this.panelLogin.Controls.Add(this.lblPassword);
             this.panelLogin.Controls.Add(this.lblUsuario);
             this.panelLogin.Controls.Add(this.txtUsuario);
@@ -91,6 +84,14 @@
             this.panelLogin.Name = "panelLogin";
             this.panelLogin.Size = new System.Drawing.Size(710, 200);
             this.panelLogin.TabIndex = 5;
+            // 
+            // txtPassword
+            // 
+            this.txtPassword.Location = new System.Drawing.Point(362, 13);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '*';
+            this.txtPassword.Size = new System.Drawing.Size(162, 20);
+            this.txtPassword.TabIndex = 5;
             // 
             // LoginWindow
             // 
@@ -112,8 +113,8 @@
         private System.Windows.Forms.TextBox txtUsuario;
         private System.Windows.Forms.Label lblUsuario;
         private System.Windows.Forms.Label lblPassword;
-        private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Panel panelLogin;
+        private System.Windows.Forms.MaskedTextBox txtPassword;
     }
 }

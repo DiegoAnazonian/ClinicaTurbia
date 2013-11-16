@@ -117,6 +117,11 @@ namespace Clinica_Frba.Abm_de_Rol
                         "id", this.idRol);
             DataTable tablaRol = Database.GetInstance
                 .ExecuteQuery("[ClinicaTurbia].[MODIFICAR_ROL]", rolModificadoParam);
+            if (!checkBoxHabilitado.Checked)
+            {
+                List<SqlParameter> rolParam = Database.GenerarListaDeParametros("id", this.idRol);
+                Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[DESHABILITAR_ROL]", rolParam);
+            }
         }
 
         private void quitarFuncionalidad(String idFunc)
