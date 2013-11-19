@@ -12,6 +12,7 @@ using Clinica_Frba.Pedir_Turno;
 using Clinica_Frba.Abm_de_Afiliado;
 using System.Security.Cryptography;
 using System.Text;
+using Clinica_Frba.Cancelar_Atencion;
 
 namespace Clinica_Frba.NewFolder10
 {
@@ -85,13 +86,6 @@ namespace Clinica_Frba.NewFolder10
                         {
                             //ES UN PACIENTE
                             new AltaModifAfiliado(tablaAfiliado, true).ShowDialog();
-                        }
-                        else
-                        {
-                            //DataTable tablaMedico = Database.GetInstance.ExecuteQuery
-                            //("[ClinicaTurbia].[EXISTE_MEDICO]", afiliadoParam);
-                            MessageBox.Show("Es un medico");
-
                         }
                     }
                     String rol = obtenerRolDelUsuario();
@@ -202,6 +196,18 @@ namespace Clinica_Frba.NewFolder10
                         btn.Click += (ssender, args) =>
                         {
                             new PedirTurno().ShowDialog();
+                        };
+                        break;
+                    case "Cancelar Turno":
+                        btn.Click += (ssender, args) =>
+                        {
+                            new CancelarTurno(LOGGED_USER).ShowDialog();
+                        };
+                        break;
+                    case "Cancelar fecha de atencion":
+                        btn.Click += (ssender, args) =>
+                        {
+                            new CancelarFechaDeAtencion(LOGGED_USER).ShowDialog();
                         };
                         break;
                 }

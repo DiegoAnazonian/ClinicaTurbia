@@ -125,7 +125,7 @@ namespace Clinica_Frba.Pedir_Turno
             DateTime horaHasta = DateTime.ParseExact(tablaHorarios.Rows[0][1].ToString(),
                 "HH:mm", CultureInfo.CurrentCulture);
 
-            while(horaDesde < horaHasta.AddHours(-1))
+            while(horaDesde < horaHasta)
             {
                 comboHorario.Items.Add(horaDesde.ToShortTimeString());
                 horaDesde = horaDesde.AddMinutes(30);
@@ -138,6 +138,13 @@ namespace Clinica_Frba.Pedir_Turno
 
             foreach (DataRow rou in tablaTurnos.Rows)
             {
+                if (rou[1].Equals(true))
+                {
+                    MessageBox.Show("El profesional no estara disponible en esta fecha",
+                        "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    comboHorario.Items.Clear();
+                    break;
+                }
                 comboHorario.Items.Remove(((DateTime)rou[0]).ToShortTimeString());
             }
         }

@@ -43,6 +43,10 @@ IF OBJECT_ID('ClinicaTurbia.TipoEspecialidad', 'U') IS NOT NULL
 	DROP TABLE ClinicaTurbia.TipoEspecialidad
 GO
 
+IF OBJECT_ID('ClinicaTurbia.TipoCancelacion', 'U') IS NOT NULL
+	DROP TABLE ClinicaTurbia.TipoCancelacion
+GO
+
 IF OBJECT_ID('ClinicaTurbia.TipoDocumento', 'U') IS NOT NULL
 	DROP TABLE ClinicaTurbia.TipoDocumento
 GO
@@ -115,6 +119,18 @@ IF OBJECT_ID('ClinicaTurbia.LISTADO_ESPECIALIDAD', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.LISTADO_ESPECIALIDAD
 GO
 
+IF OBJECT_ID('ClinicaTurbia.LISTADO_TIPO_CANCELACION', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.LISTADO_TIPO_CANCELACION
+GO
+
+IF OBJECT_ID('ClinicaTurbia.CANCELAR_TURNO', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.CANCELAR_TURNO
+GO
+
+IF OBJECT_ID('ClinicaTurbia.CANCELAR_TURNOS_EN_FECHA', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.CANCELAR_TURNOS_EN_FECHA
+GO
+
 IF OBJECT_ID('ClinicaTurbia.LISTADO_TIPO_DOCUMENTO', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.LISTADO_TIPO_DOCUMENTO
 GO
@@ -177,6 +193,10 @@ GO
 
 IF OBJECT_ID('ClinicaTurbia.CREAR_TURNO','P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.CREAR_TURNO
+GO
+
+IF OBJECT_ID('ClinicaTurbia.LISTADO_TURNOS_PACIENTE ','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.LISTADO_TURNOS_PACIENTE 
 GO
 
 IF OBJECT_ID('ClinicaTurbia.TRAER_TODOS_MEDICOS','P') IS NOT NULL
@@ -287,6 +307,12 @@ CREATE TABLE ClinicaTurbia.TipoDocumento(
 	TIDOC_NOMBRE [nvarchar] (255) NOT NULL
 );
 
+----TIPO CANCELACION----
+CREATE TABLE ClinicaTurbia.TipoCancelacion(
+	TICAN_ID [numeric] (18, 0) PRIMARY KEY IDENTITY(1, 1) NOT NULL,
+	TICAN_NOMBRE [nvarchar] (255) NOT NULL
+);
+
 ----ESTADO CIVIL----
 CREATE TABLE ClinicaTurbia.EstadoCivil(
 	ECIVIL_ID [int] PRIMARY KEY IDENTITY(1, 1) NOT NULL,
@@ -299,7 +325,7 @@ CREATE TABLE ClinicaTurbia.PlanMedico(
 	PLAN_DESCRIPCION [nvarchar] (255),
 	PLAN_PRECIO_BONO_CONSULTA [int] NOT NULL,
 	PLAN_PRECIO_BONO_FARMACIA [int] NOT NULL
-);	
+);
 
 ----PACIENTE----
 CREATE TABLE ClinicaTurbia.Paciente(
@@ -371,7 +397,11 @@ CREATE TABLE ClinicaTurbia.Turno(
 	TURN_NUMERO [numeric] (18,0) PRIMARY KEY IDENTITY,
 	TURN_FECHA [datetime] NOT NULL,
 	TURN_PROF_COD [numeric] (18,0) NOT NULL FOREIGN KEY REFERENCES ClinicaTurbia.Medico(MED_DNI),
-	TURN_PAC_COD [numeric] (18,0) NOT NULL FOREIGN KEY REFERENCES ClinicaTurbia.Paciente(PAC_NUMDOC)
+	TURN_PAC_COD [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.Paciente(PAC_NUMDOC),
+	TURN_CANCELADO [bit],
+	TURN_CAN_MOTIVO [varchar] (255),
+	TURN_CAN_TICAN [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.TipoCancelacion(TICAN_ID),
+	TURN_CAN_AVISADO [bit]
 );
 
 CREATE TABLE ClinicaTurbia.Diagnostico(
@@ -396,18 +426,21 @@ GO
 CREATE PROCEDURE ClinicaTurbia.MIGRACION AS
 
 INSERT INTO ClinicaTurbia.Rol(ROL_NOMBRE, ROL_HABILITADO) VALUES
-	('Administrativo', 1), ('Afiliado', 1);
+	('Administrativo', 1), ('Afiliado', 1), ('Profesional', 1);
 	
 INSERT INTO ClinicaTurbia.Funcionalidad(FUN_NOMBRE) VALUES
 	('ABM de Roles'), ('ABM de Afiliado'), ('ABM de Especialidad'), ('ABM de Profesional'),
-	('Pedir Turno');
+	('Pedir Turno'), ('Cancelar Turno'), ('Cancelar fecha de atencion');
 
 INSERT INTO ClinicaTurbia.Rol_Funcionalidad(ROL_ID, FUN_ID) VALUES
-	(1,1), (2,1), (1,2), (2,2), (1,3), (2,3), (1,4), (2,4), (2,5);
+	(1,1), (2,1), (1,2), (2,2), (1,3), (2,3), (1,4), (2,4), (2,5), (2,6), (3,7);
 
 INSERT INTO ClinicaTurbia.TipoDocumento(TIDOC_NOMBRE) VALUES
 	('Documento Nacional de Identidad'), ('Cédula de Identidad'),
 	('Libreta de Enrolamiento'), ('Libreta Cívica');
+	
+INSERT INTO ClinicaTurbia.TipoCancelacion(TICAN_NOMBRE) VALUES
+	('Problemas familiares'), ('Problemas de salud'), ('Otro');
 	
 INSERT INTO ClinicaTurbia.EstadoCivil(ECIVIL_NOMBRE) VALUES
 	('Soltero/a'), ('Casado/a'), ('Viudo/a'), ('Concubinato'), ('Divorciado/a');
@@ -456,13 +489,17 @@ INSERT INTO ClinicaTurbia.Medico(MED_DNI, MED_NOMBRE, MED_APELLIDO, MED_DIRECCIO
 	FROM gd_esquema.Maestra m WHERE m.Medico_Dni IS NOT NULL;
 
 INSERT INTO ClinicaTurbia.Usuario(USUARIO_NOMBRE, USUARIO_PASSWORD, USUARIO_HABILITADO, USUARIO_PRIMER_LOGIN)
-	SELECT PAC_NUMDOC, '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 1, 1 FROM ClinicaTurbia.Paciente;
+	SELECT PAC_NUMDOC, '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 1, 1 FROM ClinicaTurbia.Paciente
+	UNION ALL
+	SELECT MED_DNI, '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 1, 1 FROM ClinicaTurbia.Medico;
 	
 INSERT INTO ClinicaTurbia.Usuario(USUARIO_NOMBRE, USUARIO_PASSWORD, USUARIO_HABILITADO, USUARIO_PRIMER_LOGIN)
 	VALUES ('admin', 'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 1, 0);
 
 INSERT INTO ClinicaTurbia.Usuario_Rol(USUARIO_NOMBRE, ROL_ID)
-	SELECT PAC_NUMDOC, 2 FROM ClinicaTurbia.Paciente;
+	SELECT PAC_NUMDOC, 2 FROM ClinicaTurbia.Paciente
+	UNION ALL
+	SELECT MED_DNI, 3 FROM ClinicaTurbia.Medico;
 	
 INSERT INTO ClinicaTurbia.Usuario_Rol(USUARIO_NOMBRE, ROL_ID)
 	VALUES ('admin', 1); 
@@ -532,6 +569,35 @@ CREATE PROCEDURE ClinicaTurbia.LISTADO_PACIENTES AS
 	AND (PAC_TIPO_DOCUMENTO=TIDOC_ID OR PAC_TIPO_DOCUMENTO IS NULL)
 	AND (PAC_ESTADO_CIVIL=ECIVIL_ID OR PAC_ESTADO_CIVIL IS NULL)
 	ORDER BY 'Apellido', 'Nombre'
+GO
+
+CREATE PROCEDURE ClinicaTurbia.LISTADO_TURNOS_PACIENTE 
+	(@pac varchar(20), @fecha date) AS
+	SELECT TURN_NUMERO AS 'NUMERO DE TURNO', TURN_FECHA AS FECHA,
+		UPPER(MED_APELLIDO + ' ' +  MED_NOMBRE) AS PROFESIONAL
+		FROM ClinicaTurbia.Turno, ClinicaTurbia.Medico
+		WHERE TURN_PAC_COD=@pac AND (TURN_CANCELADO IS NULL OR TURN_CANCELADO!=1)
+			  AND TURN_FECHA > @fecha AND MED_DNI=TURN_PROF_COD;
+GO
+
+CREATE PROCEDURE ClinicaTurbia.LISTADO_TIPO_CANCELACION AS
+	SELECT * FROM ClinicaTurbia.TipoCancelacion;
+GO
+
+CREATE PROCEDURE ClinicaTurbia.CANCELAR_TURNO
+	(@turno varchar(255), @motivo varchar(255), @tipoCan numeric(18,0)) AS
+	UPDATE ClinicaTurbia.Turno SET
+		TURN_CANCELADO=1, TURN_CAN_MOTIVO=@motivo, TURN_CAN_TICAN=@tipoCan, TURN_CAN_AVISADO=0
+		WHERE TURN_NUMERO=@turno;
+GO
+
+CREATE PROCEDURE ClinicaTurbia.CANCELAR_TURNOS_EN_FECHA
+	(@med numeric(18,0), @fecha datetime, @motivo varchar(255), @tipoCan numeric(18,0)) AS
+	UPDATE ClinicaTurbia.Turno SET
+		TURN_CANCELADO=1, TURN_CAN_MOTIVO=@motivo, TURN_CAN_TICAN=@tipoCan, TURN_CAN_AVISADO=0
+		WHERE CAST(TURN_FECHA AS DATE)=@fecha AND TURN_PROF_COD=@med;
+	INSERT INTO ClinicaTurbia.Turno(TURN_FECHA, TURN_PROF_COD, TURN_CANCELADO)
+		VALUES (@fecha, @med, 1);
 GO
 
 CREATE PROCEDURE ClinicaTurbia.FILTRAR_POR_PALABRACLAVE_PACIENTE
@@ -723,8 +789,9 @@ GO
 
 CREATE PROCEDURE ClinicaTurbia.TRAER_TURNOS_DE_MEDICO_PARA_FECHA
 	(@dni numeric(18,0), @fecha datetime) AS
-	SELECT TURN_FECHA FROM ClinicaTurbia.Turno 
-	WHERE TURN_PROF_COD=@dni AND CAST(TURN_FECHA AS DATE)=CAST(@fecha AS DATE);
+	SELECT TURN_FECHA, TURN_CANCELADO FROM ClinicaTurbia.Turno 
+	WHERE TURN_PROF_COD=@dni AND (TURN_CANCELADO IS NULL OR TURN_CANCELADO!=1)
+		  AND CAST(TURN_FECHA AS DATE)=CAST(@fecha AS DATE);
 GO
 
 CREATE PROCEDURE ClinicaTurbia.CREAR_TURNO (@med numeric(18,0), @pac numeric(18,0), @fecha datetime) AS
