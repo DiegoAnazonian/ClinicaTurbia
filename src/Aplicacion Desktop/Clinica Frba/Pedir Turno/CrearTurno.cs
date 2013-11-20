@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -9,12 +7,14 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Globalization;
 using Clinica_Frba.NewFolder10;
+using System;
+using System.Collections.Generic;
 
 namespace Clinica_Frba.Pedir_Turno
 {
-    public partial class PedirTurno : Form
+    public partial class CrearTurno : Form
     {
-        public PedirTurno()
+        public CrearTurno()
         {
             InitializeComponent();
             comboFecha.Enabled = false;
@@ -23,7 +23,7 @@ namespace Clinica_Frba.Pedir_Turno
             DataTable tablaEsp = Database.GetInstance.ExecuteQuery(
                "[ClinicaTurbia].[LISTADO_ESPECIALIDAD]");
             completarComboEspecialidades(tablaEsp);
-            
+
             DataTable tablaMed = Database.GetInstance.ExecuteQuery(
                 "[ClinicaTurbia].[TRAER_TODOS_MEDICOS]");
             completarComboMedico(tablaMed);
@@ -63,7 +63,7 @@ namespace Clinica_Frba.Pedir_Turno
 
         private void completarComboFecha()
         {
-            DateTime da =  DateTime.ParseExact(Configuration.getFecha(),
+            DateTime da = DateTime.ParseExact(Configuration.getFecha(),
                 "dd/MM/yyyy", CultureInfo.CurrentCulture);
             for (int i = 0; i < 120; i++)
             {
@@ -117,7 +117,7 @@ namespace Clinica_Frba.Pedir_Turno
             DateTime da = DateTime.ParseExact(comboFecha.SelectedItem.ToString(),
                 "dd/MM/yyyy", CultureInfo.CurrentCulture);
             List<SqlParameter> paramHorario = Database.GenerarListaDeParametros(
-                "dni", comboMedico.SelectedValue, "dia", (int) da.DayOfWeek);
+                "dni", comboMedico.SelectedValue, "dia", (int)da.DayOfWeek);
             DataTable tablaHorarios = Database.GetInstance.ExecuteQuery(
                 "[ClinicaTurbia].[TRAER_HORARIOS_MEDICO]", paramHorario);
             DateTime horaDesde = DateTime.ParseExact(tablaHorarios.Rows[0][0].ToString(),
@@ -125,7 +125,7 @@ namespace Clinica_Frba.Pedir_Turno
             DateTime horaHasta = DateTime.ParseExact(tablaHorarios.Rows[0][1].ToString(),
                 "HH:mm", CultureInfo.CurrentCulture);
 
-            while(horaDesde < horaHasta.AddHours(-1))
+            while (horaDesde < horaHasta)
             {
                 comboHorario.Items.Add(horaDesde.ToShortTimeString());
                 horaDesde = horaDesde.AddMinutes(30);
@@ -138,6 +138,13 @@ namespace Clinica_Frba.Pedir_Turno
 
             foreach (DataRow rou in tablaTurnos.Rows)
             {
+                if (rou[1].Equals(true))
+                {
+                    MessageBox.Show("El profesional no estara disponible en esta fecha",
+                        "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    comboHorario.Items.Clear();
+                    break;
+                }
                 comboHorario.Items.Remove(((DateTime)rou[0]).ToShortTimeString());
             }
         }
@@ -172,3 +179,4 @@ namespace Clinica_Frba.Pedir_Turno
         }
     }
 }
+

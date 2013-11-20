@@ -108,25 +108,43 @@
       <DependentUpon>AbmRolWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm de Rol\Rol_Id_Habilitado.cs" />
+    <Compile Include="Cancelar Atencion\CancelarFechaDeAtencion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Cancelar Atencion\CancelarFechaDeAtencion.Designer.cs">
+      <DependentUpon>CancelarFechaDeAtencion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cancelar Atencion\CancelarTurno.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Cancelar Atencion\CancelarTurno.Designer.cs">
+      <DependentUpon>CancelarTurno.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cancelar Atencion\MotivoCancelacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Cancelar Atencion\MotivoCancelacion.Designer.cs">
+      <DependentUpon>MotivoCancelacion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Configuration.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="Login\LoginWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Login\LoginWindow.Designer.cs">
+    <Compile Include="Login\LoginWindow.designer.cs">
       <DependentUpon>LoginWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\RolesWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Login\RolesWindow.Designer.cs">
+    <Compile Include="Login\RolesWindow.designer.cs">
       <DependentUpon>RolesWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Pedir Turno\PedirTurno.cs">
+    <Compile Include="Pedir Turno\CrearTurno.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Pedir Turno\PedirTurno.Designer.cs">
-      <DependentUpon>PedirTurno.cs</DependentUpon>
+    <Compile Include="Pedir Turno\CrearTurno.Designer.cs">
+      <DependentUpon>CrearTurno.cs</DependentUpon>
     </Compile>
     <Compile Include="Persona.cs" />
     <Compile Include="Registro de Usuario\Form1.cs">
@@ -171,12 +189,6 @@
     <Compile Include="Registro Resultado Atencion\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Cancelar Atencion\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Cancelar Atencion\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Generar Receta\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -215,14 +227,20 @@
     <EmbeddedResource Include="Abm de Rol\AbmRolWindow.resx">
       <DependentUpon>AbmRolWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Cancelar Atencion\CancelarFechaDeAtencion.resx">
+      <DependentUpon>CancelarFechaDeAtencion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cancelar Atencion\CancelarTurno.resx">
+      <DependentUpon>CancelarTurno.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cancelar Atencion\MotivoCancelacion.resx">
+      <DependentUpon>MotivoCancelacion.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Login\LoginWindow.resx">
       <DependentUpon>LoginWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\RolesWindow.resx">
       <DependentUpon>RolesWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pedir Turno\PedirTurno.resx">
-      <DependentUpon>PedirTurno.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
