@@ -126,6 +126,12 @@
     <Compile Include="Cancelar Atencion\MotivoCancelacion.Designer.cs">
       <DependentUpon>MotivoCancelacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Compra de Bono\ComprarBono.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compra de Bono\ComprarBono.designer.cs">
+      <DependentUpon>ComprarBono.cs</DependentUpon>
+    </Compile>
     <Compile Include="Configuration.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="Login\LoginWindow.cs">
@@ -169,12 +175,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Registrar Agenda\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Compra de Bono\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Compra de Bono\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Registro de LLegada\Form1.cs">
@@ -235,6 +235,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Cancelar Atencion\MotivoCancelacion.resx">
       <DependentUpon>MotivoCancelacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Compra de Bono\ComprarBono.resx">
+      <DependentUpon>ComprarBono.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\LoginWindow.resx">
       <DependentUpon>LoginWindow.cs</DependentUpon>

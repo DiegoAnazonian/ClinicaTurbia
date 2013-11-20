@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Clinica_Frba.NewFolder10;
 using Clinica_Frba.NewFolder12;
+using Clinica_Frba.Compra_de_Bono;
 
 namespace Clinica_Frba
 {
@@ -17,7 +18,7 @@ namespace Clinica_Frba
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new LoginWindow());
+            Application.Run(new ComprarBono(false));
         }
     }
 }

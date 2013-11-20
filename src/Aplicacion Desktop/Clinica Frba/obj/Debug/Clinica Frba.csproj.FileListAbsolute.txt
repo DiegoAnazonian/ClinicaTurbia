@@ -37,3 +37,4 @@ C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Deskt
 C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Cancelar_Atencion.CancelarFechaDeAtencion.resources
 C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Cancelar_Atencion.CancelarTurno.resources
 C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Cancelar_Atencion.MotivoCancelacion.resources
+C:\Users\asdf1\Documents\GitHub\ClinicaTurbia\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Compra_de_Bono.ComprarBono.resources
