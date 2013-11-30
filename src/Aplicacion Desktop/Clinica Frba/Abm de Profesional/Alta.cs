@@ -65,7 +65,7 @@ namespace Clinica_Frba.Abm_de_Profesional
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Probelmas al modificar el medico","Error de carga", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Problemas al modificar el medico","Error de carga", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             this.Close();
         }
