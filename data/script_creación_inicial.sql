@@ -341,7 +341,8 @@ CREATE TABLE ClinicaTurbia.Paciente(
 	PAC_MAIL [nvarchar] (255) NOT NULL,
 	PAC_CANT_HIJOS [numeric] (2, 0),
 	PAC_PLAN_MEDICO_CODIGO [int] FOREIGN KEY REFERENCES ClinicaTurbia.PlanMedico(PLAN_CODIGO),
-	PAC_NUMERO_AFILIADO [int] NOT NULL IDENTITY(1, 100)
+	PAC_NUMERO_AFILIADO [int] NOT NULL IDENTITY(1, 100),
+	PAC_BAJA_LOGICA [int] NOT NULL
 );
 
 ----MEDICO----
@@ -352,7 +353,8 @@ CREATE TABLE ClinicaTurbia.Medico(
 	MED_DIRECCION [nvarchar] (255) NOT NULL,
 	MED_TELEFONO [numeric](18, 0)  NOT NULL,
 	MED_MAIL [nvarchar] (255) NOT NULL,
-	MED_FECHA_NACIMIENTO [datetime] NOT NULL	 
+	MED_FECHA_NACIMIENTO [datetime] NOT NULL,
+	MED_BAJA_LOGICA [int] NOT NULL	 
 );
 
 ----USUARIO----
@@ -464,7 +466,7 @@ INSERT INTO ClinicaTurbia.PlanMedico(PLAN_CODIGO, PLAN_DESCRIPCION,
 	FROM gd_esquema.Maestra m;
 
 INSERT INTO ClinicaTurbia.Paciente(PAC_NUMDOC, PAC_NOMBRE, PAC_APELLIDO, PAC_DIRECCION,
-	PAC_TELEFONO, PAC_MAIL, PAC_FECHA_NACIMIENTO, PAC_PLAN_MEDICO_CODIGO)
+	PAC_TELEFONO, PAC_MAIL, PAC_FECHA_NACIMIENTO, PAC_PLAN_MEDICO_CODIGO,PAC_BAJA_LOGICA)
 	SELECT DISTINCT
 		m.Paciente_Dni,
 		m.Paciente_Nombre,
@@ -473,11 +475,12 @@ INSERT INTO ClinicaTurbia.Paciente(PAC_NUMDOC, PAC_NOMBRE, PAC_APELLIDO, PAC_DIR
 		m.Paciente_Telefono,
 		m.Paciente_Mail,
 		m.Paciente_Fecha_Nac,
-		M.Plan_Med_Codigo
+		M.Plan_Med_Codigo,
+		'0'
 	FROM gd_esquema.Maestra m;
 
 INSERT INTO ClinicaTurbia.Medico(MED_DNI, MED_NOMBRE, MED_APELLIDO, MED_DIRECCION,
-	MED_TELEFONO, MED_MAIL, MED_FECHA_NACIMIENTO)
+	MED_TELEFONO, MED_MAIL, MED_FECHA_NACIMIENTO,MED_BAJA_LOGICA)
 	SELECT DISTINCT
 		m.Medico_Dni,
 		m.Medico_Nombre,
@@ -485,7 +488,8 @@ INSERT INTO ClinicaTurbia.Medico(MED_DNI, MED_NOMBRE, MED_APELLIDO, MED_DIRECCIO
 		m.Medico_Direccion,
 		m.Medico_Telefono,
 		m.Medico_Mail,
-		m.Medico_Fecha_Nac
+		m.Medico_Fecha_Nac,
+		'0'
 	FROM gd_esquema.Maestra m WHERE m.Medico_Dni IS NOT NULL;
 
 INSERT INTO ClinicaTurbia.Usuario(USUARIO_NOMBRE, USUARIO_PASSWORD, USUARIO_HABILITADO, USUARIO_PRIMER_LOGIN)
@@ -617,6 +621,7 @@ CREATE PROCEDURE ClinicaTurbia.FILTRAR_POR_PALABRACLAVE_PACIENTE
 		  PAC_DIRECCION like @nombreParcial+'%' OR
 		  PAC_MAIL like @nombreParcial+'%' OR
 		  PAC_FECHA_NACIMIENTO like @nombreParcial+'%')
+	AND PAC_BAJA_LOGICA = '0'
 	AND PAC_PLAN_MEDICO_CODIGO=PLAN_CODIGO
 	AND (PAC_TIPO_DOCUMENTO=TIDOC_ID OR PAC_TIPO_DOCUMENTO IS NULL)
 	AND (PAC_ESTADO_CIVIL=ECIVIL_ID OR PAC_ESTADO_CIVIL IS NULL)
@@ -652,6 +657,7 @@ CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_NOMBRE_PACIENTES
 		PAC_NUMERO_AFILIADO AS 'Numero Afiliado'
 	FROM ClinicaTurbia.Paciente, ClinicaTurbia.PlanMedico, ClinicaTurbia.TipoDocumento, ClinicaTurbia.EstadoCivil 
 	WHERE PAC_NOMBRE like @nombre+'%'
+	AND PAC_BAJA_LOGICA = '0'
 	AND PAC_PLAN_MEDICO_CODIGO=PLAN_CODIGO
 	AND (PAC_TIPO_DOCUMENTO=TIDOC_ID OR PAC_TIPO_DOCUMENTO IS NULL)
 	AND (PAC_ESTADO_CIVIL=ECIVIL_ID OR PAC_ESTADO_CIVIL IS NULL)
@@ -669,6 +675,7 @@ CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_DNI_PACIENTES
 		PAC_NUMERO_AFILIADO AS 'Numero Afiliado'
 	FROM ClinicaTurbia.Paciente, ClinicaTurbia.PlanMedico, ClinicaTurbia.TipoDocumento, ClinicaTurbia.EstadoCivil 
 	WHERE PAC_NUMDOC like @dni+'%'
+	AND PAC_BAJA_LOGICA = '0'
 	AND PAC_PLAN_MEDICO_CODIGO=PLAN_CODIGO
 	AND (PAC_TIPO_DOCUMENTO=TIDOC_ID OR PAC_TIPO_DOCUMENTO IS NULL)
 	AND (PAC_ESTADO_CIVIL=ECIVIL_ID OR PAC_ESTADO_CIVIL IS NULL)
@@ -686,6 +693,7 @@ CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_APELLIDO_PACIENTES
 		PAC_NUMERO_AFILIADO AS 'Numero Afiliado'
 	FROM ClinicaTurbia.Paciente, ClinicaTurbia.PlanMedico, ClinicaTurbia.TipoDocumento, ClinicaTurbia.EstadoCivil 
 	WHERE PAC_APELLIDO like @apellido+'%'
+	AND PAC_BAJA_LOGICA = '0'
 	AND PAC_PLAN_MEDICO_CODIGO=PLAN_CODIGO
 	AND (PAC_TIPO_DOCUMENTO=TIDOC_ID OR PAC_TIPO_DOCUMENTO IS NULL)
 	AND (PAC_ESTADO_CIVIL=ECIVIL_ID OR PAC_ESTADO_CIVIL IS NULL)
@@ -698,7 +706,8 @@ GO
 
 CREATE PROCEDURE ClinicaTurbia.BORRAR_MEDICO
 	(@dni int) AS
-	DELETE FROM ClinicaTurbia.Medico 
+	UPDATE ClinicaTurbia.Medico 
+	set med_baja_logica = '1'
 	WHERE ClinicaTurbia.Medico.MED_DNI = @dni;
 GO
 
@@ -706,8 +715,8 @@ CREATE PROCEDURE ClinicaTurbia.AGREGAR_MEDICO
 	(@dni numeric,@nombre nvarchar(255),@apellido nvarchar(255),
 	 @direccion nvarchar(255) = NULL, @telefono nvarchar(255) = NULL,
 	 @mail nvarchar(255) = NULL, @fecha datetime) AS
-	INSERT INTO ClinicaTurbia.Medico(MED_DNI,MED_NOMBRE,MED_APELLIDO,MED_DIRECCION,MED_TELEFONO,MED_MAIL,MED_FECHA_NACIMIENTO) 
-	VALUES (@dni,@nombre,@apellido,@direccion,@telefono,@mail,@fecha);
+	INSERT INTO ClinicaTurbia.Medico(MED_DNI,MED_NOMBRE,MED_APELLIDO,MED_DIRECCION,MED_TELEFONO,MED_MAIL,MED_FECHA_NACIMIENTO,MED_BAJA_LOGICA) 
+	VALUES (@dni,@nombre,@apellido,@direccion,@telefono,@mail,@fecha,'0');
 		
 GO
 
@@ -716,13 +725,13 @@ CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_DIRECCION
 	AS
 	SELECT *
 	FROM ClinicaTurbia.Medico as med
-	WHERE med.MED_DIRECCION LIKE @direccion+'%';
+	WHERE med.MED_DIRECCION LIKE @direccion+'%' and med.MED_BAJA_LOGICA = '0';
 GO
 
 CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_ESPECIALIDAD
 	(@esp numeric(18, 0)) AS
 	SELECT MED_DNI, MED_NOMBRE, MED_APELLIDO FROM ClinicaTurbia.Medico_Especialidad, ClinicaTurbia.Medico
-	WHERE MEDESP_ESP=@esp AND MED_DNI=MEDESP_MED;
+	WHERE MEDESP_ESP=@esp AND MED_DNI=MEDESP_MED AND MED_BAJA_LOGICA = '0';
 GO
 
 CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_NOMBRE
@@ -730,7 +739,7 @@ CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_NOMBRE
 	AS
 	SELECT *
 	FROM ClinicaTurbia.Medico as med
-	where med.MED_NOMBRE LIKE @nombre+'%';
+	where med.MED_NOMBRE LIKE @nombre+'%' and med.MED_BAJA_LOGICA = '0';
 GO
 
 CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_DNI
@@ -738,7 +747,7 @@ CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_DNI
 	AS
 	SELECT *
 	FROM ClinicaTurbia.Medico as med
-	where med.MED_DNI LIKE @dni+'%';
+	where med.MED_DNI LIKE @dni+'%' AND med.MED_BAJA_LOGICA = '0';
 GO
 
 CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_APELLIDO
@@ -766,19 +775,19 @@ CREATE PROCEDURE ClinicaTurbia.FILTRAR_POR_NOMBRE_MEDICO
 	AS
 	SELECT *  
 	FROM ClinicaTurbia.Medico as m
-	WHERE m.MED_NOMBRE like @nombreParcial+'%' OR 
+	WHERE (m.MED_NOMBRE like @nombreParcial+'%' OR 
 		  m.MED_APELLIDO like @nombreParcial+'%' OR
 		  m.MED_DNI like @nombreParcial+'%' OR
 		  m.MED_TELEFONO like @nombreParcial+'%' OR
 		  m.MED_DIRECCION like @nombreParcial+'%' OR
 		  m.MED_MAIL like @nombreParcial+'%' OR
-		  m.MED_FECHA_NACIMIENTO like @nombreParcial+'%'
+		  m.MED_FECHA_NACIMIENTO like @nombreParcial+'%') and m.med_baja_logica = '0'
 GO
 
 CREATE PROCEDURE ClinicaTurbia.TRAER_TODOS_MEDICOS
 	AS
 	SELECT * FROM ClinicaTurbia.Medico as medico
-	WHERE medico.MED_DNI IS NOT NULL
+	WHERE medico.MED_DNI IS NOT NULL AND medico.MED_BAJA_LOGICA = '0'
 	ORDER BY medico.MED_APELLIDO ASC;
 GO
 
@@ -889,7 +898,7 @@ CREATE PROCEDURE ClinicaTurbia.EXISTE_AFILIADO
 	SELECT PAC_NOMBRE, PAC_APELLIDO, PAC_TIPO_DOCUMENTO, PAC_NUMDOC, PAC_SEXO, PAC_FECHA_NACIMIENTO, 
 		PAC_ESTADO_CIVIL, PAC_DIRECCION, PAC_TELEFONO, PAC_MAIL, PAC_CANT_HIJOS, PLAN_DESCRIPCION
 	FROM ClinicaTurbia.Paciente, ClinicaTurbia.PlanMedico
-	WHERE PAC_NUMDOC = @dni AND PAC_PLAN_MEDICO_CODIGO = PLAN_CODIGO
+	WHERE PAC_NUMDOC = @dni AND PAC_PLAN_MEDICO_CODIGO = PLAN_CODIGO and PAC_BAJA_LOGICA = '0'
 GO
 
 CREATE PROCEDURE ClinicaTurbia.MODIFICAR_AFILIADO
