@@ -371,7 +371,7 @@
             this.calendarNac.Visible = false;
             this.calendarNac.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.calendarNac_DateSelected);
             // 
-            // AbmAfiliadoWindow
+            // AltaModifAfiliado
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -409,7 +409,7 @@
             this.Controls.Add(this.lblNombre);
             this.Controls.Add(this.txtApellido);
             this.Controls.Add(this.lblApellido);
-            this.Name = "AbmAfiliadoWindow";
+            this.Name = "AltaModifAfiliado";
             this.Text = "ClinicaTurbia - Nuevo Afiliado";
             this.Shown += new System.EventHandler(this.AbmAfiliadoWindow_Shown);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AbmAfiliadoWindow_FormClosing);

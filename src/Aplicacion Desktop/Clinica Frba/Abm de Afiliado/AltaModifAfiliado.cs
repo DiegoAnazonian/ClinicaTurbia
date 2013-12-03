@@ -132,6 +132,10 @@ namespace Clinica_Frba.NewFolder12
             if (nuevoAfiliado)
             {
                 registrarNuevoAfiliado();
+                if (txtFamiliares.Text != "")
+                {
+                    
+                }
             }
             else
             {
@@ -192,13 +196,13 @@ namespace Clinica_Frba.NewFolder12
             }
             String sexoAfiliado = comboSexo.SelectedItem != null ?
                 comboSexo.SelectedItem.ToString().Substring(0, 1) : null;
-            String tel = "".Equals(txtTelefono.Text) ? null : txtTelefono.Text;
+            
             List<SqlParameter> paramsAfiliado = Database.GenerarListaDeParametros(
-                "nom", txtNombre.Text, "ape", txtApellido.Text, "fecha", txtFechaNac.Text,
+                "nom", txtNombre.Text, "ape", txtApellido.Text, "fecha", Convert.ToDateTime(txtFechaNac.Text),
                 "tiDoc", comboTipoDoc.SelectedValue, "dire", txtDireccion.Text,
-                "tel", tel, "mail", txtMail.Text, "sexo", sexoAfiliado,
+                "tel", Convert.ToInt64(txtTelefono.Text), "mail", txtMail.Text, "sexo", sexoAfiliado,
                 "estCivil", comboEstadoCivil.SelectedValue, "cantFam", txtFamiliares.Text,
-                "planMed", comboPlanMedico.SelectedValue, "numDoc", txtNroDoc.Text);
+                "planMed", comboPlanMedico.SelectedValue, "numDoc", Convert.ToInt64(txtNroDoc.Text));
             DataTable tablaPlanMedico = Database.GetInstance.ExecuteQuery(
                 "[ClinicaTurbia].[CREAR_AFILIADO]", paramsAfiliado);
         }
@@ -306,6 +310,13 @@ namespace Clinica_Frba.NewFolder12
             }
            
         }
+
+        private void txtFamiliares_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+       
 
     }
 }
