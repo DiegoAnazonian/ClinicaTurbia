@@ -42,3 +42,25 @@ C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica F
 C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Cancelar_Atencion.CancelarTurno.resources
 C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Cancelar_Atencion.MotivoCancelacion.resources
 C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Pedir_Turno.PedirTurno.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\bin\Debug\Clinica Frba.exe.config
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\bin\Debug\Clinica Frba.exe
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\bin\Debug\Clinica Frba.pdb
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Abm_de_Afiliado.AbmAfiliado.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.NewFolder12.AltaModifAfiliado.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Abm_de_Especialidades_Medicas.EspecialidadesWindow.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Abm_de_Profesional.AbmProfesional.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Abm_de_Profesional.Alta.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Abm_de_Profesional.Modificar.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Abm_de_Rol.DetallesRolWindow.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Abm_de_Rol.AbmRolWindow.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Cancelar_Atencion.CancelarFechaDeAtencion.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Cancelar_Atencion.CancelarTurno.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Cancelar_Atencion.MotivoCancelacion.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.NewFolder10.LoginWindow.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Login.RolesWindow.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Pedir_Turno.PedirTurno.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Properties.Resources.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica Frba.csproj.GenerateResource.Cache
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica Frba.exe
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica Frba.pdb
