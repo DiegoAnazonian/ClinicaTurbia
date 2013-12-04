@@ -167,6 +167,10 @@ IF OBJECT_ID('ClinicaTurbia.CREAR_AFILIADO', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.CREAR_AFILIADO
 GO
 
+IF OBJECT_ID('ClinicaTurbia.BORRAR_AFILIADO', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.BORRAR_AFILIADO
+GO
+
 IF OBJECT_ID('ClinicaTurbia.MODIFICAR_AFILIADO', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.MODIFICAR_AFILIADO
 GO
@@ -341,9 +345,11 @@ CREATE TABLE ClinicaTurbia.Paciente(
 	PAC_MAIL [nvarchar] (255) NOT NULL,
 	PAC_CANT_HIJOS [numeric] (2, 0),
 	PAC_PLAN_MEDICO_CODIGO [int] FOREIGN KEY REFERENCES ClinicaTurbia.PlanMedico(PLAN_CODIGO),
-	PAC_NUMERO_AFILIADO [int] NOT NULL IDENTITY(1, 100),
+	PAC_NUMERO_AFILIADO [nvarchar] (255) NOT NULL,
 	PAC_BAJA_LOGICA [int] NOT NULL
 );
+
+
 
 ----MEDICO----
 CREATE TABLE ClinicaTurbia.Medico(
@@ -466,7 +472,7 @@ INSERT INTO ClinicaTurbia.PlanMedico(PLAN_CODIGO, PLAN_DESCRIPCION,
 	FROM gd_esquema.Maestra m;
 
 INSERT INTO ClinicaTurbia.Paciente(PAC_NUMDOC, PAC_NOMBRE, PAC_APELLIDO, PAC_DIRECCION,
-	PAC_TELEFONO, PAC_MAIL, PAC_FECHA_NACIMIENTO, PAC_PLAN_MEDICO_CODIGO,PAC_BAJA_LOGICA)
+	PAC_TELEFONO, PAC_MAIL, PAC_FECHA_NACIMIENTO, PAC_PLAN_MEDICO_CODIGO,PAC_BAJA_LOGICA,PAC_NUMERO_AFILIADO)
 	SELECT DISTINCT
 		m.Paciente_Dni,
 		m.Paciente_Nombre,
@@ -476,8 +482,12 @@ INSERT INTO ClinicaTurbia.Paciente(PAC_NUMDOC, PAC_NOMBRE, PAC_APELLIDO, PAC_DIR
 		m.Paciente_Mail,
 		m.Paciente_Fecha_Nac,
 		M.Plan_Med_Codigo,
-		'0'
+		'0',
+		CAST(m.Paciente_Dni as nvarchar(255)) + '01' 
+		
 	FROM gd_esquema.Maestra m;
+	
+	
 
 INSERT INTO ClinicaTurbia.Medico(MED_DNI, MED_NOMBRE, MED_APELLIDO, MED_DIRECCION,
 	MED_TELEFONO, MED_MAIL, MED_FECHA_NACIMIENTO,MED_BAJA_LOGICA)
@@ -570,6 +580,7 @@ CREATE PROCEDURE ClinicaTurbia.LISTADO_PACIENTES AS
 		PAC_NUMERO_AFILIADO AS 'Numero Afiliado'
 	FROM ClinicaTurbia.Paciente, ClinicaTurbia.PlanMedico, ClinicaTurbia.TipoDocumento, ClinicaTurbia.EstadoCivil 
 	WHERE PAC_PLAN_MEDICO_CODIGO=PLAN_CODIGO
+	AND (PAC_BAJA_LOGICA = '0')
 	AND (PAC_TIPO_DOCUMENTO=TIDOC_ID OR PAC_TIPO_DOCUMENTO IS NULL)
 	AND (PAC_ESTADO_CIVIL=ECIVIL_ID OR PAC_ESTADO_CIVIL IS NULL)
 	ORDER BY 'Apellido', 'Nombre'
@@ -709,6 +720,13 @@ CREATE PROCEDURE ClinicaTurbia.BORRAR_MEDICO
 	UPDATE ClinicaTurbia.Medico 
 	set med_baja_logica = '1'
 	WHERE ClinicaTurbia.Medico.MED_DNI = @dni;
+GO
+
+CREATE PROCEDURE ClinicaTurbia.BORRAR_AFILIADO
+	(@dni int) AS
+	UPDATE ClinicaTurbia.Paciente 
+	set pac_baja_logica = '1'
+	WHERE ClinicaTurbia.Paciente.PAC_NUMDOC = @dni;
 GO
 
 CREATE PROCEDURE ClinicaTurbia.AGREGAR_MEDICO
@@ -915,12 +933,12 @@ CREATE PROCEDURE ClinicaTurbia.CREAR_AFILIADO
 	(@nom nvarchar(255), @ape nvarchar(255), @fecha datetime, @tiDoc int = NULL,
 		@dire nvarchar(255) = NULL, @tel nvarchar(255) = NULL,
 		@mail nvarchar(255) = NULL, @sexo char = NULL, @estCivil int = NULL,
-		@planMed int, @cantFam int = NULL, @numDoc nvarchar(255)) AS
+		@planMed int, @cantFam int = NULL, @numDoc nvarchar(255),@numeroAfiliado nvarchar(255)) AS
 	INSERT INTO ClinicaTurbia.Paciente(PAC_NOMBRE, PAC_APELLIDO, PAC_TIPO_DOCUMENTO,
 		PAC_NUMDOC, PAC_SEXO, PAC_FECHA_NACIMIENTO, PAC_ESTADO_CIVIL, PAC_DIRECCION,
-		PAC_TELEFONO, PAC_MAIL, PAC_CANT_HIJOS, PAC_PLAN_MEDICO_CODIGO) VALUES
+		PAC_TELEFONO, PAC_MAIL, PAC_CANT_HIJOS, PAC_PLAN_MEDICO_CODIGO,PAC_BAJA_LOGICA,PAC_NUMERO_AFILIADO) VALUES
 		(@nom, @ape, @tiDoc, @numDoc, @sexo, @fecha, @estCivil, @dire, @tel,
-		@mail, @cantFam, @planMed)
+		@mail, @cantFam, @planMed,0,@numeroAfiliado)
 GO
 
 CREATE PROCEDURE ClinicaTurbia.PRIMER_LOGIN_USUARIO (@numDoc nvarchar(255)) AS

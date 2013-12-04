@@ -132,7 +132,7 @@ namespace Clinica_Frba.Abm_de_Afiliado
 
         private void alta_Click(object sender, EventArgs e)
         {
-            new AltaModifAfiliado().ShowDialog();
+            new AltaModifAfiliado(false).ShowDialog();
             this.asDefault();
         }
 
@@ -141,6 +141,59 @@ namespace Clinica_Frba.Abm_de_Afiliado
             this.modificar.Enabled = false;
             this.baja.Enabled = false;
             this.refrescarTabla();
+            palabraClave.Text = "";
+            nombre.Text = "";
+            apellido.Text = "";
+            dni.Text = "";
+            direccion.Text = "";
         }
+
+        private void eliminarAfiliado(long documento)
+        {
+            try
+            {
+                List<SqlParameter> parametros = Database.GenerarListaDeParametros("dni", Convert.ToInt64(documento));
+                DataTable tablaMedicos = Database.GetInstance
+                    .ExecuteQuery("[ClinicaTurbia].[BORRAR_AFILIADO]", parametros);
+                MessageBox.Show("El afiliado se ha eliminado exitosamente", "Clinica Turbia FRBA", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Probelmas al eliminar el afiliado", "Clinica Turbia FRBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this.refrescarTabla();
+        }
+
+        private void baja_Click(object sender, EventArgs e)
+        {
+            long documento = Convert.ToInt64(afiliadosBox.Rows[afiliadosBox.CurrentRow.Index].Cells[3].Value);
+            String nom = Convert.ToString(afiliadosBox.Rows[afiliadosBox.CurrentRow.Index].Cells[0].Value);
+            String ape = Convert.ToString(afiliadosBox.Rows[afiliadosBox.CurrentRow.Index].Cells[1].Value);
+
+            if (MessageBox.Show("Seguro desea eliminar a " + ape + ", " + nom + ".\n DNI: " + documento + "", "ClinicaTurbia FRBA", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                this.eliminarAfiliado(documento);
+            }
+
+            this.asDefault();
+        
+        
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

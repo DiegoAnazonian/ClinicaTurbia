@@ -68,6 +68,7 @@
             this.baja.TabIndex = 0;
             this.baja.Text = "Baja";
             this.baja.UseVisualStyleBackColor = true;
+            this.baja.Click += new System.EventHandler(this.baja_Click);
             // 
             // modificar
             // 

@@ -61,6 +61,7 @@
             this.lblApellidoInc = new System.Windows.Forms.Label();
             this.lblPlanInc = new System.Windows.Forms.Label();
             this.calendarNac = new System.Windows.Forms.MonthCalendar();
+            this.familiares = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // lblApellido
@@ -258,12 +259,13 @@
             this.txtFamiliares.Name = "txtFamiliares";
             this.txtFamiliares.Size = new System.Drawing.Size(142, 20);
             this.txtFamiliares.TabIndex = 9;
+            this.txtFamiliares.TextChanged += new System.EventHandler(this.txtFamiliares_TextChanged);
             // 
             // btnLimipiar
             // 
             this.btnLimipiar.Location = new System.Drawing.Point(15, 322);
             this.btnLimipiar.Name = "btnLimipiar";
-            this.btnLimipiar.Size = new System.Drawing.Size(136, 26);
+            this.btnLimipiar.Size = new System.Drawing.Size(63, 26);
             this.btnLimipiar.TabIndex = 12;
             this.btnLimipiar.Text = "Limpiar";
             this.btnLimipiar.UseVisualStyleBackColor = true;
@@ -271,9 +273,9 @@
             // 
             // btnGuardar
             // 
-            this.btnGuardar.Location = new System.Drawing.Point(425, 322);
+            this.btnGuardar.Location = new System.Drawing.Point(494, 322);
             this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(136, 26);
+            this.btnGuardar.Size = new System.Drawing.Size(67, 26);
             this.btnGuardar.TabIndex = 12;
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.UseVisualStyleBackColor = true;
@@ -362,7 +364,7 @@
             // 
             // calendarNac
             // 
-            this.calendarNac.Location = new System.Drawing.Point(316, 108);
+            this.calendarNac.Location = new System.Drawing.Point(317, 108);
             this.calendarNac.MaxSelectionCount = 1;
             this.calendarNac.Name = "calendarNac";
             this.calendarNac.ShowToday = false;
@@ -371,11 +373,21 @@
             this.calendarNac.Visible = false;
             this.calendarNac.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.calendarNac_DateSelected);
             // 
+            // familiares
+            // 
+            this.familiares.FormattingEnabled = true;
+            this.familiares.Location = new System.Drawing.Point(388, 12);
+            this.familiares.Name = "familiares";
+            this.familiares.Size = new System.Drawing.Size(121, 21);
+            this.familiares.TabIndex = 15;
+            this.familiares.Text = "Tipo Familiar";
+            // 
             // AltaModifAfiliado
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(573, 357);
+            this.ClientSize = new System.Drawing.Size(602, 357);
+            this.Controls.Add(this.familiares);
             this.Controls.Add(this.calendarNac);
             this.Controls.Add(this.lblNroDocInc);
             this.Controls.Add(this.lblApellidoInc);
@@ -453,5 +465,6 @@
         private System.Windows.Forms.Label lblApellidoInc;
         private System.Windows.Forms.Label lblPlanInc;
         private System.Windows.Forms.MonthCalendar calendarNac;
+        private System.Windows.Forms.ComboBox familiares;
     }
 }

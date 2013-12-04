@@ -15,12 +15,27 @@ namespace Clinica_Frba.NewFolder12
         private bool nuevoAfiliado;
         private bool btnGuardarClicked = false;
         private bool owner;
+        private static int indexAfiliado = 3;
+        private static String codigoAfiliadoPrincipal;
+        private static String endPointAfiliado = "01";
+        private String nombreACargo;
+        private String apellidoACargo;
+        private long cantidadFamiliares;
+        
 
-        public AltaModifAfiliado()
+        public AltaModifAfiliado(Boolean conFamiliares)
         {
             InitializeComponent();
             nuevoAfiliado = true;
             completarCombos();
+            botonesFamiliares(false);
+            
+
+            if (conFamiliares)
+            {
+                this.botonesFamiliares(true);
+                this.agregarDatosComboFamiliar();
+            }
         }
 
         public AltaModifAfiliado(DataTable tablaAfiliado, bool owner)
@@ -30,6 +45,37 @@ namespace Clinica_Frba.NewFolder12
             this.owner = owner;
             completarCombos();
             completarDatos(tablaAfiliado);
+            botonesFamiliares(false);
+            codigoAfiliadoPrincipal = null;
+            
+        }
+
+        private void agregarDatosComboFamiliar(){
+            List<String> tipoFamiliares = new List<string>();
+
+            tipoFamiliares.Add("Conyuge");
+            tipoFamiliares.Add("Hijo");
+            tipoFamiliares.Add("Hija");
+            tipoFamiliares.Add("Otro Familiar");
+
+            familiares.DataSource = tipoFamiliares;
+        }
+
+        private void botonesFamiliares(Boolean quieroAgregar)
+        {
+            
+            
+            if (quieroAgregar)
+            {
+                
+                familiares.Visible = true;
+            }
+            else
+            {
+                
+                familiares.Visible = false;
+            }
+            
         }
 
         private void completarCombos()
@@ -126,15 +172,44 @@ namespace Clinica_Frba.NewFolder12
             }
         }
 
+        private void asDefault()
+        {
+            txtApellido.Text = "";
+            txtNombre.Text = "";
+            txtNroDoc.Text = "";
+            txtDireccion.Text = "";
+            txtTelefono.Text = "";
+            txtMail.Text = "";
+            txtFechaNac.Text = "";
+            comboEstadoCivil.SelectedItem = null;
+            comboSexo.SelectedItem = null;
+            comboTipoDoc.SelectedItem = null;
+            comboPlanMedico.SelectedItem = null;
+            txtFamiliares.Text = "";
+        }
+
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             btnGuardarClicked = true;
             if (nuevoAfiliado)
             {
-                registrarNuevoAfiliado();
-                if (txtFamiliares.Text != "")
+                
+                    registrarNuevoAfiliado();
+                
+                if (!String.IsNullOrEmpty(txtFamiliares.Text))
                 {
-                    
+                    codigoAfiliadoPrincipal = txtNroDoc.Text;
+                    nombreACargo = txtNombre.Text;
+                    apellidoACargo = txtApellido.Text;
+                    this.botonesFamiliares(true);
+                    this.agregarDatosComboFamiliar();
+
+                    for(int i = 0;i<cantidadFamiliares;i++)
+                    {
+                        new AltaModifAfiliado(true).ShowDialog();
+                        this.Close();
+                    }
+                    this.Close();
                 }
             }
             else
@@ -158,12 +233,12 @@ namespace Clinica_Frba.NewFolder12
             }
             String sexoAfiliado = comboSexo.SelectedItem != null ? 
                 comboSexo.SelectedItem.ToString().Substring(0, 1) : null;
-            String tel = "".Equals(txtTelefono.Text) ? null : txtTelefono.Text;
+            
             List<SqlParameter> paramsAfiliado = Database.GenerarListaDeParametros(
                 "tiDoc", comboTipoDoc.SelectedValue, "dire", txtDireccion.Text,
-                "tel", tel, "mail", txtMail.Text, "sexo", sexoAfiliado,
+                "tel", Convert.ToInt64(txtTelefono.Text), "mail", txtMail.Text, "sexo", sexoAfiliado,
                 "estCivil", comboEstadoCivil.SelectedValue, "cantFam", txtFamiliares.Text, 
-                "planMed", comboPlanMedico.SelectedValue, "numDoc", txtNroDoc.Text);
+                "planMed", comboPlanMedico.SelectedValue, "numDoc", Convert.ToInt64(txtNroDoc.Text));
             DataTable tablaPlanMedico = Database.GetInstance.ExecuteQuery(
                 "[ClinicaTurbia].[MODIFICAR_AFILIADO]", paramsAfiliado);
             List<SqlParameter> paramsPrimerLogeo = Database.GenerarListaDeParametros(
@@ -175,6 +250,7 @@ namespace Clinica_Frba.NewFolder12
 
         private void registrarNuevoAfiliado()
         {
+
             ocultarMarcasDeFaltanDatos();
             if (faltanDatosObligatorios())
             {
@@ -194,18 +270,60 @@ namespace Clinica_Frba.NewFolder12
                     return;
                 }
             }
-            String sexoAfiliado = comboSexo.SelectedItem != null ?
-                comboSexo.SelectedItem.ToString().Substring(0, 1) : null;
+
+            try
+            {
+                String codigoNuevoAfiliado;
+                if (!String.IsNullOrEmpty(codigoAfiliadoPrincipal))
+                {
+
+                    String familiar = familiares.SelectedItem.ToString();
+                    if (familiar.Equals("Conyuge"))
+                    {
+                        
+                        endPointAfiliado = "02";
+                    }
+                    else
+                    {
+                        
+                        endPointAfiliado = Convert.ToString(0) + Convert.ToString(indexAfiliado);
+                        indexAfiliado++;
+                    }
+
+                    codigoNuevoAfiliado = String.Concat(codigoAfiliadoPrincipal, endPointAfiliado);
+                    
+                }
+                else
+                {
+                    
+                    codigoNuevoAfiliado = String.Concat(txtNroDoc.Text, "01");
+                    MessageBox.Show("Es un nuevo afiliado ",codigoNuevoAfiliado);
+                }
+
+                String sexoAfiliado = comboSexo.SelectedItem != null ?
+                    comboSexo.SelectedItem.ToString().Substring(0, 1) : null;
+                
+
+                List<SqlParameter> paramsAfiliado = Database.GenerarListaDeParametros(
+                    "nom", txtNombre.Text, "ape", txtApellido.Text, "fecha", Convert.ToDateTime(txtFechaNac.Text),
+                    "tiDoc", comboTipoDoc.SelectedValue, "dire", txtDireccion.Text,
+                    "tel", Convert.ToInt64(txtTelefono.Text), "mail", txtMail.Text, "sexo", sexoAfiliado,
+                    "estCivil", comboEstadoCivil.SelectedValue, "cantFam", txtFamiliares.Text,
+                    "planMed", comboPlanMedico.SelectedValue, "numDoc", Convert.ToInt64(txtNroDoc.Text), "numeroAfiliado", codigoNuevoAfiliado.ToString());
+
+                DataTable tablaPlanMedico = Database.GetInstance.ExecuteQuery(
+                    "[ClinicaTurbia].[CREAR_AFILIADO]", paramsAfiliado);
+                MessageBox.Show("El afiliado " +  txtNombre.Text + "," + txtApellido.Text +" se ha guardado correctamente. Su Codigo de afiliado es: " + codigoNuevoAfiliado, "Clinica Turbia FRBA", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception e)
+            {
+
+                MessageBox.Show("Problemas al guardar el afiliado, error: " + e);   
+            }
             
-            List<SqlParameter> paramsAfiliado = Database.GenerarListaDeParametros(
-                "nom", txtNombre.Text, "ape", txtApellido.Text, "fecha", Convert.ToDateTime(txtFechaNac.Text),
-                "tiDoc", comboTipoDoc.SelectedValue, "dire", txtDireccion.Text,
-                "tel", Convert.ToInt64(txtTelefono.Text), "mail", txtMail.Text, "sexo", sexoAfiliado,
-                "estCivil", comboEstadoCivil.SelectedValue, "cantFam", txtFamiliares.Text,
-                "planMed", comboPlanMedico.SelectedValue, "numDoc", Convert.ToInt64(txtNroDoc.Text));
-            DataTable tablaPlanMedico = Database.GetInstance.ExecuteQuery(
-                "[ClinicaTurbia].[CREAR_AFILIADO]", paramsAfiliado);
-        }
+            
+            }
+
 
         private bool hayCamposVacios()
         {
@@ -313,8 +431,19 @@ namespace Clinica_Frba.NewFolder12
 
         private void txtFamiliares_TextChanged(object sender, EventArgs e)
         {
-            
+            if (!String.IsNullOrEmpty(txtFamiliares.Text))
+            {
+                cantidadFamiliares = Convert.ToInt64(txtFamiliares.Text);
+            }
         }
+
+       
+
+        
+
+        
+
+        
 
        
 
