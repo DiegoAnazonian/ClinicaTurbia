@@ -13,6 +13,7 @@ using Clinica_Frba.Abm_de_Afiliado;
 using System.Security.Cryptography;
 using System.Text;
 using Clinica_Frba.Cancelar_Atencion;
+using Clinica_Frba.Compra_de_Bono;
 
 namespace Clinica_Frba.NewFolder10
 {
@@ -84,7 +85,6 @@ namespace Clinica_Frba.NewFolder10
                             ("[ClinicaTurbia].[EXISTE_AFILIADO]", afiliadoParam);
                         if (tablaAfiliado.Rows.Count > 0)
                         {
-                            //ES UN PACIENTE
                             new AltaModifAfiliado(tablaAfiliado, true).ShowDialog();
                         }
                     }
@@ -208,6 +208,18 @@ namespace Clinica_Frba.NewFolder10
                         btn.Click += (ssender, args) =>
                         {
                             new CancelarFechaDeAtencion(LOGGED_USER).ShowDialog();
+                        };
+                        break;
+                    case "Vender bono":
+                        btn.Click += (ssender, args) =>
+                        {
+                            new ComprarBono(false).ShowDialog();
+                        };
+                        break;
+                    case "Comprar bono":
+                        btn.Click += (ssender, args) =>
+                        {
+                            new ComprarBono(true).ShowDialog();
                         };
                         break;
                 }

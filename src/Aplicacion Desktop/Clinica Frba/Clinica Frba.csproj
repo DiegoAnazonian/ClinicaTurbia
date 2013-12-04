@@ -126,6 +126,12 @@
     <Compile Include="Cancelar Atencion\MotivoCancelacion.Designer.cs">
       <DependentUpon>MotivoCancelacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Compra de Bono\CompraBono.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compra de Bono\CompraBono.Designer.cs">
+      <DependentUpon>CompraBono.cs</DependentUpon>
+    </Compile>
     <Compile Include="Configuration.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="Login\LoginWindow.cs">
@@ -169,12 +175,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Registrar Agenda\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Compra de Bono\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Compra de Bono\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Registro de LLegada\Form1.cs">
