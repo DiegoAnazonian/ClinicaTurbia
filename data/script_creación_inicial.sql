@@ -23,6 +23,18 @@ IF OBJECT_ID('ClinicaTurbia.Transaccion', 'U') IS NOT NULL
 	DROP TABLE ClinicaTurbia.Transaccion
 GO
 
+IF OBJECT_ID('ClinicaTurbia.Llegada', 'U') IS NOT NULL
+	DROP TABLE ClinicaTurbia.Llegada
+GO
+
+IF OBJECT_ID('ClinicaTurbia.Receta', 'U') IS NOT NULL
+	DROP TABLE ClinicaTurbia.Receta
+GO
+
+IF OBJECT_ID('ClinicaTurbia.Medicamento', 'U') IS NOT NULL
+	DROP TABLE ClinicaTurbia.Medicamento
+GO
+
 IF OBJECT_ID('ClinicaTurbia.BonoConsulta', 'U') IS NOT NULL
 	DROP TABLE ClinicaTurbia.BonoConsulta
 GO
@@ -113,6 +125,10 @@ GO
 
 IF OBJECT_ID('ClinicaTurbia.LISTADO_FUNCIONALIDADES', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.LISTADO_FUNCIONALIDADES
+GO
+
+IF OBJECT_ID('ClinicaTurbia.CALCULAR_NUMERO_CONSULTA_BONOS', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.CALCULAR_NUMERO_CONSULTA_BONOS
 GO
 
 IF OBJECT_ID('ClinicaTurbia.LISTADO_ROLES', 'P') IS NOT NULL
@@ -421,6 +437,7 @@ CREATE TABLE ClinicaTurbia.Profesional_Dia_Horario(
 	PDH_DIA [int] NOT NULL
 );
 
+
 CREATE TABLE ClinicaTurbia.Turno(
 	TURN_NUMERO [numeric] (18,0) PRIMARY KEY IDENTITY,
 	TURN_FECHA [datetime] NOT NULL,
@@ -430,20 +447,6 @@ CREATE TABLE ClinicaTurbia.Turno(
 	TURN_CAN_MOTIVO [varchar] (255),
 	TURN_CAN_TICAN [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.TipoCancelacion(TICAN_ID),
 	TURN_CAN_AVISADO [bit]
-);
-
-CREATE TABLE ClinicaTurbia.Diagnostico(
-	DIAG_COD [numeric] (18,0) PRIMARY KEY IDENTITY,
-	DIAG_TURN_NUMERO [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.Turno(TURN_NUMERO),
-	DIAG_CONSULTA_SINTOMAS [varchar] (255),
-	DIAG_CONSULTA_ENFERMEDADES [varchar] (255),
-	DIAG_BONO_CONSULTA [numeric] (18,0),
-	DIAG_BONO_FARMACIA [numeric] (18,0),
-);
-
-CREATE TABLE ClinicaTurbia.Medico_Especialidad(
-	MEDESP_MED [numeric] (18,0) NOT NULL FOREIGN KEY REFERENCES ClinicaTurbia.Medico(MED_DNI),
-	MEDESP_ESP [numeric] (18, 0) FOREIGN KEY REFERENCES ClinicaTurbia.Especialidad(ESP_CODIGO) NOT NULL
 );
 
 CREATE TABLE ClinicaTurbia.BonoConsulta(
@@ -459,6 +462,37 @@ CREATE TABLE ClinicaTurbia.BonoFarmacia(
 	BONOFAR_FECHA_COMPRA [datetime],
 	BONOFAR_AFILIADO [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.Paciente(PAC_NUMDOC),
 	BONOFAR_PLAN [int] FOREIGN KEY REFERENCES ClinicaTurbia.PlanMedico(PLAN_CODIGO)
+);
+
+CREATE TABLE ClinicaTurbia.Llegada(
+	LLE_ID [numeric] (18,0) PRIMARY KEY IDENTITY,
+	LLE_TURN_NUMERO [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.Turno(TURN_NUMERO),
+	LLE_FECHA_HORA [datetime],
+	LLE_BONO_CONSULTA [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.BonoConsulta(BONOCON_ID)	
+);
+
+CREATE TABLE ClinicaTurbia.Medicamento(
+	MEDICAM_ID [numeric] (18,0) PRIMARY KEY IDENTITY,
+	MEDICAM_DESCRIPCION [nvarchar] (255)
+);
+
+CREATE TABLE ClinicaTurbia.Receta(
+	REC_ID [numeric] (18,0) PRIMARY KEY IDENTITY,
+	REC_BONO_FARMACIA [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.BonoFarmacia(BONOFAR_ID),
+	REC_MEDICAMENTO_ID [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.Medicamento(MEDICAM_ID),
+	REC_CANT_MEDICAMENTO [int]
+);
+
+CREATE TABLE ClinicaTurbia.Diagnostico(
+	DIAG_COD [numeric] (18,0) PRIMARY KEY IDENTITY,
+	DIAG_TURN_NUMERO [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.Turno(TURN_NUMERO),
+	DIAG_SINTOMAS [varchar] (255),
+	DIAG_ENFERMEDADES [varchar] (255)
+);
+
+CREATE TABLE ClinicaTurbia.Medico_Especialidad(
+	MEDESP_MED [numeric] (18,0) NOT NULL FOREIGN KEY REFERENCES ClinicaTurbia.Medico(MED_DNI),
+	MEDESP_ESP [numeric] (18, 0) FOREIGN KEY REFERENCES ClinicaTurbia.Especialidad(ESP_CODIGO) NOT NULL
 );
 
 CREATE TABLE ClinicaTurbia.Transaccion(
@@ -516,6 +550,12 @@ INSERT INTO ClinicaTurbia.PlanMedico(PLAN_CODIGO, PLAN_DESCRIPCION,
 	FROM gd_esquema.Maestra m;
 SET IDENTITY_INSERT ClinicaTurbia.PlanMedico OFF;
 
+INSERT INTO ClinicaTurbia.Medicamento(MEDICAM_DESCRIPCION)
+	SELECT DISTINCT Bono_Farmacia_Medicamento
+	FROM GD2C2013.gd_esquema.Maestra
+	WHERE Bono_Farmacia_Medicamento IS NOT NULL
+	ORDER BY Bono_Farmacia_Medicamento;
+
 INSERT INTO ClinicaTurbia.Paciente(PAC_NUMDOC, PAC_NOMBRE, PAC_APELLIDO, PAC_DIRECCION,
 	PAC_TELEFONO, PAC_MAIL, PAC_FECHA_NACIMIENTO, PAC_PLAN_MEDICO_CODIGO,PAC_BAJA_LOGICA,PAC_NUMERO_AFILIADO)
 	SELECT DISTINCT
@@ -563,20 +603,17 @@ INSERT INTO ClinicaTurbia.Usuario_Rol(USUARIO_NOMBRE, ROL_ID)
 INSERT INTO ClinicaTurbia.Usuario_Rol(USUARIO_NOMBRE, ROL_ID)
 	VALUES ('admin', 1); 
 
-SET IDENTITY_INSERT ClinicaTurbia.BonoConsulta ON;
-INSERT INTO ClinicaTurbia.BonoConsulta(BONOCON_ID, BONOCON_FECHA_COMPRA,
-		BONOCON_AFILIADO, BONOCON_PLAN, BONOCON_NUMERO_CONSULTA)
-	SELECT DISTINCT Bono_Consulta_Numero, Compra_Bono_Fecha, Paciente_Dni, Plan_Med_Codigo, 0
-	FROM gd_esquema.Maestra
-	WHERE Compra_Bono_Fecha IS NOT NULL AND Bono_Consulta_Numero IS NOT NULL;
-SET IDENTITY_INSERT ClinicaTurbia.BonoConsulta OFF;
-
 SET IDENTITY_INSERT ClinicaTurbia.BonoFarmacia ON;
 INSERT INTO ClinicaTurbia.BonoFarmacia(BONOFAR_ID, BONOFAR_FECHA_COMPRA, BONOFAR_AFILIADO, BONOFAR_PLAN)
 	SELECT DISTINCT Bono_Farmacia_Numero, Compra_Bono_Fecha, Paciente_Dni, Plan_Med_Codigo
 	FROM gd_esquema.Maestra
 	WHERE Compra_Bono_Fecha IS NOT NULL AND Bono_Farmacia_Numero IS NOT NULL;
 SET IDENTITY_INSERT ClinicaTurbia.BonoFarmacia OFF;
+
+INSERT INTO ClinicaTurbia.Receta(REC_BONO_FARMACIA, REC_MEDICAMENTO_ID, REC_CANT_MEDICAMENTO)
+	SELECT Bono_Farmacia_Numero, MEDICAM_ID, 1
+	FROM GD2C2013.gd_esquema.Maestra, ClinicaTurbia.Medicamento
+	WHERE MEDICAM_DESCRIPCION = Bono_Farmacia_Medicamento;
 
 INSERT INTO ClinicaTurbia.Horario(HOR_NOMBRE, HOR_HORA_DESDE, HOR_HORA_HASTA)
 	VALUES ('Mañana', '07:00', '14:00'), ('Tarde', '13:00', '20:00'),
@@ -589,9 +626,8 @@ INSERT INTO ClinicaTurbia.Turno(TURN_NUMERO, TURN_FECHA, TURN_PROF_COD, TURN_PAC
 			WHERE DATEPART(DW, Turno_Fecha) != 7;
 SET IDENTITY_INSERT ClinicaTurbia.Turno OFF;
 
-INSERT INTO ClinicaTurbia.Diagnostico(DIAG_TURN_NUMERO, DIAG_CONSULTA_SINTOMAS, DIAG_CONSULTA_ENFERMEDADES,
-		DIAG_BONO_CONSULTA, DIAG_BONO_FARMACIA)
-	SELECT Turno_Numero, Consulta_Sintomas, Consulta_Enfermedades, Bono_Consulta_Numero, Bono_Farmacia_Numero
+INSERT INTO ClinicaTurbia.Diagnostico(DIAG_TURN_NUMERO, DIAG_SINTOMAS, DIAG_ENFERMEDADES)
+	SELECT Turno_Numero, Consulta_Sintomas, Consulta_Enfermedades
 		FROM gd_esquema.Maestra 
 		WHERE Consulta_Sintomas IS NOT NULL AND DATEPART(DW, Turno_Fecha) != 7
 		ORDER BY Turno_Numero;
@@ -621,6 +657,63 @@ CREATE PROCEDURE ClinicaTurbia.CARGAR_HORARIOS_PROFESIONALES AS
 	DEALLOCATE cursorProfs;
 
 GO
+
+CREATE PROCEDURE ClinicaTurbia.CALCULAR_NUMERO_CONSULTA_BONOS AS	
+	DECLARE @bonoId numeric(18,0);
+	DECLARE @bonoAfi numeric(18,0);
+	DECLARE @plan numeric(18,0);
+	DECLARE @fecha datetime;
+	DECLARE @bonoAfiAux numeric(18,0);
+	DECLARE @numConsulta numeric(18,0);
+	DECLARE curs CURSOR FOR SELECT  Bono_Consulta_Numero, Compra_Bono_Fecha, Paciente_Dni, Plan_Med_Codigo
+							FROM GD2C2013.gd_esquema.Maestra
+							WHERE Bono_Consulta_Numero IS NOT NULL
+							AND Consulta_Sintomas IS NOT NULL
+							ORDER BY Paciente_Dni;
+	OPEN curs;
+	FETCH curs INTO @bonoId, @fecha, @bonoAfi, @plan;
+	
+    SET IDENTITY_INSERT ClinicaTurbia.BonoConsulta ON;
+	
+	SET @bonoAfiAux = @bonoAfi;
+	SET @numConsulta = 0;
+	WHILE @@FETCH_STATUS = 0
+	BEGIN;
+		IF @bonoAfiAux = @bonoAfi
+		BEGIN;
+			SET @numConsulta = @numConsulta + 1;
+		END;
+		ELSE
+		BEGIN;
+			SET @bonoAfiAux = @bonoAfi;
+			SET @numConsulta = 1;
+		END;
+		INSERT INTO ClinicaTurbia.BonoConsulta(BONOCON_ID, BONOCON_FECHA_COMPRA,
+			BONOCON_PLAN, BONOCON_AFILIADO, BONOCON_NUMERO_CONSULTA)
+			VALUES (@bonoId, @fecha, @plan, @bonoAfi, @numConsulta);
+		FETCH NEXT FROM curs INTO @bonoId, @fecha, @bonoAfi, @plan;
+	END;
+	CLOSE curs;
+	DEALLOCATE curs;
+	
+	INSERT INTO ClinicaTurbia.BonoConsulta(BONOCON_ID, BONOCON_FECHA_COMPRA,
+		BONOCON_PLAN, BONOCON_AFILIADO, BONOCON_NUMERO_CONSULTA)
+		(SELECT Bono_Consulta_Numero, NULL, Plan_Med_Codigo, Paciente_Dni, NULL
+		FROM GD2C2013.gd_esquema.Maestra
+		WHERE Bono_Consulta_Numero IS NOT NULL AND Consulta_Sintomas IS NULL
+		EXCEPT
+		SELECT Bono_Consulta_Numero, NULL, Plan_Med_Codigo, Paciente_Dni, NULL
+		FROM GD2C2013.gd_esquema.Maestra
+		WHERE Bono_Consulta_Numero IS NOT NULL AND Consulta_Sintomas IS NOT NULL);
+	
+	SET IDENTITY_INSERT ClinicaTurbia.BonoConsulta OFF;
+	
+	UPDATE ClinicaTurbia.BonoConsulta SET BONOCON_FECHA_COMPRA = T2.Compra_Bono_Fecha
+	FROM ClinicaTurbia.BonoConsulta T1 INNER JOIN GD2C2013.gd_esquema.Maestra T2
+	ON T1.BONOCON_ID = T2.Bono_Consulta_Numero AND BONOCON_FECHA_COMPRA IS NULL
+
+GO
+
 
 CREATE PROCEDURE ClinicaTurbia.INHABILITAR_ROL (@id numeric(18,0)) AS
 	DELETE FROM ClinicaTurbia.Usuario_Rol WHERE ROL_ID=@id;
@@ -666,11 +759,16 @@ CREATE PROCEDURE ClinicaTurbia.COMPRAR_BONO
 	(@cantCon int, @cantFar int, @monto float, @fecha datetime, @plan numeric(18,0),
 	@pacDoc numeric(18,0) = NULL, @numAf numeric(18,0) = NULL) AS
 	DECLARE @cant int;
+	DECLARE @eliminado bit;
 	
 	IF @pacDoc IS NULL
 	BEGIN;
-		SELECT @pacDoc = PAC_NUMDOC FROM ClinicaTurbia.Paciente
+		SELECT @pacDoc = PAC_NUMDOC, @eliminado = PAC_BAJA_LOGICA FROM ClinicaTurbia.Paciente
 			WHERE PAC_NUMERO_AFILIADO=@numAf;
+	END;
+	IF @eliminado = 1
+	BEGIN;
+		RETURN;
 	END;
 	INSERT INTO ClinicaTurbia.Transaccion(TRAN_AFILIADO, TRAN_CANT_BONOFAR,
 			TRAN_CANT_BONOCON, TRAN_MONTO)
@@ -687,7 +785,7 @@ CREATE PROCEDURE ClinicaTurbia.COMPRAR_BONO
 	BEGIN;
 		INSERT INTO ClinicaTurbia.BonoConsulta(BONOCON_FECHA_COMPRA,
 				BONOCON_AFILIADO, BONOCON_PLAN, BONOCON_NUMERO_CONSULTA)
-			VALUES (@fecha, @pacDoc, @plan, 0);
+			VALUES (@fecha, @pacDoc, @plan, NULL);
 		SET @cant += 1;
 	END;
 		
@@ -1061,3 +1159,4 @@ GO
 EXEC ClinicaTurbia.CREARTABLAS
 EXEC ClinicaTurbia.MIGRACION
 EXEC ClinicaTurbia.CARGAR_HORARIOS_PROFESIONALES
+EXEC ClinicaTurbia.CALCULAR_NUMERO_CONSULTA_BONOS
