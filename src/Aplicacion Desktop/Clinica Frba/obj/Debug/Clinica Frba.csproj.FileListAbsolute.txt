@@ -65,3 +65,7 @@ C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Fr
 C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica Frba.exe
 C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica Frba.pdb
 C:\Users\Dieguin\Documents\GitHub\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Registro_de_LLegada.RegistroLlegada.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Registro_Resultado_Atencion.RegistroResultado.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Registro_Resultado_Atencion.RegistroAtencion.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Generar_Receta.GenerarReceta.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Registro_de_LLegada.RegistroLlegada.resources

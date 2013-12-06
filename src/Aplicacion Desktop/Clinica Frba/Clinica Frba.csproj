@@ -134,6 +134,12 @@
     </Compile>
     <Compile Include="Configuration.cs" />
     <Compile Include="Database.cs" />
+    <Compile Include="Generar Receta\GenerarReceta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Generar Receta\GenerarReceta.Designer.cs">
+      <DependentUpon>GenerarReceta.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login\LoginWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -224,6 +230,9 @@
     <EmbeddedResource Include="Cancelar Atencion\MotivoCancelacion.resx">
       <DependentUpon>MotivoCancelacion.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Generar Receta\GenerarReceta.resx">
+      <DependentUpon>GenerarReceta.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Login\LoginWindow.resx">
       <DependentUpon>LoginWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -271,6 +280,12 @@
     <EmbeddedResource Include="Registro de Llegada\RegistroLlegada.resx">
       <DependentUpon>RegistroLlegada.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Registro Resultado Atencion\RegistroAtencion.resx">
+      <DependentUpon>RegistroAtencion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Registro Resultado Atencion\RegistroResultado.resx">
+      <DependentUpon>RegistroResultado.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -289,6 +304,18 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Registro Resultado Atencion\RegistroAtencion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Registro Resultado Atencion\RegistroAtencion.Designer.cs">
+      <DependentUpon>RegistroAtencion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Registro Resultado Atencion\RegistroResultado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Registro Resultado Atencion\RegistroResultado.Designer.cs">
+      <DependentUpon>RegistroResultado.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
   </ItemGroup>
@@ -330,6 +357,7 @@
     <Folder Include="obj\Debug\TempPE\" />
     <Folder Include="obj\Release\TempPE\" />
     <Folder Include="Registro Resultado Atencion\" />
+    <Folder Include="Registro de LLegada\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

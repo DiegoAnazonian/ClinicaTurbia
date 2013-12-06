@@ -31,10 +31,6 @@ IF OBJECT_ID('ClinicaTurbia.Receta', 'U') IS NOT NULL
 	DROP TABLE ClinicaTurbia.Receta
 GO
 
-IF OBJECT_ID('ClinicaTurbia.Medicamento', 'U') IS NOT NULL
-	DROP TABLE ClinicaTurbia.Medicamento
-GO
-
 IF OBJECT_ID('ClinicaTurbia.BonoConsulta', 'U') IS NOT NULL
 	DROP TABLE ClinicaTurbia.BonoConsulta
 GO
@@ -263,12 +259,20 @@ IF OBJECT_ID('ClinicaTurbia.FILTRAR_X_DIRECCION','P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.FILTRAR_X_DIRECCION
 GO
 
+IF OBJECT_ID('ClinicaTurbia.TRAER_BONOS_FARMACIA_AFILIADO','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.TRAER_BONOS_FARMACIA_AFILIADO
+GO
+
 IF OBJECT_ID('ClinicaTurbia.DESHABILITAR_USUARIO','P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.DESHABILITAR_USUARIO
 GO
 
 IF OBJECT_ID('ClinicaTurbia.AGREGAR_MEDICO','P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.AGREGAR_MEDICO
+GO
+
+IF OBJECT_ID('ClinicaTurbia.REGISTRAR_ATENCION','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.REGISTRAR_ATENCION
 GO
 
 IF OBJECT_ID('ClinicaTurbia.COSTO_BONOS_PACIENTE','P') IS NOT NULL
@@ -281,6 +285,10 @@ GO
 
 IF OBJECT_ID('ClinicaTurbia.BORRAR_MEDICO','P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.BORRAR_MEDICO
+GO
+
+IF OBJECT_ID('ClinicaTurbia.GENERAR_RECETA','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.GENERAR_RECETA
 GO
 
 IF OBJECT_ID('ClinicaTurbia.TRAER_TURNOS_DE_MEDICO_PARA_FECHA','P') IS NOT NULL
@@ -389,8 +397,6 @@ CREATE TABLE ClinicaTurbia.Paciente(
 	PAC_BAJA_LOGICA [int] NOT NULL
 );
 
-
-
 ----MEDICO----
 CREATE TABLE ClinicaTurbia.Medico(
 	MED_DNI [numeric] (18,0) NOT NULL PRIMARY KEY,
@@ -447,6 +453,7 @@ CREATE TABLE ClinicaTurbia.Turno(
 	TURN_FECHA [datetime] NOT NULL,
 	TURN_PROF_COD [numeric] (18,0) NOT NULL FOREIGN KEY REFERENCES ClinicaTurbia.Medico(MED_DNI),
 	TURN_PAC_COD [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.Paciente(PAC_NUMDOC),
+	TURN_REGISTRADO [bit] DEFAULT NULL,
 	TURN_CANCELADO [bit],
 	TURN_CAN_MOTIVO [varchar] (255),
 	TURN_CAN_TICAN [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.TipoCancelacion(TICAN_ID),
@@ -465,7 +472,8 @@ CREATE TABLE ClinicaTurbia.BonoFarmacia(
 	BONOFAR_ID [numeric] (18,0) PRIMARY KEY IDENTITY,
 	BONOFAR_FECHA_COMPRA [datetime],
 	BONOFAR_AFILIADO [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.Paciente(PAC_NUMDOC),
-	BONOFAR_PLAN [int] FOREIGN KEY REFERENCES ClinicaTurbia.PlanMedico(PLAN_CODIGO)
+	BONOFAR_PLAN [int] FOREIGN KEY REFERENCES ClinicaTurbia.PlanMedico(PLAN_CODIGO),
+	BONOFAR_FECHA_PRESCRIPCION [datetime] 
 );
 
 CREATE TABLE ClinicaTurbia.Llegada(
@@ -475,15 +483,11 @@ CREATE TABLE ClinicaTurbia.Llegada(
 	LLE_BONO_CONSULTA [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.BonoConsulta(BONOCON_ID)	
 );
 
-CREATE TABLE ClinicaTurbia.Medicamento(
-	MEDICAM_ID [numeric] (18,0) PRIMARY KEY IDENTITY,
-	MEDICAM_DESCRIPCION [nvarchar] (255)
-);
 
 CREATE TABLE ClinicaTurbia.Receta(
 	REC_ID [numeric] (18,0) PRIMARY KEY IDENTITY,
 	REC_BONO_FARMACIA [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.BonoFarmacia(BONOFAR_ID),
-	REC_MEDICAMENTO_ID [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.Medicamento(MEDICAM_ID),
+	REC_MEDICAMENTO [nvarchar] (255),
 	REC_CANT_MEDICAMENTO [int]
 );
 
@@ -520,10 +524,10 @@ INSERT INTO ClinicaTurbia.Rol(ROL_NOMBRE, ROL_HABILITADO) VALUES
 INSERT INTO ClinicaTurbia.Funcionalidad(FUN_NOMBRE) VALUES
 	('ABM de Roles'), ('ABM de Afiliado'), ('ABM de Especialidad'), ('ABM de Profesional'),
 	('Pedir Turno'), ('Cancelar Turno'), ('Cancelar fecha de atencion'),
-	('Comprar bono'), ('Vender bono'),('Registrar llegada');
+	('Comprar bono'), ('Vender bono'), ('Registrar Atencion'),('Registrar llegada');
 
 INSERT INTO ClinicaTurbia.Rol_Funcionalidad(ROL_ID, FUN_ID) VALUES
-	(1,1), (1,2), (1,3), (1,4), (2,5), (2,6), (3,7), (2,8),(1,9),(1,10);
+	(1,1), (1,2), (1,3), (1,4), (2,5), (2,6), (3,7), (2,8), (1,9), (3,10), (1,11);
 
 INSERT INTO ClinicaTurbia.TipoDocumento(TIDOC_NOMBRE) VALUES
 	('Documento Nacional de Identidad'), ('Cédula de Identidad'),
@@ -553,12 +557,6 @@ INSERT INTO ClinicaTurbia.PlanMedico(PLAN_CODIGO, PLAN_DESCRIPCION,
 		m.Plan_Med_Precio_Bono_Farmacia
 	FROM gd_esquema.Maestra m;
 SET IDENTITY_INSERT ClinicaTurbia.PlanMedico OFF;
-
-INSERT INTO ClinicaTurbia.Medicamento(MEDICAM_DESCRIPCION)
-	SELECT DISTINCT Bono_Farmacia_Medicamento
-	FROM GD2C2013.gd_esquema.Maestra
-	WHERE Bono_Farmacia_Medicamento IS NOT NULL
-	ORDER BY Bono_Farmacia_Medicamento;
 
 INSERT INTO ClinicaTurbia.Paciente(PAC_NUMDOC, PAC_NOMBRE, PAC_APELLIDO, PAC_DIRECCION,
 	PAC_TELEFONO, PAC_MAIL, PAC_FECHA_NACIMIENTO, PAC_PLAN_MEDICO_CODIGO,PAC_BAJA_LOGICA,PAC_NUMERO_AFILIADO)
@@ -608,16 +606,26 @@ INSERT INTO ClinicaTurbia.Usuario_Rol(USUARIO_NOMBRE, ROL_ID)
 	VALUES ('admin', 1); 
 
 SET IDENTITY_INSERT ClinicaTurbia.BonoFarmacia ON;
-INSERT INTO ClinicaTurbia.BonoFarmacia(BONOFAR_ID, BONOFAR_FECHA_COMPRA, BONOFAR_AFILIADO, BONOFAR_PLAN)
-	SELECT DISTINCT Bono_Farmacia_Numero, Compra_Bono_Fecha, Paciente_Dni, Plan_Med_Codigo
+INSERT INTO ClinicaTurbia.BonoFarmacia(BONOFAR_ID, BONOFAR_FECHA_COMPRA, BONOFAR_FECHA_PRESCRIPCION,
+				BONOFAR_AFILIADO, BONOFAR_PLAN)
+	SELECT DISTINCT Bono_Farmacia_Numero, Compra_Bono_Fecha, CAST('01/01/2014' AS DATE), Paciente_Dni, Plan_Med_Codigo
 	FROM gd_esquema.Maestra
-	WHERE Compra_Bono_Fecha IS NOT NULL AND Bono_Farmacia_Numero IS NOT NULL;
+	WHERE Compra_Bono_Fecha IS NOT NULL
+	AND Bono_Farmacia_Numero IS NOT NULL
+	AND Bono_Farmacia_Medicamento IS NOT NULL;
+INSERT INTO ClinicaTurbia.BonoFarmacia(BONOFAR_ID, BONOFAR_FECHA_COMPRA, BONOFAR_FECHA_PRESCRIPCION,
+				BONOFAR_AFILIADO, BONOFAR_PLAN)
+	SELECT DISTINCT Bono_Farmacia_Numero, Compra_Bono_Fecha, NULL, Paciente_Dni, Plan_Med_Codigo
+	FROM gd_esquema.Maestra
+	WHERE Compra_Bono_Fecha IS NOT NULL
+	AND Bono_Farmacia_Numero IS NOT NULL
+	AND Bono_Farmacia_Medicamento IS NULL;
 SET IDENTITY_INSERT ClinicaTurbia.BonoFarmacia OFF;
 
-INSERT INTO ClinicaTurbia.Receta(REC_BONO_FARMACIA, REC_MEDICAMENTO_ID, REC_CANT_MEDICAMENTO)
-	SELECT Bono_Farmacia_Numero, MEDICAM_ID, 1
-	FROM GD2C2013.gd_esquema.Maestra, ClinicaTurbia.Medicamento
-	WHERE MEDICAM_DESCRIPCION = Bono_Farmacia_Medicamento;
+INSERT INTO ClinicaTurbia.Receta(REC_BONO_FARMACIA, REC_MEDICAMENTO, REC_CANT_MEDICAMENTO)
+	SELECT Bono_Farmacia_Numero, Bono_Farmacia_Medicamento, 1
+	FROM GD2C2013.gd_esquema.Maestra
+	WHERE Bono_Farmacia_Medicamento IS NOT NULL AND Bono_Farmacia_Numero IS NOT NULL;
 
 INSERT INTO ClinicaTurbia.Horario(HOR_NOMBRE, HOR_HORA_DESDE, HOR_HORA_HASTA)
 	VALUES ('Mañana', '07:00', '14:00'), ('Tarde', '13:00', '20:00'),
@@ -832,6 +840,14 @@ CREATE PROCEDURE ClinicaTurbia.CANCELAR_TURNOS_EN_FECHA
 		VALUES (@fecha, @med, 1);
 GO
 
+CREATE PROCEDURE ClinicaTurbia.GENERAR_RECETA
+	(@bono numeric(18,0), @medi nvarchar(255), @cant int, @fecha datetime) AS
+	INSERT INTO ClinicaTurbia.Receta(REC_BONO_FARMACIA, REC_MEDICAMENTO, REC_CANT_MEDICAMENTO)
+		VALUES (@bono, @medi, @cant);
+	UPDATE ClinicaTurbia.BonoFarmacia SET BONOFAR_FECHA_PRESCRIPCION = @fecha
+		WHERE BONOFAR_ID = @bono;
+GO
+
 CREATE PROCEDURE ClinicaTurbia.FILTRAR_POR_PALABRACLAVE_PACIENTE
 	(@nombreParcial nvarchar(255)) 
 	AS
@@ -1037,7 +1053,23 @@ CREATE PROCEDURE ClinicaTurbia.TRAER_TURNOS_DE_MEDICO_PARA_FECHA
 	FROM ClinicaTurbia.Turno 
 					JOIN ClinicaTurbia.Paciente on TURN_PAC_COD = PAC_NUMDOC 
 	WHERE TURN_PROF_COD=@dni AND (TURN_CANCELADO IS NULL OR TURN_CANCELADO!=1)
-		  AND CAST(TURN_FECHA AS DATE)=CAST(@fecha AS DATE);
+		  AND CAST(TURN_FECHA AS DATE)=CAST(@fecha AS DATE)
+		  AND (TURN_REGISTRADO IS NULL OR TURN_REGISTRADO!=1);
+GO
+
+CREATE PROCEDURE ClinicaTurbia.REGISTRAR_ATENCION
+	(@numTurno numeric(18,0), @sinto varchar(255), @enfe varchar(255)) AS
+	UPDATE ClinicaTurbia.Turno SET TURN_REGISTRADO = 1
+		WHERE TURN_NUMERO=@numTurno;
+	INSERT INTO ClinicaTurbia.Diagnostico(DIAG_TURN_NUMERO, DIAG_SINTOMAS, DIAG_ENFERMEDADES)
+		VALUES (@numTurno, @sinto, @enfe);
+GO
+
+CREATE PROCEDURE ClinicaTurbia.TRAER_BONOS_FARMACIA_AFILIADO
+	(@docAfiliado numeric(18,0), @fecha datetime) AS
+	SELECT BONOFAR_ID FROM ClinicaTurbia.BonoFarmacia
+	WHERE BONOFAR_AFILIADO=@docAfiliado AND BONOFAR_FECHA_PRESCRIPCION IS NULL
+	AND DATEADD(weekday,60,BONOFAR_FECHA_COMPRA) > @fecha;
 GO
 
 
