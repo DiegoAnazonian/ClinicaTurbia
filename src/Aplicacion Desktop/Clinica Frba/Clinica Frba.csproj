@@ -153,6 +153,12 @@
       <DependentUpon>PedirTurno.cs</DependentUpon>
     </Compile>
     <Compile Include="Persona.cs" />
+    <Compile Include="Registro de Llegada\RegistroLlegada.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Registro de Llegada\RegistroLlegada.Designer.cs">
+      <DependentUpon>RegistroLlegada.cs</DependentUpon>
+    </Compile>
     <Compile Include="Registro de Usuario\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -175,24 +181,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Registrar Agenda\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Registro de LLegada\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Registro de LLegada\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Registro Resultado Atencion\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Registro Resultado Atencion\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Generar Receta\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Generar Receta\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Listados Estadisticos\Form1.cs">
@@ -280,6 +268,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Registro de Llegada\RegistroLlegada.resx">
+      <DependentUpon>RegistroLlegada.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -334,9 +325,11 @@
     <Content Include="obj\Release\Clinica Frba.pdb" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Generar Receta\" />
     <Folder Include="obj\Debug\Refactor\" />
     <Folder Include="obj\Debug\TempPE\" />
     <Folder Include="obj\Release\TempPE\" />
+    <Folder Include="Registro Resultado Atencion\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

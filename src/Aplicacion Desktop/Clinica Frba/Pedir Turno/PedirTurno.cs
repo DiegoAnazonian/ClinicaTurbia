@@ -177,5 +177,10 @@ namespace Clinica_Frba.Pedir_Turno
                 btnCrearTurno.Enabled = false;
             }
         }
+
+        private void PedirTurno_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -303,6 +303,10 @@ IF OBJECT_ID('ClinicaTurbia.FILTRAR_X_DIRECCION_PACIENTES','P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.FILTRAR_X_DIRECCION_PACIENTES
 GO
 
+IF OBJECT_ID('ClinicaTurbia.TRAER_BONOS','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.TRAER_BONOS
+GO
+
 IF OBJECT_ID('ClinicaTurbia.FILTRAR_POR_PALABRACLAVE_PACIENTE','P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.FILTRAR_POR_PALABRACLAVE_PACIENTE
 GO
@@ -516,10 +520,10 @@ INSERT INTO ClinicaTurbia.Rol(ROL_NOMBRE, ROL_HABILITADO) VALUES
 INSERT INTO ClinicaTurbia.Funcionalidad(FUN_NOMBRE) VALUES
 	('ABM de Roles'), ('ABM de Afiliado'), ('ABM de Especialidad'), ('ABM de Profesional'),
 	('Pedir Turno'), ('Cancelar Turno'), ('Cancelar fecha de atencion'),
-	('Comprar bono'), ('Vender bono');
+	('Comprar bono'), ('Vender bono'),('Registrar llegada');
 
 INSERT INTO ClinicaTurbia.Rol_Funcionalidad(ROL_ID, FUN_ID) VALUES
-	(1,1), (1,2), (1,3), (1,4), (2,5), (2,6), (3,7), (2,8),(1,9);
+	(1,1), (1,2), (1,3), (1,4), (2,5), (2,6), (3,7), (2,8),(1,9),(1,10);
 
 INSERT INTO ClinicaTurbia.TipoDocumento(TIDOC_NOMBRE) VALUES
 	('Documento Nacional de Identidad'), ('Cédula de Identidad'),
@@ -738,6 +742,14 @@ CREATE PROCEDURE ClinicaTurbia.LISTADO_PACIENTES AS
 	AND (PAC_ESTADO_CIVIL=ECIVIL_ID OR PAC_ESTADO_CIVIL IS NULL)
 	ORDER BY 'Apellido', 'Nombre'
 GO
+
+CREATE PROCEDURE ClinicaTurbia.TRAER_BONOS
+	(@dni numeric(18,0)) AS
+	SELECT BONOCON_ID 
+	FROM ClinicaTurbia.bonoconsulta 
+	where BONOCON_AFILIADO = @dni AND (BONOCON_NUMERO_CONSULTA IS NULL)
+GO
+	
 
 CREATE PROCEDURE ClinicaTurbia.COSTO_BONOS_PACIENTE
 	(@pacDoc numeric(18,0) = NULL, @numAf numeric(18,0) = NULL) AS
@@ -1021,10 +1033,14 @@ GO
 
 CREATE PROCEDURE ClinicaTurbia.TRAER_TURNOS_DE_MEDICO_PARA_FECHA
 	(@dni numeric(18,0), @fecha datetime) AS
-	SELECT TURN_FECHA, TURN_CANCELADO FROM ClinicaTurbia.Turno 
+	SELECT TURN_FECHA, TURN_CANCELADO,(PAC_NOMBRE +' '+ PAC_APELLIDO),PAC_NUMDOC,TURN_NUMERO 
+	FROM ClinicaTurbia.Turno 
+					JOIN ClinicaTurbia.Paciente on TURN_PAC_COD = PAC_NUMDOC 
 	WHERE TURN_PROF_COD=@dni AND (TURN_CANCELADO IS NULL OR TURN_CANCELADO!=1)
 		  AND CAST(TURN_FECHA AS DATE)=CAST(@fecha AS DATE);
 GO
+
+
 
 CREATE PROCEDURE ClinicaTurbia.CREAR_TURNO (@med numeric(18,0), @pac numeric(18,0), @fecha datetime) AS
 	INSERT INTO ClinicaTurbia.Turno(TURN_PROF_COD, TURN_FECHA, TURN_PAC_COD) 

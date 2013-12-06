@@ -14,6 +14,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Clinica_Frba.Cancelar_Atencion;
 using Clinica_Frba.Compra_de_Bono;
+using Clinica_Frba.Registro_de_LLegada;
 
 namespace Clinica_Frba.NewFolder10
 {
@@ -220,6 +221,12 @@ namespace Clinica_Frba.NewFolder10
                         btn.Click += (ssender, args) =>
                         {
                             new ComprarBono(true).ShowDialog();
+                        };
+                        break;
+                    case "Registrar llegada":
+                        btn.Click += (ssender, args) =>
+                        {
+                            new RegistroLlegada().ShowDialog();
                         };
                         break;
                 }

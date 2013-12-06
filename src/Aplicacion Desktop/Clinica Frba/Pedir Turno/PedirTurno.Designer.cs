@@ -138,6 +138,7 @@
             this.Controls.Add(this.comboEspecialidad);
             this.Name = "PedirTurno";
             this.Text = "PedirTurno";
+            this.Load += new System.EventHandler(this.PedirTurno_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
