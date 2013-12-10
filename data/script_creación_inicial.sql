@@ -864,7 +864,8 @@ CREATE PROCEDURE ClinicaTurbia.FILTRAR_POR_PALABRACLAVE_PACIENTE
 		  PAC_TELEFONO like @nombreParcial+'%' OR
 		  PAC_DIRECCION like @nombreParcial+'%' OR
 		  PAC_MAIL like @nombreParcial+'%' OR
-		  PAC_FECHA_NACIMIENTO like @nombreParcial+'%')
+		  PAC_FECHA_NACIMIENTO like @nombreParcial+'%' OR
+		  PAC_NUMERO_AFILIADO like @nombreParcial+'%')
 	AND PAC_BAJA_LOGICA = '0'
 	AND PAC_PLAN_MEDICO_CODIGO=PLAN_CODIGO
 	AND (PAC_TIPO_DOCUMENTO=TIDOC_ID OR PAC_TIPO_DOCUMENTO IS NULL)

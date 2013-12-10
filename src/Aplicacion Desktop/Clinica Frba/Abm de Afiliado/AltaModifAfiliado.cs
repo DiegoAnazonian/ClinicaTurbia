@@ -29,8 +29,6 @@ namespace Clinica_Frba.NewFolder12
             nuevoAfiliado = true;
             completarCombos();
             botonesFamiliares(false);
-            
-
             if (conFamiliares)
             {
                 this.botonesFamiliares(true);
@@ -63,17 +61,17 @@ namespace Clinica_Frba.NewFolder12
 
         private void botonesFamiliares(Boolean quieroAgregar)
         {
-            
-            
             if (quieroAgregar)
             {
-                
                 familiares.Visible = true;
+                txtFamiliares.Hide();
+                lblFamiliares.Hide();
             }
             else
             {
-                
                 familiares.Visible = false;
+                txtFamiliares.Show();
+                lblFamiliares.Show();
             }
             
         }
@@ -193,23 +191,46 @@ namespace Clinica_Frba.NewFolder12
             btnGuardarClicked = true;
             if (nuevoAfiliado)
             {
-                
-                    registrarNuevoAfiliado();
-                
+                bool success = registrarNuevoAfiliado();
+                if (!success) { return; }
                 if (!String.IsNullOrEmpty(txtFamiliares.Text))
                 {
                     codigoAfiliadoPrincipal = txtNroDoc.Text;
                     nombreACargo = txtNombre.Text;
                     apellidoACargo = txtApellido.Text;
-                    this.botonesFamiliares(true);
-                    this.agregarDatosComboFamiliar();
-
-                    for(int i = 0;i<cantidadFamiliares;i++)
+                    for(int i = 0; i < cantidadFamiliares; i++)
                     {
-                        new AltaModifAfiliado(true).ShowDialog();
-                        this.Close();
+                        if (i == 0)
+                        {
+                            var confirmResult = MessageBox.Show(
+                             "Desea registrar alguno de sus familiares?",
+                             "Registrar familiares",
+                             MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                            if (confirmResult == DialogResult.Yes)
+                            {
+                                new AltaModifAfiliado(true).ShowDialog();
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            var confirmResult = MessageBox.Show(
+                             "Desea registrar otro de sus familiares?",
+                             "Registrar familiares",
+                             MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                            if (confirmResult == DialogResult.Yes)
+                            {
+                                new AltaModifAfiliado(true).ShowDialog();
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
                     }
-                    this.Close();
                 }
             }
             else
@@ -220,7 +241,7 @@ namespace Clinica_Frba.NewFolder12
 
         private void actualizarDatosDelAfiliado()
         {
-            if (hayCamposVacios())
+            if (hayCamposVacios(false))
             {
                 var confirmResult = MessageBox.Show(
                     "Algunos de sus datos estan incompletos, desea continuar de todas formas?",
@@ -248,18 +269,17 @@ namespace Clinica_Frba.NewFolder12
             this.Close();
         }
 
-        private void registrarNuevoAfiliado()
+        private bool registrarNuevoAfiliado()
         {
-
             ocultarMarcasDeFaltanDatos();
             if (faltanDatosObligatorios())
             {
                 MessageBox.Show("Debe completar todos los datos obligatorios",
                     "Faltan datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 btnGuardarClicked = false;
-                return;
+                return false;
             }
-            if (hayCamposVacios())
+            if (hayCamposVacios(!String.IsNullOrEmpty(codigoAfiliadoPrincipal)))
             {
                 var confirmResult = MessageBox.Show(
                     "Algunos de sus datos estan incompletos, desea continuar de todas formas?",
@@ -267,25 +287,21 @@ namespace Clinica_Frba.NewFolder12
                 if (confirmResult == DialogResult.No)
                 {
                     btnGuardarClicked = false;
-                    return;
+                    return false;
                 }
             }
-
             try
             {
                 String codigoNuevoAfiliado;
                 if (!String.IsNullOrEmpty(codigoAfiliadoPrincipal))
                 {
-
                     String familiar = familiares.SelectedItem.ToString();
                     if (familiar.Equals("Conyuge"))
                     {
-                        
                         endPointAfiliado = "02";
                     }
                     else
                     {
-                        
                         endPointAfiliado = Convert.ToString(0) + Convert.ToString(indexAfiliado);
                         indexAfiliado++;
                     }
@@ -295,37 +311,34 @@ namespace Clinica_Frba.NewFolder12
                 }
                 else
                 {
-                    
                     codigoNuevoAfiliado = String.Concat(txtNroDoc.Text, "01");
-                    MessageBox.Show("Es un nuevo afiliado ",codigoNuevoAfiliado);
                 }
 
                 String sexoAfiliado = comboSexo.SelectedItem != null ?
                     comboSexo.SelectedItem.ToString().Substring(0, 1) : null;
-                
 
                 List<SqlParameter> paramsAfiliado = Database.GenerarListaDeParametros(
                     "nom", txtNombre.Text, "ape", txtApellido.Text, "fecha", Convert.ToDateTime(txtFechaNac.Text),
                     "tiDoc", comboTipoDoc.SelectedValue, "dire", txtDireccion.Text,
-                    "tel", Convert.ToInt64(txtTelefono.Text), "mail", txtMail.Text, "sexo", sexoAfiliado,
+                    "tel", txtTelefono.Text, "mail", txtMail.Text, "sexo", sexoAfiliado,
                     "estCivil", comboEstadoCivil.SelectedValue, "cantFam", txtFamiliares.Text,
                     "planMed", comboPlanMedico.SelectedValue, "numDoc", Convert.ToInt64(txtNroDoc.Text), "numeroAfiliado", codigoNuevoAfiliado.ToString());
 
                 DataTable tablaPlanMedico = Database.GetInstance.ExecuteQuery(
                     "[ClinicaTurbia].[CREAR_AFILIADO]", paramsAfiliado);
-                MessageBox.Show("El afiliado " +  txtNombre.Text + "," + txtApellido.Text +" se ha guardado correctamente. Su Codigo de afiliado es: " + codigoNuevoAfiliado, "Clinica Turbia FRBA", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("El afiliado " +  txtNombre.Text + ", " + txtApellido.Text +" se ha guardado correctamente. Su Codigo de afiliado es: " + codigoNuevoAfiliado, "Clinica Turbia FRBA", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
+                return true;
             }
             catch (Exception e)
             {
-
-                MessageBox.Show("Problemas al guardar el afiliado, error: " + e);   
+                MessageBox.Show("Problemas al guardar el afiliado, error: " + e);
+                return false;
             }
-            
-            
-            }
+        }
 
 
-        private bool hayCamposVacios()
+        private bool hayCamposVacios(bool familiar)
         {
             if (comboSexo.SelectedItem == null)
             {
@@ -343,7 +356,7 @@ namespace Clinica_Frba.NewFolder12
             {
                 return true;
             }
-            if ("".Equals(txtFamiliares.Text))
+            if (!familiar && "".Equals(txtFamiliares.Text))
             {
                 return true;
             }
@@ -431,9 +444,46 @@ namespace Clinica_Frba.NewFolder12
 
         private void txtFamiliares_TextChanged(object sender, EventArgs e)
         {
-            if (!String.IsNullOrEmpty(txtFamiliares.Text))
+            try
             {
-                cantidadFamiliares = Convert.ToInt64(txtFamiliares.Text);
+                if (!String.IsNullOrEmpty(txtFamiliares.Text))
+                {
+                    cantidadFamiliares = Convert.ToInt64(txtFamiliares.Text);
+                }
+            }
+            catch (FormatException ex)
+            {
+                txtFamiliares.Text = "";
+            }
+        }
+
+        private void txtTelefono_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(txtTelefono.Text))
+                {
+                    Convert.ToInt64(txtTelefono.Text);
+                }
+            }
+            catch (FormatException ex)
+            {
+                txtTelefono.Text = "";
+            }
+        }
+
+        private void txtNroDoc_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(txtNroDoc.Text))
+                {
+                    Convert.ToInt64(txtNroDoc.Text);
+                }
+            }
+            catch (FormatException ex)
+            {
+                txtNroDoc.Text = "";
             }
         }
 

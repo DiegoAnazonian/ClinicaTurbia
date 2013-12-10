@@ -85,7 +85,7 @@
             this.txtNombre.Location = new System.Drawing.Point(119, 50);
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(142, 20);
-            this.txtNombre.TabIndex = 3;
+            this.txtNombre.TabIndex = 2;
             // 
             // lblNombre
             // 
@@ -101,7 +101,8 @@
             this.txtNroDoc.Location = new System.Drawing.Point(388, 76);
             this.txtNroDoc.Name = "txtNroDoc";
             this.txtNroDoc.Size = new System.Drawing.Size(142, 20);
-            this.txtNroDoc.TabIndex = 5;
+            this.txtNroDoc.TabIndex = 3;
+            this.txtNroDoc.TextChanged += new System.EventHandler(this.txtNroDoc_TextChanged);
             // 
             // lblNroDoc
             // 
@@ -117,7 +118,7 @@
             this.txtDireccion.Location = new System.Drawing.Point(119, 102);
             this.txtDireccion.Name = "txtDireccion";
             this.txtDireccion.Size = new System.Drawing.Size(142, 20);
-            this.txtDireccion.TabIndex = 7;
+            this.txtDireccion.TabIndex = 5;
             // 
             // lblDireccion
             // 
@@ -133,7 +134,8 @@
             this.txtTelefono.Location = new System.Drawing.Point(119, 128);
             this.txtTelefono.Name = "txtTelefono";
             this.txtTelefono.Size = new System.Drawing.Size(142, 20);
-            this.txtTelefono.TabIndex = 9;
+            this.txtTelefono.TabIndex = 6;
+            this.txtTelefono.TextChanged += new System.EventHandler(this.txtTelefono_TextChanged);
             // 
             // lblTelefono
             // 
@@ -160,7 +162,7 @@
             this.comboTipoDoc.Location = new System.Drawing.Point(119, 76);
             this.comboTipoDoc.Name = "comboTipoDoc";
             this.comboTipoDoc.Size = new System.Drawing.Size(142, 21);
-            this.comboTipoDoc.TabIndex = 10;
+            this.comboTipoDoc.TabIndex = 4;
             // 
             // lblFechaNac
             // 
@@ -185,7 +187,7 @@
             this.btnSelecFecha.Location = new System.Drawing.Point(270, 175);
             this.btnSelecFecha.Name = "btnSelecFecha";
             this.btnSelecFecha.Size = new System.Drawing.Size(124, 25);
-            this.btnSelecFecha.TabIndex = 11;
+            this.btnSelecFecha.TabIndex = 8;
             this.btnSelecFecha.Text = "Seleccionar";
             this.btnSelecFecha.UseVisualStyleBackColor = true;
             this.btnSelecFecha.Click += new System.EventHandler(this.btnSelecFecha_Click);
@@ -224,7 +226,7 @@
             this.comboEstadoCivil.Location = new System.Drawing.Point(119, 231);
             this.comboEstadoCivil.Name = "comboEstadoCivil";
             this.comboEstadoCivil.Size = new System.Drawing.Size(142, 21);
-            this.comboEstadoCivil.TabIndex = 10;
+            this.comboEstadoCivil.TabIndex = 11;
             // 
             // lblPlanMedico
             // 
@@ -242,7 +244,7 @@
             this.comboPlanMedico.Location = new System.Drawing.Point(119, 258);
             this.comboPlanMedico.Name = "comboPlanMedico";
             this.comboPlanMedico.Size = new System.Drawing.Size(142, 21);
-            this.comboPlanMedico.TabIndex = 10;
+            this.comboPlanMedico.TabIndex = 12;
             // 
             // lblFamiliares
             // 
@@ -258,7 +260,7 @@
             this.txtFamiliares.Location = new System.Drawing.Point(167, 285);
             this.txtFamiliares.Name = "txtFamiliares";
             this.txtFamiliares.Size = new System.Drawing.Size(142, 20);
-            this.txtFamiliares.TabIndex = 9;
+            this.txtFamiliares.TabIndex = 13;
             this.txtFamiliares.TextChanged += new System.EventHandler(this.txtFamiliares_TextChanged);
             // 
             // btnLimipiar
@@ -266,7 +268,7 @@
             this.btnLimipiar.Location = new System.Drawing.Point(15, 322);
             this.btnLimipiar.Name = "btnLimipiar";
             this.btnLimipiar.Size = new System.Drawing.Size(63, 26);
-            this.btnLimipiar.TabIndex = 12;
+            this.btnLimipiar.TabIndex = 15;
             this.btnLimipiar.Text = "Limpiar";
             this.btnLimipiar.UseVisualStyleBackColor = true;
             this.btnLimipiar.Click += new System.EventHandler(this.btnLimipiar_Click);
@@ -276,7 +278,7 @@
             this.btnGuardar.Location = new System.Drawing.Point(494, 322);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(67, 26);
-            this.btnGuardar.TabIndex = 12;
+            this.btnGuardar.TabIndex = 14;
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
@@ -295,7 +297,7 @@
             this.txtMail.Location = new System.Drawing.Point(119, 152);
             this.txtMail.Name = "txtMail";
             this.txtMail.Size = new System.Drawing.Size(142, 20);
-            this.txtMail.TabIndex = 9;
+            this.txtMail.TabIndex = 7;
             // 
             // lblNombreInc
             // 
