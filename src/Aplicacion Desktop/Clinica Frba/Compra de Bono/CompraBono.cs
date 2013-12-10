@@ -47,7 +47,7 @@ namespace Clinica_Frba.Compra_de_Bono
             panelAfiliado.Top = panelAfiliado.Top - 35;
             panelAfiliado.Enabled = true;
             DataTable tablePlan = Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[COSTO_BONOS_PACIENTE]",
-                Database.GenerarListaDeParametros("pacDoc", /*LoginWindow.LOGGED_USER*/ 1113058));
+                Database.GenerarListaDeParametros("pacDoc", LoginWindow.LOGGED_USER));
             this.planMedId = long.Parse(tablePlan.Rows[0][0].ToString());
             this.costoBonoConsulta = double.Parse(tablePlan.Rows[0][1].ToString());
             this.costoBonoFarmacia = double.Parse(tablePlan.Rows[0][2].ToString());
