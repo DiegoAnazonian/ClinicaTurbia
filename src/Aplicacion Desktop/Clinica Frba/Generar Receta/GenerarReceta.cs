@@ -91,7 +91,7 @@ namespace Clinica_Frba.Generar_Receta
                 List<SqlParameter> paramList = Database.GenerarListaDeParametros(
                        "bono", comboBono.Text, "medi", rou.Cells[0].Value.ToString(),
                        "cant", rou.Cells[1].Value.ToString(),
-                       "fecha", Configuration.getFecha());
+                       "fecha", Configuration.getFecha(), "pac", docAfiliado);
                 DataTable tabBon = Database.GetInstance.ExecuteQuery(
                     "[ClinicaTurbia].[GENERAR_RECETA]", paramList);
             }

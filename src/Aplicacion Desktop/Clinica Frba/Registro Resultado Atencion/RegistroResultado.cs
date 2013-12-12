@@ -21,7 +21,7 @@ namespace Clinica_Frba.Registro_Resultado_Atencion
 
         private void gridTurnos_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex != 3 || e.RowIndex == gridTurnos.Rows.Count - 1) 
+            if (e.ColumnIndex != 3) 
             {
                 return;
             }
@@ -36,7 +36,7 @@ namespace Clinica_Frba.Registro_Resultado_Atencion
             List<SqlParameter> paramList = Database.GenerarListaDeParametros(
                     "fecha", Configuration.getFecha(), "dni", LoginWindow.LOGGED_USER);
             DataTable tabTur = Database.GetInstance.ExecuteQuery(
-                "[ClinicaTurbia].[TRAER_TURNOS_DE_MEDICO_PARA_FECHA]", paramList);
+                "[ClinicaTurbia].[TRAER_TURNOS_REGISTRADOS_DE_MEDICO_PARA_FECHA]", paramList);
 
             this.gridTurnos.Rows.Clear();
 

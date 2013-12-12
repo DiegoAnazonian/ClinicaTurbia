@@ -26,7 +26,7 @@ namespace Clinica_Frba.Registro_Resultado_Atencion
         {
             List<SqlParameter> paramList = Database.GenerarListaDeParametros(
                     "numTurno", txtTurno.Text, "sinto", txtSint.Text,
-                    "enfe", txtEnf.Text);
+                    "enfe", txtEnf.Text, "pac", txtAfiliado.Text);
             DataTable tabTur = Database.GetInstance.ExecuteQuery(
                 "[ClinicaTurbia].[REGISTRAR_ATENCION]", paramList);
             btnRegistrar.Enabled = false;

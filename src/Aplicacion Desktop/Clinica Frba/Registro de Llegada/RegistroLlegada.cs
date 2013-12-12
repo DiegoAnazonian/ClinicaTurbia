@@ -141,6 +141,16 @@ namespace Clinica_Frba.Registro_de_LLegada
             DataTable bonos = Database.GetInstance.ExecuteQuery(
                 "[ClinicaTurbia].[TRAER_BONOS]", param);
 
+            this.bonosAfiliado.DataSource = null;
+            this.bonosAfiliado.Items.Clear();
+            this.bonosAfiliado.SelectedItem = null;
+
+            if (bonos.Rows.Count == 0)
+            {
+                MessageBox.Show("El paciente no posee bonos consulta");
+                return;
+            }
+
             this.bonosAfiliado.DataSource = bonos;
             this.bonosAfiliado.DisplayMember = "BONOCON_ID";
             this.bonosAfiliado.ValueMember = "BONOCON_ID";
