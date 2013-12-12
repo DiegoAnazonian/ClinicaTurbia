@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Globalization;
 
 namespace Clinica_Frba.Abm_de_Profesional
 {
@@ -14,40 +15,30 @@ namespace Clinica_Frba.Abm_de_Profesional
     {
         public Alta()
         {
-            
             InitializeComponent();
-            this.fechaNacimiento.GotFocus += new EventHandler(this.gotFocus);
-            this.fechaNacimiento.LostFocus += new EventHandler(this.lostFocus);
-            this.fechaNacimiento.Text = "dd/mm/aaaa";
-            
-
+            calendario.Hide();
+            llenarListEspecialidades();
         }
 
-        private void lostFocus(object sender, EventArgs e)
+        private void agregarEspecialidad(String idEsp)
         {
-            if (this.fechaNacimiento.Text.Equals(""))
-            {
-                this.fechaNacimiento.Text = ("dd/mm/aaaa");
-            }
+            List<SqlParameter> espParam = Database.GenerarListaDeParametros(
+                "dniDoc", this.dni.Text, "idEsp", int.Parse(idEsp),
+                "agregar", true);
+            Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[MODIFICAR_ESPECIALIDADES_MEDICO]",
+                espParam);
         }
 
-        private void gotFocus(object sender, EventArgs e)
+        private void llenarListEspecialidades()
         {
-            if (this.fechaNacimiento.Text.Equals("dd/mm/aaaa") || this.fechaNacimiento.Text.Equals(""))
-            {
-                this.fechaNacimiento.Text = "";
-            }
-        }
-
-        private void fechaNacimiento_GotFocus(object sender, EventArgs e)
-        {
-            this.fechaNacimiento.Text = "";
-            this.fechaNacimiento.ForeColor = System.Drawing.Color.Black;
-        }
-
-        private void fechaNacimiento_TextChanged(object sender, EventArgs e)
-        {
-
+            this.listEspecialidades.DataSource = null;
+            this.listEspecialidades.Items.Clear();
+            DataTable tablaEsp = Database.GetInstance
+                .ExecuteQuery("[ClinicaTurbia].[LISTADO_ESPECIALIDAD]");
+            this.listEspecialidades.DataSource = tablaEsp;
+            this.listEspecialidades.DisplayMember = "ESP_DESCRIPCION";
+            this.listEspecialidades.ValueMember = "ESP_CODIGO";
+            this.listEspecialidades.SelectedIndices.Clear();
         }
 
         private void cancelar_Click(object sender, EventArgs e)
@@ -58,18 +49,79 @@ namespace Clinica_Frba.Abm_de_Profesional
         private void guardar_Click(object sender, EventArgs e)
         {
             try{
-            List<SqlParameter> parametros = Database.GenerarListaDeParametros("dni", Convert.ToInt64(dni.Text), "nombre", nombre.Text, "apellido", apellido.Text, "direccion", direccion.Text, "telefono", Convert.ToInt64(telefono.Text), "mail", mail.Text, "fecha", Convert.ToDateTime(fechaNacimiento.Text));
+            List<SqlParameter> parametros = Database.GenerarListaDeParametros(
+                "dni", Convert.ToInt64(dni.Text), "nombre", nombre.Text, 
+                "apellido", apellido.Text, "direccion", direccion.Text, 
+                "telefono", Convert.ToInt64(telefono.Text), "mail", mail.Text, 
+                "fecha", Convert.ToDateTime(fechaNacimiento.Text),
+                "matricula", txtMatricula.Text);
                 DataTable tablaMedicos = Database.GetInstance
                     .ExecuteQuery("[ClinicaTurbia].[AGREGAR_MEDICO]", parametros);
-                MessageBox.Show("El medico se ha modificado exitosamente", "Clinica FRBA", MessageBoxButtons.OK, MessageBoxIcon.Information);
+           
+                for (int i = 0; i < listEspecialidades.Items.Count; i++)
+                {
+                    DataRowView item = (DataRowView)listEspecialidades.Items[i];
+                    if (listEspecialidades.GetSelected(i))
+                    {
+                        agregarEspecialidad(item.Row["ESP_CODIGO"].ToString());
+                    }
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Problemas al modificar el medico","Error de carga", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Problemas al crear el medico", "Error de carga", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            MessageBox.Show("El medico se ha creado exitosamente", "Clinica FRBA", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
 
+        private void txtMatricula_TextChanged(object sender, EventArgs e)
+        {
+            guardar.Enabled = true;
+        }
+
+        private void dni_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(dni.Text))
+                {
+                    Convert.ToInt64(dni.Text);
+                }
+            }
+            catch (FormatException ex)
+            {
+                dni.Text = "";
+            }
+        }
+
+        private void telefono_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(telefono.Text))
+                {
+                    Convert.ToInt64(telefono.Text);
+                }
+            }
+            catch (FormatException ex)
+            {
+                telefono.Text = "";
+            }
+        }
+
+        private void btnCale_Click(object sender, EventArgs e)
+        {
+            calendario.Show();
+        }
+
+        private void calendario_DateSelected(object sender, DateRangeEventArgs e)
+        {
+            fechaNacimiento.Text = calendario.SelectionStart.ToShortDateString();
+            calendario.Hide();
+            guardar.Enabled = true;
+
+        }
         
     }
 }

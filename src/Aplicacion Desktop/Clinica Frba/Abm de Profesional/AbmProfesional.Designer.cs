@@ -122,9 +122,13 @@
             // 
             // medicosBox
             // 
+            this.medicosBox.AllowUserToAddRows = false;
+            this.medicosBox.AllowUserToDeleteRows = false;
             this.medicosBox.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.medicosBox.Location = new System.Drawing.Point(12, 199);
+            this.medicosBox.MultiSelect = false;
             this.medicosBox.Name = "medicosBox";
+            this.medicosBox.ReadOnly = true;
             this.medicosBox.Size = new System.Drawing.Size(630, 242);
             this.medicosBox.TabIndex = 7;
             this.medicosBox.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.medicosBox_CellContentClick);

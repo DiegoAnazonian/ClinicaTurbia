@@ -191,6 +191,14 @@ IF OBJECT_ID('ClinicaTurbia.EXISTE_AFILIADO', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.EXISTE_AFILIADO
 GO
 
+IF OBJECT_ID('ClinicaTurbia.MODIFICAR_ESPECIALIDADES_MEDICO', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.MODIFICAR_ESPECIALIDADES_MEDICO
+GO
+
+IF OBJECT_ID('ClinicaTurbia.LISTADO_ESPECIALIDAD_PARA_MEDICO', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.LISTADO_ESPECIALIDAD_PARA_MEDICO
+GO
+
 IF OBJECT_ID('ClinicaTurbia.CREAR_AFILIADO', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.CREAR_AFILIADO
 GO
@@ -426,7 +434,8 @@ CREATE TABLE ClinicaTurbia.Medico(
 	MED_TELEFONO [numeric](18, 0)  NOT NULL,
 	MED_MAIL [nvarchar] (255) NOT NULL,
 	MED_FECHA_NACIMIENTO [datetime] NOT NULL,
-	MED_BAJA_LOGICA [int] NOT NULL	 
+	MED_BAJA_LOGICA [int] NOT NULL,
+	MED_MATRICULA [nvarchar] (255) DEFAULT NULL
 );
 
 ----USUARIO----
@@ -990,9 +999,14 @@ GO
 CREATE PROCEDURE ClinicaTurbia.AGREGAR_MEDICO
 	(@dni numeric,@nombre nvarchar(255),@apellido nvarchar(255),
 	 @direccion nvarchar(255) = NULL, @telefono nvarchar(255) = NULL,
-	 @mail nvarchar(255) = NULL, @fecha datetime) AS
-	INSERT INTO ClinicaTurbia.Medico(MED_DNI,MED_NOMBRE,MED_APELLIDO,MED_DIRECCION,MED_TELEFONO,MED_MAIL,MED_FECHA_NACIMIENTO,MED_BAJA_LOGICA) 
-	VALUES (@dni,@nombre,@apellido,@direccion,@telefono,@mail,@fecha,'0');
+	 @mail nvarchar(255) = NULL, @fecha datetime, @matricula nvarchar(255)) AS
+	INSERT INTO ClinicaTurbia.Medico(MED_MATRICULA,MED_DNI,MED_NOMBRE,MED_APELLIDO,MED_DIRECCION,MED_TELEFONO,MED_MAIL,MED_FECHA_NACIMIENTO,MED_BAJA_LOGICA) 
+	VALUES (@matricula,@dni,@nombre,@apellido,@direccion,@telefono,@mail,@fecha,'0');
+	
+	INSERT INTO ClinicaTurbia.Usuario(USUARIO_NOMBRE, USUARIO_PASSWORD, USUARIO_PRIMER_LOGIN, USUARIO_HABILITADO)
+		VALUES (@dni , '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 1, 1);
+	INSERT INTO ClinicaTurbia.Usuario_Rol(USUARIO_NOMBRE, ROL_ID)
+		VALUES (@dni, 3);
 		
 GO
 
@@ -1037,11 +1051,11 @@ GO
 CREATE PROCEDURE ClinicaTurbia.MODIFICAR_MEDICO
 	(@dni numeric,@nombre nvarchar(255),@apellido nvarchar(255),
 	 @direccion nvarchar(255) = NULL, @telefono nvarchar(255) = NULL,
-	 @mail nvarchar(255) = NULL, @fecha datetime) AS
+	 @mail nvarchar(255) = NULL, @fecha datetime, @matricula nvarchar(255)) AS
 	UPDATE ClinicaTurbia.Medico SET 
-		MED_DNI = @dni,MED_NOMBRE = @nombre,MED_APELLIDO = @apellido,
+		MED_NOMBRE = @nombre,MED_APELLIDO = @apellido,
 		MED_DIRECCION = @direccion,MED_TELEFONO = @telefono,MED_MAIL = @mail,
-		MED_FECHA_NACIMIENTO = @fecha
+		MED_FECHA_NACIMIENTO = @fecha, MED_MATRICULA=@matricula
 		
 		WHERE MED_DNI=@dni;
 GO
@@ -1184,6 +1198,12 @@ CREATE PROCEDURE ClinicaTurbia.LISTADO_ESPECIALIDAD AS
 	ClinicaTurbia.TipoEspecialidad WHERE ESP_TIPOESP_CODIGO = TIPOESP_CODIGO
 GO
 
+CREATE PROCEDURE ClinicaTurbia.LISTADO_ESPECIALIDAD_PARA_MEDICO
+	(@dni numeric(18,0)) AS
+	SELECT ESP_CODIGO, ESP_DESCRIPCION FROM ClinicaTurbia.Medico_Especialidad, ClinicaTurbia.Especialidad
+	WHERE MEDESP_MED=@dni AND MEDESP_ESP=ESP_CODIGO;
+GO
+
 CREATE PROCEDURE ClinicaTurbia.LISTADO_TIPO_DOCUMENTO AS
 	SELECT * FROM ClinicaTurbia.TipoDocumento
 GO
@@ -1219,6 +1239,20 @@ CREATE PROCEDURE ClinicaTurbia.MODIFICAR_FUNCIONES_ROL
 	ELSE
 		BEGIN
 		DELETE FROM ClinicaTurbia.Rol_Funcionalidad WHERE ROL_ID = @idRol AND FUN_ID = @idFunc;
+		END
+	END	
+GO
+
+CREATE PROCEDURE ClinicaTurbia.MODIFICAR_ESPECIALIDADES_MEDICO
+	(@dniDoc numeric(18,0), @idEsp int, @agregar bit) AS
+	BEGIN
+	IF @agregar = 1
+		BEGIN
+		INSERT INTO ClinicaTurbia.Medico_Especialidad(MEDESP_MED, MEDESP_ESP) VALUES (@dniDoc, @idEsp);
+		END
+	ELSE
+		BEGIN
+		DELETE FROM ClinicaTurbia.Medico_Especialidad WHERE MEDESP_ESP = @idEsp AND MEDESP_MED = @dniDoc;
 		END
 	END	
 GO
@@ -1284,7 +1318,7 @@ GO
 CREATE PROCEDURE ClinicaTurbia.TOP5_BONOS_AJENOS AS
 	SELECT AFILIADO, SUM(CANT) AS CANT FROM 
 		(SELECT BONOCON_AFILIADO_USO AS AFILIADO, COUNT(*) AS CANT
-			FROM ClinicaTurbia.BonoConsulta--, ClinicaTurbia.BonoFarmacia
+			FROM ClinicaTurbia.BonoConsulta
 			WHERE BONOCON_AFILIADO_COMPRO != BONOCON_AFILIADO_USO
 			GROUP BY BONOCON_AFILIADO_USO
 		UNION ALL

@@ -7,18 +7,24 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Globalization;
 
 namespace Clinica_Frba.Abm_de_Profesional
 {
     public partial class Modificar : Form
     {
         private Persona persona;
+        List<DataRowView> espViejas = new List<DataRowView>();
+        bool espFueronModificadas = false;
 
         public Modificar(Persona persona)
         {
             InitializeComponent();
+            calendario.Hide();
+            llenarListEspecialidades();
             this.llenarTabla(persona);
             this.guardar.Enabled = false;
+            this.marcarEspecialidades();
         }
 
         public void llenarTabla(Persona persona)
@@ -30,40 +36,55 @@ namespace Clinica_Frba.Abm_de_Profesional
             dni.Text = persona.dni.ToString();
             telefono.Text = persona.telefono.ToString();
             direccion.Text = persona.direccion.ToString();
-            fecha_nacimiento.Text = persona.fecha.ToString();
+            fecha_nacimiento.Text = persona.fecha.ToShortDateString();
             mail.Text = persona.mail;
-
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
+            txtMatricula.Text = persona.matricula;
 
         }
 
         private void guardar_Click(object sender, EventArgs e)
         {
-            try
-            {
-                List<SqlParameter> parametros = Database.GenerarListaDeParametros("dni", Convert.ToInt64(dni.Text), "nombre", nombre.Text, "apellido", apellido.Text, "direccion", direccion.Text, "telefono", Convert.ToInt64(telefono.Text), "mail", mail.Text, "fecha", Convert.ToDateTime(fecha_nacimiento.Text));
-                DataTable tablaMedicos = Database.GetInstance
-                    .ExecuteQuery("[ClinicaTurbia].[MODIFICAR_MEDICO]", parametros);
-                MessageBox.Show("El medico se ha modificado exitosamente", "Clinica FRBA", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Probelmas al modificar el medico","Error de carga", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
             this.guardar.Enabled = false;
+            List<SqlParameter> parametros = Database.GenerarListaDeParametros(
+                "dni", dni.Text, "nombre", nombre.Text, "apellido", apellido.Text,
+                "direccion", direccion.Text, "telefono", telefono.Text, 
+                "mail", mail.Text, "fecha", fecha_nacimiento.Text,
+                "matricula", txtMatricula.Text);
+            DataTable tablaMedicos = Database.GetInstance
+                .ExecuteQuery("[ClinicaTurbia].[MODIFICAR_MEDICO]", parametros);
+            if (this.espFueronModificadas)
+            {
+                for (int i = 0; i < listEspecialidades.Items.Count; i++)
+                {
+                    DataRowView item = (DataRowView)listEspecialidades.Items[i];
+                    if (this.espViejas.Contains(item) && !listEspecialidades.GetSelected(i))
+                    {
+                        quitarEspecialidad(item.Row["ESP_CODIGO"].ToString());
+                    }
+                    else if (!this.espViejas.Contains(item) && listEspecialidades.GetSelected(i))
+                    {
+                        agregarEspecialidad(item.Row["ESP_CODIGO"].ToString());
+                    }
+                }
+            }
+            MessageBox.Show("El medico se ha modificado exitosamente", "Clinica FRBA", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            this.Close();
         }
 
         private void dni_TextChanged(object sender, EventArgs e)
         {
-            
+            try
+            {
+                if (!String.IsNullOrEmpty(dni.Text))
+                {
+                    Convert.ToInt64(dni.Text);
+                }
+            }
+            catch (FormatException ex)
+            {
+                dni.Text = "";
+            }
             if (!(this.persona.dni.ToString().Equals(this.dni.Text)))
             {
                 this.guardar.Enabled = true;
@@ -100,6 +121,17 @@ namespace Clinica_Frba.Abm_de_Profesional
 
         private void telefono_TextChanged(object sender, EventArgs e)
         {
+            try
+            {
+                if (!String.IsNullOrEmpty(telefono.Text))
+                {
+                    Convert.ToInt64(telefono.Text);
+                }
+            }
+            catch (FormatException ex)
+            {
+                telefono.Text = "";
+            }
             if (!(this.persona.telefono.ToString().Equals(this.telefono.Text)))
             {
                 this.guardar.Enabled = true;
@@ -134,25 +166,76 @@ namespace Clinica_Frba.Abm_de_Profesional
             }
         }
 
-        private void fecha_nacimiento_TextChanged(object sender, EventArgs e)
-        {
-            if (!(this.persona.fecha.ToString().Equals(this.fecha_nacimiento.Text)))
-            {
-                this.guardar.Enabled = true;
-            }
-            else
-            {
-                this.guardar.Enabled = false;
-            }
-        }
-
         private void cancelar_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void Modificar_Load(object sender, EventArgs e)
+        private void llenarListEspecialidades()
         {
+            this.listEspecialidades.DataSource = null;
+            this.listEspecialidades.Items.Clear();
+            DataTable tablaEsp = Database.GetInstance
+                .ExecuteQuery("[ClinicaTurbia].[LISTADO_ESPECIALIDAD]");
+            this.listEspecialidades.DataSource = tablaEsp;
+            this.listEspecialidades.DisplayMember = "ESP_DESCRIPCION";
+            this.listEspecialidades.ValueMember = "ESP_CODIGO";
+            this.listEspecialidades.SelectedIndices.Clear();
+        }
+
+        private void marcarEspecialidades()
+        {
+            DataTable tablaEsp = Database.GetInstance
+                .ExecuteQuery("[ClinicaTurbia].[LISTADO_ESPECIALIDAD_PARA_MEDICO]",
+                Database.GenerarListaDeParametros("dni", persona.dni.ToString()));
+            foreach(DataRow rou in tablaEsp.Rows)
+            {
+                int index = listEspecialidades.FindStringExact(
+                    rou["ESP_DESCRIPCION"].ToString());
+                listEspecialidades.SetSelected(index, true);
+                this.espViejas.Add((DataRowView)listEspecialidades.Items[index]);
+            }
+        }
+
+        private void listEspecialidades_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            espFueronModificadas = true;
+            guardar.Enabled = true;
+        }
+
+        private void quitarEspecialidad(String idEsp)
+        {
+            List<SqlParameter> espParam = Database.GenerarListaDeParametros(
+                "dniDoc", this.persona.dni.ToString(), "idEsp", int.Parse(idEsp),
+                "agregar", false);
+            Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[MODIFICAR_ESPECIALIDADES_MEDICO]",
+                espParam);
+        }
+
+        private void agregarEspecialidad(String idEsp)
+        {
+            List<SqlParameter> espParam = Database.GenerarListaDeParametros(
+                "dniDoc", this.persona.dni.ToString(), "idEsp", int.Parse(idEsp),
+                "agregar", true);
+            Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[MODIFICAR_ESPECIALIDADES_MEDICO]",
+                espParam);
+        }
+
+        private void txtMatricula_TextChanged(object sender, EventArgs e)
+        {
+            guardar.Enabled = true;
+        }
+
+        private void btnCale_Click(object sender, EventArgs e)
+        {
+            calendario.Show();
+        }
+
+        private void calendario_DateSelected(object sender, DateRangeEventArgs e)
+        {
+            fecha_nacimiento.Text = calendario.SelectionStart.ToShortDateString();
+            calendario.Hide();
+            guardar.Enabled = true;
 
         }
     }

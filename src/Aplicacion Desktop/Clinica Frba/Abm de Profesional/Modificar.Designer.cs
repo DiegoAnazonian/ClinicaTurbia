@@ -44,11 +44,17 @@
             this.nombre = new System.Windows.Forms.TextBox();
             this.dni = new System.Windows.Forms.TextBox();
             this.cancelar = new System.Windows.Forms.Button();
+            this.txtMatricula = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.listEspecialidades = new System.Windows.Forms.ListBox();
+            this.btnCale = new System.Windows.Forms.Button();
+            this.calendario = new System.Windows.Forms.MonthCalendar();
             this.SuspendLayout();
             // 
             // guardar
             // 
-            this.guardar.Location = new System.Drawing.Point(181, 217);
+            this.guardar.Location = new System.Drawing.Point(231, 387);
             this.guardar.Name = "guardar";
             this.guardar.Size = new System.Drawing.Size(75, 23);
             this.guardar.TabIndex = 29;
@@ -73,19 +79,18 @@
             this.label6.Size = new System.Drawing.Size(26, 13);
             this.label6.TabIndex = 27;
             this.label6.Text = "Mail";
-            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // fecha_nacimiento
             // 
+            this.fecha_nacimiento.Enabled = false;
             this.fecha_nacimiento.Location = new System.Drawing.Point(10, 165);
             this.fecha_nacimiento.Name = "fecha_nacimiento";
             this.fecha_nacimiento.Size = new System.Drawing.Size(130, 20);
             this.fecha_nacimiento.TabIndex = 26;
-            this.fecha_nacimiento.TextChanged += new System.EventHandler(this.fecha_nacimiento_TextChanged);
             // 
             // mail
             // 
-            this.mail.Location = new System.Drawing.Point(158, 122);
+            this.mail.Location = new System.Drawing.Point(155, 122);
             this.mail.Name = "mail";
             this.mail.Size = new System.Drawing.Size(151, 20);
             this.mail.TabIndex = 25;
@@ -116,7 +121,6 @@
             this.label4.Size = new System.Drawing.Size(52, 13);
             this.label4.TabIndex = 22;
             this.label4.Text = "Direccion";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // direccion
             // 
@@ -171,6 +175,7 @@
             // 
             // dni
             // 
+            this.dni.Enabled = false;
             this.dni.Location = new System.Drawing.Point(10, 40);
             this.dni.Name = "dni";
             this.dni.Size = new System.Drawing.Size(130, 20);
@@ -179,7 +184,7 @@
             // 
             // cancelar
             // 
-            this.cancelar.Location = new System.Drawing.Point(74, 217);
+            this.cancelar.Location = new System.Drawing.Point(14, 387);
             this.cancelar.Name = "cancelar";
             this.cancelar.Size = new System.Drawing.Size(75, 23);
             this.cancelar.TabIndex = 30;
@@ -187,15 +192,74 @@
             this.cancelar.UseVisualStyleBackColor = true;
             this.cancelar.Click += new System.EventHandler(this.cancelar_Click);
             // 
+            // txtMatricula
+            // 
+            this.txtMatricula.Location = new System.Drawing.Point(10, 209);
+            this.txtMatricula.Name = "txtMatricula";
+            this.txtMatricula.Size = new System.Drawing.Size(151, 20);
+            this.txtMatricula.TabIndex = 25;
+            this.txtMatricula.TextChanged += new System.EventHandler(this.txtMatricula_TextChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(9, 193);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(50, 13);
+            this.label8.TabIndex = 27;
+            this.label8.Text = "Matricula";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(10, 237);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(78, 13);
+            this.label9.TabIndex = 31;
+            this.label9.Text = "Especialidades";
+            // 
+            // listEspecialidades
+            // 
+            this.listEspecialidades.FormattingEnabled = true;
+            this.listEspecialidades.Location = new System.Drawing.Point(10, 262);
+            this.listEspecialidades.Name = "listEspecialidades";
+            this.listEspecialidades.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.listEspecialidades.Size = new System.Drawing.Size(296, 95);
+            this.listEspecialidades.TabIndex = 32;
+            this.listEspecialidades.SelectedIndexChanged += new System.EventHandler(this.listEspecialidades_SelectedIndexChanged);
+            // 
+            // btnCale
+            // 
+            this.btnCale.Location = new System.Drawing.Point(166, 163);
+            this.btnCale.Name = "btnCale";
+            this.btnCale.Size = new System.Drawing.Size(107, 23);
+            this.btnCale.TabIndex = 53;
+            this.btnCale.Text = "Seleccionar fecha";
+            this.btnCale.UseVisualStyleBackColor = true;
+            this.btnCale.Click += new System.EventHandler(this.btnCale_Click);
+            // 
+            // calendario
+            // 
+            this.calendario.Location = new System.Drawing.Point(79, 111);
+            this.calendario.Name = "calendario";
+            this.calendario.TabIndex = 54;
+            this.calendario.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.calendario_DateSelected);
+            // 
             // Modificar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(318, 252);
+            this.ClientSize = new System.Drawing.Size(324, 483);
+            this.Controls.Add(this.calendario);
+            this.Controls.Add(this.btnCale);
+            this.Controls.Add(this.listEspecialidades);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.cancelar);
             this.Controls.Add(this.guardar);
             this.Controls.Add(this.label7);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.label6);
+            this.Controls.Add(this.txtMatricula);
             this.Controls.Add(this.fecha_nacimiento);
             this.Controls.Add(this.mail);
             this.Controls.Add(this.label5);
@@ -210,7 +274,6 @@
             this.Controls.Add(this.dni);
             this.Name = "Modificar";
             this.Text = "Modificar";
-            this.Load += new System.EventHandler(this.Modificar_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -234,6 +297,12 @@
         private System.Windows.Forms.TextBox nombre;
         private System.Windows.Forms.TextBox dni;
         private System.Windows.Forms.Button cancelar;
+        private System.Windows.Forms.TextBox txtMatricula;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ListBox listEspecialidades;
+        private System.Windows.Forms.Button btnCale;
+        private System.Windows.Forms.MonthCalendar calendario;
 
     }
 }

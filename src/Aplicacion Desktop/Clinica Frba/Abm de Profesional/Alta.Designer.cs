@@ -44,11 +44,17 @@
             this.apellido = new System.Windows.Forms.TextBox();
             this.nombre = new System.Windows.Forms.TextBox();
             this.dni = new System.Windows.Forms.TextBox();
+            this.listEspecialidades = new System.Windows.Forms.ListBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.txtMatricula = new System.Windows.Forms.TextBox();
+            this.btnCale = new System.Windows.Forms.Button();
+            this.calendario = new System.Windows.Forms.MonthCalendar();
             this.SuspendLayout();
             // 
             // cancelar
             // 
-            this.cancelar.Location = new System.Drawing.Point(76, 204);
+            this.cancelar.Location = new System.Drawing.Point(63, 363);
             this.cancelar.Name = "cancelar";
             this.cancelar.Size = new System.Drawing.Size(75, 23);
             this.cancelar.TabIndex = 46;
@@ -58,7 +64,7 @@
             // 
             // guardar
             // 
-            this.guardar.Location = new System.Drawing.Point(183, 204);
+            this.guardar.Location = new System.Drawing.Point(170, 363);
             this.guardar.Name = "guardar";
             this.guardar.Size = new System.Drawing.Size(75, 23);
             this.guardar.TabIndex = 45;
@@ -86,11 +92,11 @@
             // 
             // fechaNacimiento
             // 
+            this.fechaNacimiento.Enabled = false;
             this.fechaNacimiento.Location = new System.Drawing.Point(12, 152);
             this.fechaNacimiento.Name = "fechaNacimiento";
             this.fechaNacimiento.Size = new System.Drawing.Size(130, 20);
             this.fechaNacimiento.TabIndex = 42;
-            this.fechaNacimiento.TextChanged += new System.EventHandler(this.fechaNacimiento_TextChanged);
             // 
             // mail
             // 
@@ -114,6 +120,7 @@
             this.telefono.Name = "telefono";
             this.telefono.Size = new System.Drawing.Size(151, 20);
             this.telefono.TabIndex = 39;
+            this.telefono.TextChanged += new System.EventHandler(this.telefono_TextChanged);
             // 
             // label4
             // 
@@ -178,12 +185,71 @@
             this.dni.Name = "dni";
             this.dni.Size = new System.Drawing.Size(130, 20);
             this.dni.TabIndex = 31;
+            this.dni.TextChanged += new System.EventHandler(this.dni_TextChanged);
+            // 
+            // listEspecialidades
+            // 
+            this.listEspecialidades.FormattingEnabled = true;
+            this.listEspecialidades.Location = new System.Drawing.Point(12, 250);
+            this.listEspecialidades.Name = "listEspecialidades";
+            this.listEspecialidades.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.listEspecialidades.Size = new System.Drawing.Size(296, 95);
+            this.listEspecialidades.TabIndex = 48;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(13, 234);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(78, 13);
+            this.label9.TabIndex = 47;
+            this.label9.Text = "Especialidades";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(12, 184);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(50, 13);
+            this.label8.TabIndex = 50;
+            this.label8.Text = "Matricula";
+            // 
+            // txtMatricula
+            // 
+            this.txtMatricula.Location = new System.Drawing.Point(13, 200);
+            this.txtMatricula.Name = "txtMatricula";
+            this.txtMatricula.Size = new System.Drawing.Size(129, 20);
+            this.txtMatricula.TabIndex = 49;
+            this.txtMatricula.TextChanged += new System.EventHandler(this.txtMatricula_TextChanged);
+            // 
+            // btnCale
+            // 
+            this.btnCale.Location = new System.Drawing.Point(170, 150);
+            this.btnCale.Name = "btnCale";
+            this.btnCale.Size = new System.Drawing.Size(117, 23);
+            this.btnCale.TabIndex = 52;
+            this.btnCale.Text = "Seleccionar fecha";
+            this.btnCale.UseVisualStyleBackColor = true;
+            this.btnCale.Click += new System.EventHandler(this.btnCale_Click);
+            // 
+            // calendario
+            // 
+            this.calendario.Location = new System.Drawing.Point(84, 85);
+            this.calendario.Name = "calendario";
+            this.calendario.TabIndex = 53;
+            this.calendario.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.calendario_DateSelected);
             // 
             // Alta
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(327, 267);
+            this.ClientSize = new System.Drawing.Size(327, 430);
+            this.Controls.Add(this.calendario);
+            this.Controls.Add(this.btnCale);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.txtMatricula);
+            this.Controls.Add(this.listEspecialidades);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.cancelar);
             this.Controls.Add(this.guardar);
             this.Controls.Add(this.label7);
@@ -225,5 +291,11 @@
         private System.Windows.Forms.TextBox apellido;
         private System.Windows.Forms.TextBox nombre;
         private System.Windows.Forms.TextBox dni;
+        private System.Windows.Forms.ListBox listEspecialidades;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox txtMatricula;
+        private System.Windows.Forms.Button btnCale;
+        private System.Windows.Forms.MonthCalendar calendario;
     }
 }

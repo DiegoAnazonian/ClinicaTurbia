@@ -45,6 +45,7 @@ namespace Clinica_Frba.Abm_de_Profesional
             this.medicosBox.Columns[4].HeaderText = "TELEFONO";
             this.medicosBox.Columns[5].HeaderText = "MAIL";
             this.medicosBox.Columns[6].HeaderText = "FECHA NACIMIENTO";
+            this.medicosBox.Columns[7].HeaderText = "MATRICULA";
             
         }
 
@@ -57,13 +58,14 @@ namespace Clinica_Frba.Abm_de_Profesional
 
         private void llenarCheckedBoxMedicos(DataTable medicos)
         {
+            medicos.Columns.RemoveAt(7);
             cantidadMedicos.Text = new StringConverter().ConvertToString(medicos.Rows.Count);
             this.medicosBox.DataSource = medicos;
             
         }
 
         private DataTable traerTodosLosMedicos(){
-            return Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[TRAER_TODOS_MEDICOS]");        
+            return Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[TRAER_TODOS_MEDICOS]");
         }
 
         
@@ -94,7 +96,6 @@ namespace Clinica_Frba.Abm_de_Profesional
             List<SqlParameter> nomParcial = Database.GenerarListaDeParametros("nombreParcial", palabraClave.Text);
             DataTable tablaMedicos = Database.GetInstance
                 .ExecuteQuery("[ClinicaTurbia].[FILTRAR_POR_NOMBRE_MEDICO]", nomParcial);
-
             this.llenarCheckedBoxMedicos(tablaMedicos);
         }
 
@@ -129,8 +130,8 @@ namespace Clinica_Frba.Abm_de_Profesional
         private void modificar_Click(object sender, EventArgs e)
         {
             Persona persona = new Persona();
-            
 
+            persona.matricula = medicosBox.Rows[medicosBox.CurrentRow.Index].Cells[7].Value.ToString();
             persona.dni = Convert.ToInt64(medicosBox.Rows[medicosBox.CurrentRow.Index].Cells[0].Value);
             persona.nombre = medicosBox.Rows[medicosBox.CurrentRow.Index].Cells[1].Value.ToString();
             persona.apellido = medicosBox.Rows[medicosBox.CurrentRow.Index].Cells[2].Value.ToString();

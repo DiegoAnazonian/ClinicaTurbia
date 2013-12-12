@@ -79,6 +79,7 @@ namespace Clinica_Frba.NewFolder10
                 else
                 {
                     LOGGED_USER = txtUsuario.Text;
+                    loginFallidos.Clear();
                     if ((bool)reg["USUARIO_PRIMER_LOGIN"])
                     {
                         List<SqlParameter> afiliadoParam = 
