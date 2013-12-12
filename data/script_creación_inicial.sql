@@ -919,6 +919,7 @@ CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_DIRECCION_PACIENTES
 	FROM ClinicaTurbia.Paciente, ClinicaTurbia.PlanMedico, ClinicaTurbia.TipoDocumento, ClinicaTurbia.EstadoCivil 
 	WHERE PAC_DIRECCION like @direccion+'%'
 	AND PAC_PLAN_MEDICO_CODIGO=PLAN_CODIGO
+		AND PAC_BAJA_LOGICA = '0'
 	AND (PAC_TIPO_DOCUMENTO=TIDOC_ID OR PAC_TIPO_DOCUMENTO IS NULL)
 	AND (PAC_ESTADO_CIVIL=ECIVIL_ID OR PAC_ESTADO_CIVIL IS NULL)
 	ORDER BY 'Apellido', 'Nombre'
@@ -987,6 +988,7 @@ CREATE PROCEDURE ClinicaTurbia.BORRAR_MEDICO
 	UPDATE ClinicaTurbia.Medico 
 	set med_baja_logica = '1'
 	WHERE ClinicaTurbia.Medico.MED_DNI = @dni;
+	DELETE FROM ClinicaTurbia.Usuario WHERE USUARIO_NOMBRE = @dni;
 GO
 
 CREATE PROCEDURE ClinicaTurbia.BORRAR_AFILIADO
@@ -994,6 +996,7 @@ CREATE PROCEDURE ClinicaTurbia.BORRAR_AFILIADO
 	UPDATE ClinicaTurbia.Paciente 
 	set pac_baja_logica = '1'
 	WHERE ClinicaTurbia.Paciente.PAC_NUMDOC = @dni;
+	DELETE FROM ClinicaTurbia.Usuario WHERE USUARIO_NOMBRE = @dni;
 GO
 
 CREATE PROCEDURE ClinicaTurbia.AGREGAR_MEDICO
@@ -1045,7 +1048,7 @@ CREATE PROCEDURE ClinicaTurbia.FILTRAR_X_APELLIDO
 	AS
 	SELECT *
 	FROM ClinicaTurbia.Medico as med
-	where med.MED_APELLIDO LIKE @apellido+'%';
+	where med.MED_APELLIDO LIKE @apellido+'%' AND MED_BAJA_LOGICA = '0'
 GO
 
 CREATE PROCEDURE ClinicaTurbia.MODIFICAR_MEDICO
