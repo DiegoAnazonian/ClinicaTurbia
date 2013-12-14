@@ -79,6 +79,12 @@ namespace Clinica_Frba.NewFolder10
                 }
                 else
                 {
+                    String rol = obtenerRolDelUsuario();
+                    if (rol == null)
+                    {
+                        btnLogin.Enabled = true;
+                        return;
+                    }
                     LOGGED_USER = txtUsuario.Text;
                     loginFallidos.Clear();
                     if ((bool)reg["USUARIO_PRIMER_LOGIN"])
@@ -92,7 +98,6 @@ namespace Clinica_Frba.NewFolder10
                             new AltaModifAfiliado(tablaAfiliado, true).ShowDialog();
                         }
                     }
-                    String rol = obtenerRolDelUsuario();
                     ocultarLoginYMostrarLogout(rol);
                     obtenerYMostrarFuncionesDeUnRol(rol);                    
                 }
@@ -146,6 +151,12 @@ namespace Clinica_Frba.NewFolder10
                 RolesWindow rolesForm = new RolesWindow(roles);
                 rolesForm.ShowDialog();
                 rol = rolesForm.rolSeleccionado;
+            }
+            else if (tablaRoles.Rows.Count == 0)
+            {
+                MessageBox.Show("El usuario no posee ningun rol para acceder a la aplicacion.\n",
+                    "Error de login", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
             }
             else
             {

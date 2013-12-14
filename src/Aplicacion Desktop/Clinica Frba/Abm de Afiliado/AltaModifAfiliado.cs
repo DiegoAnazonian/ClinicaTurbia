@@ -48,6 +48,8 @@ namespace Clinica_Frba.NewFolder12
             botonesFamiliares(false);
             codigoAfiliadoPrincipal = null;
             this.planViejo = tablaAfiliado.Rows[0][11].ToString();
+            txtFamiliares.Hide();
+            lblFamiliares.Hide();
         }
 
         private void agregarDatosComboFamiliar(){
@@ -260,7 +262,7 @@ namespace Clinica_Frba.NewFolder12
             List<SqlParameter> paramsAfiliado = Database.GenerarListaDeParametros(
                 "tiDoc", comboTipoDoc.SelectedValue, "dire", txtDireccion.Text,
                 "tel", Convert.ToInt64(txtTelefono.Text), "mail", txtMail.Text, "sexo", sexoAfiliado,
-                "estCivil", comboEstadoCivil.SelectedValue, "cantFam", txtFamiliares.Text, 
+                "estCivil", comboEstadoCivil.SelectedValue, 
                 "planMed", comboPlanMedico.SelectedValue, "numDoc", Convert.ToInt64(txtNroDoc.Text));
             DataTable tablaPlanMedico = Database.GetInstance.ExecuteQuery(
                 "[ClinicaTurbia].[MODIFICAR_AFILIADO]", paramsAfiliado);

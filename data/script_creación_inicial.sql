@@ -1209,7 +1209,9 @@ GO
 CREATE PROCEDURE ClinicaTurbia.CONSULTA_ROLES_POR_USUARIO
 	(@usuario nvarchar(255)) AS
 	SELECT R.ROL_NOMBRE FROM ClinicaTurbia.Rol R, ClinicaTurbia.Usuario_Rol UR
-	WHERE UR.USUARIO_NOMBRE = @usuario AND R.ROL_ID = UR.ROL_ID
+		WHERE UR.USUARIO_NOMBRE = @usuario AND R.ROL_ID = UR.ROL_ID 
+		AND (R.ELIMINADO IS NULL OR R.ELIMINADO != 1)
+		AND ROL_HABILITADO = 1;
 GO
 
 CREATE PROCEDURE ClinicaTurbia.DESHABILITAR_USUARIO
@@ -1312,10 +1314,10 @@ GO
 CREATE PROCEDURE ClinicaTurbia.MODIFICAR_AFILIADO
 	(@tiDoc int = NULL, @dire nvarchar(255) = NULL, @tel nvarchar(255) = NULL,
 	@mail nvarchar(255) = NULL,	@sexo char = NULL, @estCivil int = NULL, @planMed int,
-	@cantFam int = NULL, @numDoc nvarchar(255)) AS
+	@numDoc nvarchar(255)) AS
 	UPDATE ClinicaTurbia.Paciente SET PAC_TIPO_DOCUMENTO=@tiDoc, PAC_SEXO=@sexo,
 		PAC_ESTADO_CIVIL=@estCivil, PAC_DIRECCION=@dire, PAC_TELEFONO=@tel,
-		PAC_MAIL=@mail, PAC_CANT_HIJOS=@cantFam, PAC_PLAN_MEDICO_CODIGO=@planMed
+		PAC_MAIL=@mail, PAC_PLAN_MEDICO_CODIGO=@planMed
 		WHERE PAC_NUMDOC=@numDoc;
 GO
 
