@@ -152,14 +152,14 @@ namespace Clinica_Frba.Abm_de_Afiliado
         {
             try
             {
-                List<SqlParameter> parametros = Database.GenerarListaDeParametros("dni", Convert.ToInt64(documento));
+                List<SqlParameter> parametros = Database.GenerarListaDeParametros("dni", documento);
                 DataTable tablaMedicos = Database.GetInstance
                     .ExecuteQuery("[ClinicaTurbia].[BORRAR_AFILIADO]", parametros);
                 MessageBox.Show("El afiliado se ha eliminado exitosamente", "Clinica Turbia FRBA", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Probelmas al eliminar el afiliado", "Clinica Turbia FRBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Problemas al eliminar el afiliado", "Clinica Turbia FRBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             this.refrescarTabla();
@@ -174,6 +174,8 @@ namespace Clinica_Frba.Abm_de_Afiliado
             if (MessageBox.Show("Seguro desea eliminar a " + ape + ", " + nom + ".\n DNI: " + documento + "", "ClinicaTurbia FRBA", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 this.eliminarAfiliado(documento);
+                Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[AGREGAR_HISTORICO_PLAN]",
+                    Database.GenerarListaDeParametros("pac", documento, "fecha", Configuration.getFecha()));
             }
 
             this.asDefault();

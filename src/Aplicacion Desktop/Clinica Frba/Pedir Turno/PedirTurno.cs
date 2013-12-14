@@ -27,7 +27,6 @@ namespace Clinica_Frba.Pedir_Turno
             DataTable tablaMed = Database.GetInstance.ExecuteQuery(
                 "[ClinicaTurbia].[TRAER_TODOS_MEDICOS]");
             completarComboMedico(tablaMed);
-            completarComboFecha();
         }
 
         private void completarComboEspecialidades(DataTable tablaEsp)
@@ -63,15 +62,15 @@ namespace Clinica_Frba.Pedir_Turno
 
         private void completarComboFecha()
         {
-            DateTime da =  DateTime.ParseExact(Configuration.getFecha(),
-                "dd/MM/yyyy", CultureInfo.CurrentCulture);
-            for (int i = 0; i < 120; i++)
+            comboFecha.Items.Clear();
+            DataTable tablaFech = Database.GetInstance.ExecuteQuery(
+                "[ClinicaTurbia].[TRAER_DIAS_MEDICO]",
+                Database.GenerarListaDeParametros("dni", comboMedico.SelectedValue));
+            foreach (DataRow rou in tablaFech.Rows)
             {
-                comboFecha.Items.Add(da.ToShortDateString());
-                da = da.AddDays(1);
-                if (da.DayOfWeek == 0)
+                if ((bool)rou[1])
                 {
-                    da = da.AddDays(1);
+                    comboFecha.Items.Add(((DateTime)rou[0]).ToShortDateString());
                 }
             }
         }
@@ -81,6 +80,11 @@ namespace Clinica_Frba.Pedir_Turno
             comboFecha.Enabled = true;
             comboHorario.Enabled = false;
             comboFecha.SelectedItem = null;
+            if (comboMedico.SelectedValue == null || comboMedico.SelectedValue.GetType().IsClass)
+            {
+                return;
+            }
+            completarComboFecha();
         }
 
         private void comboEspecialidad_SelectedIndexChanged(object sender, EventArgs e)
@@ -117,13 +121,15 @@ namespace Clinica_Frba.Pedir_Turno
             DateTime da = DateTime.ParseExact(comboFecha.SelectedItem.ToString(),
                 "dd/MM/yyyy", CultureInfo.CurrentCulture);
             List<SqlParameter> paramHorario = Database.GenerarListaDeParametros(
-                "dni", comboMedico.SelectedValue, "dia", (int) da.DayOfWeek);
+                "dni", comboMedico.SelectedValue, "dia", da);
             DataTable tablaHorarios = Database.GetInstance.ExecuteQuery(
                 "[ClinicaTurbia].[TRAER_HORARIOS_MEDICO]", paramHorario);
-            DateTime horaDesde = DateTime.ParseExact(tablaHorarios.Rows[0][0].ToString(),
-                "HH:mm", CultureInfo.CurrentCulture);
-            DateTime horaHasta = DateTime.ParseExact(tablaHorarios.Rows[0][1].ToString(),
-                "HH:mm", CultureInfo.CurrentCulture);
+            string horaD = tablaHorarios.Rows[0][0].ToString().Length == 1 ?
+                "0" + tablaHorarios.Rows[0][0].ToString() : tablaHorarios.Rows[0][0].ToString();
+            string horaH = tablaHorarios.Rows[0][1].ToString().Length == 1 ?
+                "0" + tablaHorarios.Rows[0][1].ToString() : tablaHorarios.Rows[0][1].ToString();
+            DateTime horaDesde = DateTime.ParseExact(horaD, "HH", CultureInfo.CurrentCulture);
+            DateTime horaHasta = DateTime.ParseExact(horaH, "HH", CultureInfo.CurrentCulture);
 
             while(horaDesde < horaHasta)
             {

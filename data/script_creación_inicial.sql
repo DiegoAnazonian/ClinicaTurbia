@@ -19,6 +19,10 @@ IF OBJECT_ID('ClinicaTurbia.Medico_Especialidad', 'U') IS NOT NULL
 	DROP TABLE ClinicaTurbia.Medico_Especialidad
 GO
 
+IF OBJECT_ID('ClinicaTurbia.Agenda', 'U') IS NOT NULL
+	DROP TABLE ClinicaTurbia.Agenda
+GO
+
 IF OBJECT_ID('ClinicaTurbia.Transaccion', 'U') IS NOT NULL
 	DROP TABLE ClinicaTurbia.Transaccion
 GO
@@ -45,6 +49,10 @@ GO
 
 IF OBJECT_ID('ClinicaTurbia.Turno', 'U') IS NOT NULL
 	DROP TABLE ClinicaTurbia.Turno
+GO
+
+IF OBJECT_ID('ClinicaTurbia.Historicos_Paciente', 'U') IS NOT NULL
+	DROP TABLE ClinicaTurbia.Historicos_Paciente
 GO
 
 IF OBJECT_ID('ClinicaTurbia.Paciente', 'U') IS NOT NULL
@@ -91,16 +99,8 @@ IF OBJECT_ID('ClinicaTurbia.Rol', 'U') IS NOT NULL
 	DROP TABLE ClinicaTurbia.Rol
 GO
 
-IF OBJECT_ID('ClinicaTurbia.Profesional_Dia_Horario', 'U') IS NOT NULL
-	DROP TABLE ClinicaTurbia.Profesional_Dia_Horario
-GO
-
 IF OBJECT_ID('ClinicaTurbia.Medico', 'U') IS NOT NULL
 	DROP TABLE ClinicaTurbia.Medico
-GO
-
-IF OBJECT_ID('ClinicaTurbia.Horario', 'U') IS NOT NULL
-	DROP TABLE ClinicaTurbia.Horario
 GO
 
 IF OBJECT_ID('ClinicaTurbia.Funcionalidad', 'U') IS NOT NULL
@@ -191,6 +191,10 @@ IF OBJECT_ID('ClinicaTurbia.EXISTE_AFILIADO', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.EXISTE_AFILIADO
 GO
 
+IF OBJECT_ID('ClinicaTurbia.MIGRAR_AGENDAS', 'P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.MIGRAR_AGENDAS
+GO
+
 IF OBJECT_ID('ClinicaTurbia.MODIFICAR_ESPECIALIDADES_MEDICO', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.MODIFICAR_ESPECIALIDADES_MEDICO
 GO
@@ -217,10 +221,6 @@ GO
 
 IF OBJECT_ID('ClinicaTurbia.CREARTABLAS', 'P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.CREARTABLAS
-GO
-
-IF OBJECT_ID('ClinicaTurbia.CARGAR_HORARIOS_PROFESIONALES', 'P') IS NOT NULL
-	DROP PROCEDURE ClinicaTurbia.CARGAR_HORARIOS_PROFESIONALES
 GO
 
 IF OBJECT_ID('ClinicaTurbia.TOP5_BONOS_VENCIDOS', 'P') IS NOT NULL
@@ -343,6 +343,22 @@ IF OBJECT_ID('ClinicaTurbia.TRAER_BONOS','P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.TRAER_BONOS
 GO
 
+IF OBJECT_ID('ClinicaTurbia.TRAER_DIAS_AGENDADOS_PARA_MEDICO','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.TRAER_DIAS_AGENDADOS_PARA_MEDICO
+GO
+
+IF OBJECT_ID('ClinicaTurbia.CARGAR_AGENDA','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.CARGAR_AGENDA
+GO
+
+IF OBJECT_ID('ClinicaTurbia.TRAER_DIAS_MEDICO','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.TRAER_DIAS_MEDICO
+GO
+
+IF OBJECT_ID('ClinicaTurbia.AGREGAR_HISTORICO_PLAN','P') IS NOT NULL
+	DROP PROCEDURE ClinicaTurbia.AGREGAR_HISTORICO_PLAN
+GO
+
 IF OBJECT_ID('ClinicaTurbia.FILTRAR_POR_PALABRACLAVE_PACIENTE','P') IS NOT NULL
 	DROP PROCEDURE ClinicaTurbia.FILTRAR_POR_PALABRACLAVE_PACIENTE
 GO
@@ -425,6 +441,14 @@ CREATE TABLE ClinicaTurbia.Paciente(
 	PAC_BAJA_LOGICA [int] NOT NULL
 );
 
+CREATE TABLE ClinicaTurbia.Historicos_Paciente(
+	HPAC_ID [numeric] (18,0) PRIMARY KEY IDENTITY,
+	HPAC_NUMDOC [numeric] (18,0) FOREIGN KEY REFERENCES ClinicaTurbia.Paciente(PAC_NUMDOC),
+	HPAC_DESCRIPCION [nvarchar] (255),
+	HPAC_FECHA [datetime],
+	HPAC_MOTIVO [nvarchar] (255)
+);
+
 ----MEDICO----
 CREATE TABLE ClinicaTurbia.Medico(
 	MED_DNI [numeric] (18,0) NOT NULL PRIMARY KEY,
@@ -463,19 +487,14 @@ CREATE TABLE ClinicaTurbia.Especialidad(
 	ESP_TIPOESP_CODIGO [numeric] (18, 0) FOREIGN KEY REFERENCES ClinicaTurbia.TipoEspecialidad(TIPOESP_CODIGO) NOT NULL
 );
 
-CREATE TABLE ClinicaTurbia.Horario(
-	HOR_COD [int] PRIMARY KEY NOT NULL IDENTITY,
-	HOR_NOMBRE [varchar] (255) NOT NULL,
-	HOR_HORA_DESDE [varchar] (10) NOT NULL,
-	HOR_HORA_HASTA [varchar] (10) NOT NULL
+CREATE TABLE ClinicaTurbia.Agenda(
+	AGENDA_ID [numeric] (18,0) NOT NULL PRIMARY KEY IDENTITY,
+	AGENDA_MEDICO [numeric] (18,0) NOT NULL FOREIGN KEY REFERENCES ClinicaTurbia.Medico(MED_DNI),
+	AGENDA_DIA [date] NOT NULL,
+	AGENDA_TRABAJA [bit] NOT NULL,
+	AGENDA_HORA_DESDE [int] NOT NULL,
+	AGENDA_HORA_HASTA [int] NOT NULL
 );
-
-CREATE TABLE ClinicaTurbia.Profesional_Dia_Horario(
-	PDH_PROF_COD [numeric] (18,0) NOT NULL FOREIGN KEY REFERENCES ClinicaTurbia.Medico(MED_DNI),
-	PDH_HORARIO_COD [int] NOT NULL FOREIGN KEY REFERENCES ClinicaTurbia.Horario(HOR_COD),
-	PDH_DIA [int] NOT NULL
-);
-
 
 CREATE TABLE ClinicaTurbia.Turno(
 	TURN_NUMERO [numeric] (18,0) PRIMARY KEY IDENTITY,
@@ -555,12 +574,12 @@ INSERT INTO ClinicaTurbia.Rol(ROL_NOMBRE, ROL_HABILITADO) VALUES
 	('Administrativo', 1), ('Afiliado', 1), ('Profesional', 1);
 	
 INSERT INTO ClinicaTurbia.Funcionalidad(FUN_NOMBRE) VALUES
-	('ABM de Roles'), ('ABM de Afiliado'), ('ABM de Especialidad'), ('ABM de Profesional'),
+	('ABM de Roles'), ('ABM de Afiliado'), ('Registrar Agenda'), ('ABM de Profesional'),
 	('Pedir Turno'), ('Cancelar Turno'), ('Cancelar fecha de atencion'),
 	('Comprar bono'), ('Vender bono'), ('Registrar Atencion'),('Registrar llegada');
 
 INSERT INTO ClinicaTurbia.Rol_Funcionalidad(ROL_ID, FUN_ID) VALUES
-	(1,1), (1,2), (1,3), (1,4), (2,5), (2,6), (3,7), (2,8), (1,9), (3,10), (1,11);
+	(1,1), (1,2), (3,3), (1,4), (2,5), (2,6), (3,7), (2,8), (1,9), (3,10), (1,11);
 
 INSERT INTO ClinicaTurbia.TipoDocumento(TIDOC_NOMBRE) VALUES
 	('Documento Nacional de Identidad'), ('Cédula de Identidad'),
@@ -657,14 +676,9 @@ INSERT INTO ClinicaTurbia.Receta(REC_BONO_FARMACIA, REC_MEDICAMENTO, REC_CANT_ME
 	FROM GD2C2013.gd_esquema.Maestra
 	WHERE Bono_Farmacia_Medicamento IS NOT NULL AND Bono_Farmacia_Numero IS NOT NULL;
 
-INSERT INTO ClinicaTurbia.Horario(HOR_NOMBRE, HOR_HORA_DESDE, HOR_HORA_HASTA)
-	VALUES ('Mañana', '07:00', '14:00'), ('Tarde', '13:00', '20:00'),
-	('Part-Time Mañana', '08:00', '11:00'), ('Part-Time Tarde', '15:00', '18:00'),
-	('Sabado Tarde', '11:00', '15:00'), ('Sabado Mañana', '08:00', '12:00');
-
 SET IDENTITY_INSERT ClinicaTurbia.Turno ON;
-INSERT INTO ClinicaTurbia.Turno(TURN_NUMERO, TURN_FECHA, TURN_PROF_COD, TURN_PAC_COD)
-	SELECT DISTINCT Turno_Numero, Turno_Fecha, Medico_Dni, Paciente_Dni FROM GD2C2013.gd_esquema.Maestra
+INSERT INTO ClinicaTurbia.Turno(TURN_NUMERO, TURN_FECHA, TURN_PROF_COD, TURN_PAC_COD, TURN_REGISTRADO, TURN_ATENDIDO)
+	SELECT DISTINCT Turno_Numero, Turno_Fecha, Medico_Dni, Paciente_Dni, 1, 1 FROM GD2C2013.gd_esquema.Maestra
 			WHERE DATEPART(DW, Turno_Fecha) != 7;
 SET IDENTITY_INSERT ClinicaTurbia.Turno OFF;
 
@@ -679,24 +693,6 @@ INSERT INTO ClinicaTurbia.Medico_Especialidad
 	WHERE Medico_Dni IS NOT NULL
 	GROUP BY Medico_Dni, Especialidad_Codigo
 	ORDER BY Medico_Dni;
-
-GO
-
-CREATE PROCEDURE ClinicaTurbia.CARGAR_HORARIOS_PROFESIONALES AS	
-	DECLARE @medDoc numeric (18, 0);
-	DECLARE cursorProfs CURSOR FOR SELECT MED_DNI FROM ClinicaTurbia.Medico;
-	OPEN cursorProfs;
-	FETCH cursorProfs INTO @medDoc;
-	WHILE @@FETCH_STATUS = 0
-	BEGIN;
-		INSERT INTO ClinicaTurbia.Profesional_Dia_Horario(PDH_PROF_COD, PDH_HORARIO_COD, PDH_DIA)
-			VALUES (@medDoc, ROUND(RAND()*4+1, 0, 1), 1), (@medDoc, ROUND(RAND()*4+1, 0, 1), 2),
-			(@medDoc, ROUND(RAND()*4+1, 0, 1), 3), (@medDoc, ROUND(RAND()*4+1, 0, 1), 4),
-			(@medDoc, ROUND(RAND()*4+1, 0, 1), 5), (@medDoc, ROUND(RAND()*2+5, 0, 1), 6);
-		FETCH NEXT FROM cursorProfs INTO @medDoc;
-	END;
-	CLOSE cursorProfs;
-	DEALLOCATE cursorProfs;
 
 GO
 
@@ -766,6 +762,21 @@ GO
 ---------------- CONSULTA_PACIENTE  --------------------
 --------------------------------------------------------
 
+CREATE PROCEDURE ClinicaTurbia.AGREGAR_HISTORICO_PLAN
+	(@pac numeric(18,0), @fecha datetime, @planV nvarchar (255) = NULL,
+		@planN nvarchar (255) = NULL, @motivo nvarchar (255) = NULL) AS
+	IF @planV IS NOT NULL
+	BEGIN;
+		INSERT INTO ClinicaTurbia.Historicos_Paciente(HPAC_NUMDOC, HPAC_DESCRIPCION, HPAC_FECHA, HPAC_MOTIVO)
+			VALUES (@pac, 'Cambio de plan: ' + @planV + ' a ' + @planN, @fecha, @motivo);
+	END;
+	ELSE
+	BEGIN;
+		INSERT INTO ClinicaTurbia.Historicos_Paciente(HPAC_NUMDOC, HPAC_DESCRIPCION, HPAC_FECHA, HPAC_MOTIVO)
+				VALUES (@pac, 'ELIMINADO', @fecha, @motivo);
+	END;
+GO
+
 CREATE PROCEDURE ClinicaTurbia.LISTADO_PACIENTES AS
 	SELECT DISTINCT PAC_NOMBRE AS 'Nombre', PAC_APELLIDO AS 'Apellido', CASE WHEN PAC_TIPO_DOCUMENTO IS NULL THEN 
 		NULL ELSE TIDOC_NOMBRE END AS 'Tipo Documento', PAC_NUMDOC AS 'Documento', PAC_SEXO AS 'Sexo',
@@ -797,13 +808,13 @@ CREATE PROCEDURE ClinicaTurbia.COSTO_BONOS_PACIENTE
 	BEGIN;
 		SELECT PLAN_CODIGO, PLAN_PRECIO_BONO_CONSULTA, PLAN_PRECIO_BONO_FARMACIA
 		FROM ClinicaTurbia.Paciente, ClinicaTurbia.PlanMedico
-		WHERE PAC_NUMDOC=@pacDoc AND PLAN_CODIGO = PAC_PLAN_MEDICO_CODIGO;
+		WHERE PAC_NUMDOC=@pacDoc AND PLAN_CODIGO = PAC_PLAN_MEDICO_CODIGO AND PAC_BAJA_LOGICA='0';
 	END;
 	ELSE
 	BEGIN;
 		SELECT PLAN_CODIGO, PLAN_PRECIO_BONO_CONSULTA, PLAN_PRECIO_BONO_FARMACIA
 		FROM ClinicaTurbia.Paciente, ClinicaTurbia.PlanMedico
-		WHERE PAC_NUMERO_AFILIADO=@numAf AND PLAN_CODIGO=PAC_PLAN_MEDICO_CODIGO;
+		WHERE PAC_NUMERO_AFILIADO=@numAf AND PLAN_CODIGO=PAC_PLAN_MEDICO_CODIGO AND PAC_BAJA_LOGICA='0';
 	END;
 GO
 
@@ -992,17 +1003,19 @@ CREATE PROCEDURE ClinicaTurbia.BORRAR_MEDICO
 GO
 
 CREATE PROCEDURE ClinicaTurbia.BORRAR_AFILIADO
-	(@dni int) AS
+	(@dni nvarchar (255)) AS
 	UPDATE ClinicaTurbia.Paciente 
-	set pac_baja_logica = '1'
-	WHERE ClinicaTurbia.Paciente.PAC_NUMDOC = @dni;
+		set pac_baja_logica = 1
+		WHERE ClinicaTurbia.Paciente.PAC_NUMDOC = @dni;
+	DELETE FROM ClinicaTurbia.Usuario_Rol WHERE USUARIO_NOMBRE = @dni;
 	DELETE FROM ClinicaTurbia.Usuario WHERE USUARIO_NOMBRE = @dni;
+	DELETE FROM ClinicaTurbia.Turno WHERE TURN_PAC_COD = @dni AND TURN_REGISTRADO IS NULL OR TURN_REGISTRADO != 1;
 GO
 
 CREATE PROCEDURE ClinicaTurbia.AGREGAR_MEDICO
 	(@dni numeric,@nombre nvarchar(255),@apellido nvarchar(255),
 	 @direccion nvarchar(255) = NULL, @telefono nvarchar(255) = NULL,
-	 @mail nvarchar(255) = NULL, @fecha datetime, @matricula nvarchar(255)) AS
+	 @mail nvarchar(255) = NULL, @fecha datetime, @matricula nvarchar(255) = NULL) AS
 	INSERT INTO ClinicaTurbia.Medico(MED_MATRICULA,MED_DNI,MED_NOMBRE,MED_APELLIDO,MED_DIRECCION,MED_TELEFONO,MED_MAIL,MED_FECHA_NACIMIENTO,MED_BAJA_LOGICA) 
 	VALUES (@matricula,@dni,@nombre,@apellido,@direccion,@telefono,@mail,@fecha,'0');
 	
@@ -1105,9 +1118,31 @@ CREATE PROCEDURE ClinicaTurbia.REGISTRAR_LLEGADA
 		WHERE TURN_NUMERO=@numTurno;
 GO
 
-CREATE PROCEDURE ClinicaTurbia.TRAER_HORARIOS_MEDICO (@dni numeric(18,0), @dia int) AS
-	SELECT HOR_HORA_DESDE, HOR_HORA_HASTA FROM ClinicaTurbia.Profesional_Dia_Horario, ClinicaTurbia.Horario
-	WHERE PDH_PROF_COD=@dni AND PDH_DIA=@dia AND HOR_COD=PDH_HORARIO_COD;
+CREATE PROCEDURE ClinicaTurbia.CARGAR_AGENDA
+	(@dni numeric(18,0), @diaDesde date, @diaHasta date, @horaDesde int, @horaHasta int, @trabaja bit) AS
+	WHILE @diaDesde <= @diaHasta
+	BEGIN;
+		IF (NOT EXISTS (SELECT * FROM ClinicaTurbia.Agenda WHERE AGENDA_MEDICO=@dni AND AGENDA_DIA=@diaDesde))
+		BEGIN;
+			INSERT INTO ClinicaTurbia.Agenda(AGENDA_MEDICO, AGENDA_DIA, AGENDA_TRABAJA, AGENDA_HORA_DESDE, AGENDA_HORA_HASTA)
+				VALUES (@dni, @diaDesde, @trabaja, @horaDesde, @horaHasta);
+		END;
+		SET @diaDesde = DATEADD(weekday, 7, @diaDesde);
+	END;	
+GO
+
+CREATE PROCEDURE ClinicaTurbia.TRAER_DIAS_AGENDADOS_PARA_MEDICO
+	(@dni numeric(18,0)) AS
+	SELECT AGENDA_DIA FROM ClinicaTurbia.Agenda WHERE AGENDA_MEDICO=@dni;
+GO
+	
+CREATE PROCEDURE ClinicaTurbia.TRAER_DIAS_MEDICO (@dni numeric(18,0)) AS
+	SELECT AGENDA_DIA, AGENDA_TRABAJA FROM ClinicaTurbia.Agenda WHERE AGENDA_MEDICO=@dni;
+GO
+
+CREATE PROCEDURE ClinicaTurbia.TRAER_HORARIOS_MEDICO (@dni numeric(18,0), @dia date) AS
+	SELECT AGENDA_HORA_DESDE, AGENDA_HORA_HASTA FROM ClinicaTurbia.Agenda
+	WHERE CAST(AGENDA_DIA AS DATE)=@dia AND AGENDA_MEDICO=@dni;
 GO
 
 CREATE PROCEDURE ClinicaTurbia.TRAER_TURNOS_DE_MEDICO_PARA_FECHA
@@ -1331,6 +1366,40 @@ CREATE PROCEDURE ClinicaTurbia.TOP5_BONOS_AJENOS AS
 			GROUP BY BONOFAR_AFILIADO_USO) AS SUB
 	GROUP BY AFILIADO;
 GO
+
+CREATE PROCEDURE ClinicaTurbia.MIGRAR_AGENDAS AS
+	DECLARE curs CURSOR FOR SELECT MED_DNI FROM ClinicaTurbia.Medico;
+	DECLARE @dni numeric(18,0);
+	DECLARE @dia date;
+	DECLARE @ii int;
+	SET @ii = 0;
+	SET @dia = CAST('01/01/2014' AS DATE);
+	OPEN curs;
+	FETCH curs INTO @dni;
+	WHILE @@FETCH_STATUS = 0
+	BEGIN;
+		WHILE @ii < 120
+		BEGIN;
+			IF DATEPART(WEEKDAY, @dia) = 7
+			BEGIN;
+				INSERT INTO ClinicaTurbia.Agenda(AGENDA_MEDICO, AGENDA_DIA, AGENDA_TRABAJA, AGENDA_HORA_DESDE, AGENDA_HORA_HASTA)
+					VALUES(@dni, @dia, 1, 10, 12);
+			END;
+			ELSE IF DATEPART(WEEKDAY, @dia) != 1
+			BEGIN;
+				INSERT INTO ClinicaTurbia.Agenda(AGENDA_MEDICO, AGENDA_DIA, AGENDA_TRABAJA, AGENDA_HORA_DESDE, AGENDA_HORA_HASTA)
+					VALUES(@dni, @dia, 1, 9, 18);
+			END;
+			SET @ii += 1;
+			SET @dia = DATEADD(weekday, 1, @dia);
+		END;
+		SET @ii = 0;
+		SET @dia = CAST('01/01/2014' AS DATE);
+		FETCH NEXT FROM curs INTO @dni;
+	END;
+	CLOSE curs;
+	DEALLOCATE curs;
+GO
  
 ------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------
@@ -1340,5 +1409,5 @@ GO
 
 EXEC ClinicaTurbia.CREARTABLAS
 EXEC ClinicaTurbia.MIGRACION
-EXEC ClinicaTurbia.CARGAR_HORARIOS_PROFESIONALES
 EXEC ClinicaTurbia.CALCULAR_NUMERO_CONSULTA_BONOS
+EXEC ClinicaTurbia.MIGRAR_AGENDAS

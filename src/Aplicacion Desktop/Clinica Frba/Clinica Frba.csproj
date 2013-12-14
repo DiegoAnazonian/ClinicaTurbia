@@ -71,11 +71,11 @@
     <Compile Include="Abm de Afiliado\AbmAfiliado.Designer.cs">
       <DependentUpon>AbmAfiliado.cs</DependentUpon>
     </Compile>
-    <Compile Include="Abm de Especialidades Medicas\EspecialidadesWindow.cs">
+    <Compile Include="Abm de Afiliado\CambioDePlan.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Abm de Especialidades Medicas\EspecialidadesWindow.Designer.cs">
-      <DependentUpon>EspecialidadesWindow.cs</DependentUpon>
+    <Compile Include="Abm de Afiliado\CambioDePlan.Designer.cs">
+      <DependentUpon>CambioDePlan.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm de Profesional\AbmProfesional.cs">
       <SubType>Form</SubType>
@@ -159,6 +159,12 @@
       <DependentUpon>PedirTurno.cs</DependentUpon>
     </Compile>
     <Compile Include="Persona.cs" />
+    <Compile Include="Registrar Agenda\RegistrarAgenda.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Registrar Agenda\RegistrarAgenda.Designer.cs">
+      <DependentUpon>RegistrarAgenda.cs</DependentUpon>
+    </Compile>
     <Compile Include="Registro de Llegada\RegistroLlegada.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -177,18 +183,6 @@
     <Compile Include="Abm de Afiliado\AltaModifAfiliado.Designer.cs">
       <DependentUpon>AltaModifAfiliado.cs</DependentUpon>
     </Compile>
-    <Compile Include="Abm de Planes\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Abm de Planes\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Registrar Agenda\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Registrar Agenda\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Listados Estadisticos\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -203,8 +197,8 @@
     <EmbeddedResource Include="Abm de Afiliado\AltaModifAfiliado.resx">
       <DependentUpon>AltaModifAfiliado.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Abm de Especialidades Medicas\EspecialidadesWindow.resx">
-      <DependentUpon>EspecialidadesWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Abm de Afiliado\CambioDePlan.resx">
+      <DependentUpon>CambioDePlan.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm de Profesional\AbmProfesional.resx">
       <DependentUpon>AbmProfesional.cs</DependentUpon>
@@ -240,7 +234,6 @@
       <DependentUpon>RolesWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\Clinica_Frba.Abm_de_Afiliado.AbmAfiliado.resources" />
-    <EmbeddedResource Include="obj\Debug\Clinica_Frba.Abm_de_Especialidades_Medicas.EspecialidadesWindow.resources" />
     <EmbeddedResource Include="obj\Debug\Clinica_Frba.Abm_de_Profesional.AbmProfesional.resources" />
     <EmbeddedResource Include="obj\Debug\Clinica_Frba.Abm_de_Profesional.Alta.resources" />
     <EmbeddedResource Include="obj\Debug\Clinica_Frba.Abm_de_Profesional.Modificar.resources" />
@@ -255,7 +248,6 @@
     <EmbeddedResource Include="obj\Debug\Clinica_Frba.Pedir_Turno.PedirTurno.resources" />
     <EmbeddedResource Include="obj\Debug\Clinica_Frba.Properties.Resources.resources" />
     <EmbeddedResource Include="obj\Release\Clinica_Frba.Abm_de_Afiliado.AbmAfiliado.resources" />
-    <EmbeddedResource Include="obj\Release\Clinica_Frba.Abm_de_Especialidades_Medicas.EspecialidadesWindow.resources" />
     <EmbeddedResource Include="obj\Release\Clinica_Frba.Abm_de_Profesional.AbmProfesional.resources" />
     <EmbeddedResource Include="obj\Release\Clinica_Frba.Abm_de_Profesional.Alta.resources" />
     <EmbeddedResource Include="obj\Release\Clinica_Frba.Abm_de_Profesional.Modificar.resources" />
@@ -276,6 +268,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Registrar Agenda\RegistrarAgenda.resx">
+      <DependentUpon>RegistrarAgenda.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Registro de Llegada\RegistroLlegada.resx">
       <DependentUpon>RegistroLlegada.cs</DependentUpon>
@@ -352,12 +347,11 @@
     <Content Include="obj\Release\Clinica Frba.pdb" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Generar Receta\" />
+    <Folder Include="Abm de Especialidades Medicas\" />
+    <Folder Include="Abm de Planes\" />
     <Folder Include="obj\Debug\Refactor\" />
     <Folder Include="obj\Debug\TempPE\" />
     <Folder Include="obj\Release\TempPE\" />
-    <Folder Include="Registro Resultado Atencion\" />
-    <Folder Include="Registro de LLegada\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

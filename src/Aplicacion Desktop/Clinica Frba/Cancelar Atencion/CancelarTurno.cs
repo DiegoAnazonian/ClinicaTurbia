@@ -44,6 +44,7 @@ namespace Clinica_Frba.Cancelar_Atencion
 
         private void refrescarGridTurnos()
         {
+            turnosGrid.DataSource = null;
             turnosGrid.Rows.Clear();
             DataTable tablaTurnos = Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[LISTADO_TURNOS_PACIENTE]",
                 Database.GenerarListaDeParametros("pac", paciente, "fecha", Configuration.getFecha()));

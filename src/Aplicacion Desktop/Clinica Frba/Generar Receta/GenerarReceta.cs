@@ -13,6 +13,7 @@ namespace Clinica_Frba.Generar_Receta
     public partial class GenerarReceta : Form
     {
         private string docAfiliado;
+        List<string> listaMedicamentos = new List<string>();
 
         public GenerarReceta()
         {
@@ -100,11 +101,17 @@ namespace Clinica_Frba.Generar_Receta
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
+            if (listaMedicamentos.Contains(txtMedicamento.Text))
+            {
+                MessageBox.Show("No puede incluir mas de una vez el mismo medicamento en una receta");
+                return;
+            }
             if (txtMedicamento.Text.Length > 0)
             {
                 DataGridViewRow tempRow = new DataGridViewRow();
                 DataGridViewCell cellMed = new DataGridViewTextBoxCell();
                 cellMed.Value = txtMedicamento.Text;
+                listaMedicamentos.Add(txtMedicamento.Text);
                 DataGridViewCell cellCant = new DataGridViewTextBoxCell();
                 cellCant.Value = comboCant.SelectedItem;
                 tempRow.Cells.Add(cellMed);
@@ -130,6 +137,7 @@ namespace Clinica_Frba.Generar_Receta
             {
                 return;
             }
+            listaMedicamentos.Remove(gridReceta.Rows[e.RowIndex].ToString());
             gridReceta.Rows.RemoveAt(e.RowIndex);
             if (gridReceta.Rows.Count > 0)
             {

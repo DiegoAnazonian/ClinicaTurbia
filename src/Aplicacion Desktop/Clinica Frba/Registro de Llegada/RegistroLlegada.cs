@@ -16,6 +16,7 @@ namespace Clinica_Frba.Registro_de_LLegada
     {
         String currentDate;
         String currentTime;
+        bool noContar = false;
 
         public RegistroLlegada()
         {
@@ -73,6 +74,7 @@ namespace Clinica_Frba.Registro_de_LLegada
             {
                 DataTable tablaMed = Database.GetInstance.ExecuteQuery(
                 "[ClinicaTurbia].[TRAER_TODOS_MEDICOS]");
+                noContar = true;
                 completarComboMedico(tablaMed);
             }
             else
@@ -81,6 +83,7 @@ namespace Clinica_Frba.Registro_de_LLegada
                     Database.GenerarListaDeParametros("esp", comboEspecialidad.SelectedValue);
                 DataTable tablaMed = Database.GetInstance.ExecuteQuery(
                     "[ClinicaTurbia].[FILTRAR_X_ESPECIALIDAD]", param);
+                noContar = true;
                 completarComboMedico(tablaMed);
             }
         }
@@ -118,8 +121,10 @@ namespace Clinica_Frba.Registro_de_LLegada
 
         private void comboMedico_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboMedico.SelectedValue == null || comboMedico.SelectedValue.GetType().IsClass)
+            if (noContar || comboMedico.SelectedValue == null || comboMedico.SelectedValue.GetType().IsClass)
             {
+                noContar = false;
+                turnosMedico.Rows.Clear();
                 return;
             }
             refrescarGridTurnos();
@@ -170,7 +175,7 @@ namespace Clinica_Frba.Registro_de_LLegada
             {
                 pnlPaciente.Hide();
                 MessageBox.Show("El profesional "
-                    + ((DataRowView)comboMedico.Items[comboMedico.SelectedIndex]).Row.ItemArray[8].ToString()
+                    + ((DataRowView)comboMedico.Items[comboMedico.SelectedIndex]).Row.ItemArray[3].ToString()
                     + " no registra turnos");
                 return;
             }

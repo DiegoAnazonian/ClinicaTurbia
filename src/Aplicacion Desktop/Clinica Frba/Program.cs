@@ -18,6 +18,7 @@ namespace Clinica_Frba
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new LoginWindow());
+            //Application.Run(new Registrar_Agenda.RegistrarAgenda());
         }
     }
 }

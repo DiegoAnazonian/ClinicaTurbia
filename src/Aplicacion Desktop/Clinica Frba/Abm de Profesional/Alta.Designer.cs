@@ -77,9 +77,9 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(9, 136);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(93, 13);
+            this.label7.Size = new System.Drawing.Size(100, 13);
             this.label7.TabIndex = 44;
-            this.label7.Text = "Fecha Nacimiento";
+            this.label7.Text = "Fecha Nacimiento *";
             // 
             // label6
             // 
@@ -143,27 +143,27 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(13, 92);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(44, 13);
+            this.label3.Size = new System.Drawing.Size(51, 13);
             this.label3.TabIndex = 36;
-            this.label3.Text = "Apellido";
+            this.label3.Text = "Apellido *";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(11, 51);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(44, 13);
+            this.label2.Size = new System.Drawing.Size(51, 13);
             this.label2.TabIndex = 35;
-            this.label2.Text = "Nombre";
+            this.label2.Text = "Nombre *";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(26, 13);
+            this.label1.Size = new System.Drawing.Size(33, 13);
             this.label1.TabIndex = 34;
-            this.label1.Text = "DNI";
+            this.label1.Text = "DNI *";
             // 
             // apellido
             // 
@@ -234,7 +234,7 @@
             // 
             // calendario
             // 
-            this.calendario.Location = new System.Drawing.Point(84, 85);
+            this.calendario.Location = new System.Drawing.Point(74, 72);
             this.calendario.Name = "calendario";
             this.calendario.TabIndex = 53;
             this.calendario.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.calendario_DateSelected);

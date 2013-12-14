@@ -6,7 +6,6 @@ using System.Data.SqlClient;
 using Clinica_Frba.Login;
 using Clinica_Frba.Abm_de_Rol;
 using Clinica_Frba.NewFolder12;
-using Clinica_Frba.Abm_de_Especialidades_Medicas;
 using Clinica_Frba.Abm_de_Profesional;
 using Clinica_Frba.Pedir_Turno;
 using Clinica_Frba.Abm_de_Afiliado;
@@ -16,6 +15,7 @@ using Clinica_Frba.Cancelar_Atencion;
 using Clinica_Frba.Compra_de_Bono;
 using Clinica_Frba.Registro_de_LLegada;
 using Clinica_Frba.Registro_Resultado_Atencion;
+using Clinica_Frba.Registrar_Agenda;
 
 namespace Clinica_Frba.NewFolder10
 {
@@ -183,12 +183,6 @@ namespace Clinica_Frba.NewFolder10
                             new AbmAfiliado().ShowDialog();
                         };
                         break;
-                    case "ABM de Especialidad":
-                        btn.Click += (ssender, args) =>
-                        {
-                            new EspecialidadesWindow().ShowDialog();
-                        };
-                        break;
                     case "ABM de Profesional":
                         btn.Click += (ssender, args) =>
                         {
@@ -235,6 +229,12 @@ namespace Clinica_Frba.NewFolder10
                         btn.Click += (ssender, args) =>
                         {
                             new RegistroResultado().ShowDialog();
+                        };
+                        break;
+                    case "Registrar Agenda":
+                        btn.Click += (ssender, args) =>
+                        {
+                            new RegistrarAgenda().ShowDialog();
                         };
                         break;
                 }

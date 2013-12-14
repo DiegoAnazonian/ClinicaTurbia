@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using Clinica_Frba.Abm_de_Afiliado;
 
 namespace Clinica_Frba.NewFolder12
 {
@@ -21,6 +22,7 @@ namespace Clinica_Frba.NewFolder12
         private String nombreACargo;
         private String apellidoACargo;
         private long cantidadFamiliares;
+        private string planViejo;
         
 
         public AltaModifAfiliado(Boolean conFamiliares)
@@ -45,7 +47,7 @@ namespace Clinica_Frba.NewFolder12
             completarDatos(tablaAfiliado);
             botonesFamiliares(false);
             codigoAfiliadoPrincipal = null;
-            
+            this.planViejo = tablaAfiliado.Rows[0][11].ToString();
         }
 
         private void agregarDatosComboFamiliar(){
@@ -266,6 +268,11 @@ namespace Clinica_Frba.NewFolder12
                 "numDoc", txtNroDoc.Text);
             Database.GetInstance.ExecuteQuery(
                 "[ClinicaTurbia].[PRIMER_LOGIN_USUARIO]", paramsPrimerLogeo);
+            if (this.planViejo != ((DataRowView)this.comboPlanMedico.SelectedItem).Row.ItemArray[1].ToString())
+            {
+                new CambioDePlan(this.planViejo, ((DataRowView)this.comboPlanMedico.SelectedItem).Row.ItemArray[1].ToString(),
+                    txtNroDoc.Text).ShowDialog();
+            }
             this.Close();
         }
 

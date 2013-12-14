@@ -34,7 +34,11 @@ namespace Clinica_Frba.Registro_Resultado_Atencion
 
         private void btnReceta_Click(object sender, EventArgs e)
         {
-            new GenerarReceta(txtAfiliado.Text).ShowDialog();
+            GenerarReceta gen = new GenerarReceta(txtAfiliado.Text);
+            if (!gen.IsDisposed)
+            {
+                gen.ShowDialog();
+            }
         }
     }
 }

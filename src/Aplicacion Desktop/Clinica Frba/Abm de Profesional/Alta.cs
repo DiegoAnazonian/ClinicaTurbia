@@ -66,13 +66,13 @@ namespace Clinica_Frba.Abm_de_Profesional
                         agregarEspecialidad(item.Row["ESP_CODIGO"].ToString());
                     }
                 }
+                MessageBox.Show("El medico se ha creado exitosamente", "Clinica FRBA", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Problemas al crear el medico", "Error de carga", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Problemas al crear el medico.\n Verifique que los datos obligatorios esten completos", "Error de carga", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            MessageBox.Show("El medico se ha creado exitosamente", "Clinica FRBA", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            this.Close();
         }
 
         private void txtMatricula_TextChanged(object sender, EventArgs e)
