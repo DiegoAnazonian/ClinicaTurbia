@@ -580,10 +580,10 @@ INSERT INTO ClinicaTurbia.Rol(ROL_NOMBRE, ROL_HABILITADO) VALUES
 INSERT INTO ClinicaTurbia.Funcionalidad(FUN_NOMBRE) VALUES
 	('ABM de Roles'), ('ABM de Afiliado'), ('Registrar Agenda'), ('ABM de Profesional'),
 	('Pedir Turno'), ('Cancelar Turno'), ('Cancelar fecha de atencion'),
-	('Comprar bono'), ('Vender bono'), ('Registrar Atencion'),('Registrar llegada');
+	('Comprar bono'), ('Vender bono'), ('Registrar Atencion'),('Registrar llegada'),('Estadisticos');
 
 INSERT INTO ClinicaTurbia.Rol_Funcionalidad(ROL_ID, FUN_ID) VALUES
-	(1,1), (1,2), (3,3), (1,4), (2,5), (2,6), (3,7), (2,8), (1,9), (3,10), (1,11);
+	(1,1), (1,2), (3,3), (1,4), (2,5), (2,6), (3,7), (2,8), (1,9), (3,10), (1,11), (1,12);
 
 INSERT INTO ClinicaTurbia.TipoDocumento(TIDOC_NOMBRE) VALUES
 	('Documento Nacional de Identidad'), ('Cédula de Identidad'),
@@ -883,8 +883,8 @@ CREATE PROCEDURE ClinicaTurbia.CANCELAR_TURNOS_EN_FECHA
 	UPDATE ClinicaTurbia.Turno SET
 		TURN_CANCELADO=1, TURN_CAN_MOTIVO=@motivo, TURN_CAN_TICAN=@tipoCan, TURN_CAN_AVISADO=0
 		WHERE CAST(TURN_FECHA AS DATE)=@fecha AND TURN_PROF_COD=@med;
-	INSERT INTO ClinicaTurbia.Turno(TURN_FECHA, TURN_PROF_COD, TURN_CANCELADO)
-		VALUES (@fecha, @med, 1);
+	UPDATE ClinicaTurbia.Agenda SET AGENDA_TRABAJA = 0
+		WHERE AGENDA_MEDICO = @med AND AGENDA_DIA = CAST(@fecha AS DATE);
 GO
 
 CREATE PROCEDURE ClinicaTurbia.GENERAR_RECETA
@@ -1338,16 +1338,31 @@ CREATE PROCEDURE ClinicaTurbia.PRIMER_LOGIN_USUARIO (@numDoc nvarchar(255)) AS
 	UPDATE ClinicaTurbia.Usuario SET USUARIO_PRIMER_LOGIN=0 WHERE USUARIO_NOMBRE=@numDoc;
 GO
 
-CREATE PROCEDURE ClinicaTurbia.TOP5_ESPECIALIDADES_CANCELACIONES AS
-	SELECT TOP 5 ESP_DESCRIPCION, COUNT(*) AS 'CANTIDAD DE CANCELACIONES'
+CREATE PROCEDURE ClinicaTurbia.TOP5_ESPECIALIDADES_CANCELACIONES
+	(@anio numeric(4,0), @semestre int) AS
+	DECLARE @semI int;
+	DECLARE @semF int;
+	IF @semestre = 1
+	BEGIN;
+		SET @semI = 1;
+		SET @semF = 6;
+	END;
+	ELSE
+	BEGIN;
+		SET @semI = 7;
+		SET @semF = 12;
+	END;	
+	SELECT TOP 5 ESP_DESCRIPCION AS 'ESPECIALIDAD', DATEPART(MONTH, TURN_FECHA) AS 'MES', COUNT(*) AS 'CANTIDAD DE CANCELACIONES'
 		FROM ClinicaTurbia.Turno, ClinicaTurbia.Medico_Especialidad, ClinicaTurbia.Especialidad
-		WHERE TURN_CANCELADO = 1 AND MEDESP_MED=TURN_PROF_COD AND ESP_CODIGO=MEDESP_ESP
-		GROUP BY ESP_DESCRIPCION
+		WHERE DATEPART(YEAR, TURN_FECHA) = @anio
+		AND DATEPART(MONTH, TURN_FECHA) >= @semI AND DATEPART(MONTH, TURN_FECHA) <= @semF 
+		AND TURN_CANCELADO = 1 AND MEDESP_MED=TURN_PROF_COD AND ESP_CODIGO=MEDESP_ESP
+		GROUP BY ESP_DESCRIPCION, DATEPART(MONTH, TURN_FECHA)
 		ORDER BY 'CANTIDAD DE CANCELACIONES' DESC;
 GO
 
-CREATE PROCEDURE ClinicaTurbia.TOP5_BONOS_VENCIDOS 
-	(@fechaActual datetime) AS
+CREATE PROCEDURE ClinicaTurbia.TOP5_BONOS_VENCIDOS
+	(@fechaActual datetime, @anio numeric(4,0), @semestre int) AS
 	SELECT TOP 5 (PAC_NOMBRE + ' ' + PAC_APELLIDO) AS NOMBRE, BONOFAR_AFILIADO_COMPRO AS DOCUMENTO, COUNT(*) AS 'BONOS VENCIDOS'
 		FROM ClinicaTurbia.BonoFarmacia, ClinicaTurbia.Paciente
 		WHERE BONOFAR_FECHA_PRESCRIPCION IS NULL
@@ -1357,7 +1372,8 @@ CREATE PROCEDURE ClinicaTurbia.TOP5_BONOS_VENCIDOS
 		ORDER BY 'BONOS VENCIDOS' DESC;
 GO
 
-CREATE PROCEDURE ClinicaTurbia.TOP10_BONOS_AJENOS AS
+CREATE PROCEDURE ClinicaTurbia.TOP10_BONOS_AJENOS
+	(@anio numeric(4,0), @semestre int) AS
 	SELECT TOP 10 AFILIADO, SUM(CANT) AS 'CANTIDAD DE BONOS NO PROPIOS USADOS' FROM 
 		(SELECT BONOCON_AFILIADO_USO AS AFILIADO, COUNT(*) AS CANT
 			FROM ClinicaTurbia.BonoConsulta
@@ -1371,7 +1387,8 @@ CREATE PROCEDURE ClinicaTurbia.TOP10_BONOS_AJENOS AS
 	GROUP BY AFILIADO ORDER BY [CANTIDAD DE BONOS NO PROPIOS USADOS] DESC;
 GO
 
-CREATE PROCEDURE ClinicaTurbia.TOP5_RECETAS_POR_ESPECIALIDAD AS
+CREATE PROCEDURE ClinicaTurbia.TOP5_RECETAS_POR_ESPECIALIDAD
+	(@anio numeric(4,0), @semestre int) AS
 	SELECT TOP 5 ESP_DESCRIPCION, COUNT(*) AS 'CANTIDAD DE RECETAS' FROM (
 		SELECT ESP_DESCRIPCION, REC_BONO_FARMACIA
 		FROM ClinicaTurbia.Receta, ClinicaTurbia.Especialidad, ClinicaTurbia.Medico_Especialidad

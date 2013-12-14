@@ -121,6 +121,8 @@
             // 
             // afiliadosBox
             // 
+            this.afiliadosBox.AllowUserToAddRows = false;
+            this.afiliadosBox.AllowUserToDeleteRows = false;
             this.afiliadosBox.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.afiliadosBox.Location = new System.Drawing.Point(12, 199);
             this.afiliadosBox.Name = "afiliadosBox";

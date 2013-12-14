@@ -38,6 +38,8 @@
             // 
             // dataGridRoles
             // 
+            this.dataGridRoles.AllowUserToAddRows = false;
+            this.dataGridRoles.AllowUserToDeleteRows = false;
             this.dataGridRoles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridRoles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.nombreRol,
@@ -45,6 +47,7 @@
             this.btnsModificar});
             this.dataGridRoles.Location = new System.Drawing.Point(12, 12);
             this.dataGridRoles.Name = "dataGridRoles";
+            this.dataGridRoles.ReadOnly = true;
             this.dataGridRoles.Size = new System.Drawing.Size(593, 197);
             this.dataGridRoles.TabIndex = 0;
             this.dataGridRoles.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridRoles_CellContentClick);

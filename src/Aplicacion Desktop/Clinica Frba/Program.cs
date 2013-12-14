@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Clinica_Frba.NewFolder10;
 using Clinica_Frba.NewFolder12;
+using Clinica_Frba.Listados_Estadisticos;
 
 namespace Clinica_Frba
 {
@@ -18,7 +19,7 @@ namespace Clinica_Frba
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new LoginWindow());
-            //Application.Run(new Registrar_Agenda.RegistrarAgenda());
+            //Application.Run(new Estadisticos());
         }
     }
 }

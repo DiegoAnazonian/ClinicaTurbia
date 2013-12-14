@@ -140,6 +140,12 @@
     <Compile Include="Generar Receta\GenerarReceta.Designer.cs">
       <DependentUpon>GenerarReceta.cs</DependentUpon>
     </Compile>
+    <Compile Include="Listados Estadisticos\Estadisticos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Listados Estadisticos\Estadisticos.Designer.cs">
+      <DependentUpon>Estadisticos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login\LoginWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -171,23 +177,11 @@
     <Compile Include="Registro de Llegada\RegistroLlegada.Designer.cs">
       <DependentUpon>RegistroLlegada.cs</DependentUpon>
     </Compile>
-    <Compile Include="Registro de Usuario\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Registro de Usuario\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Abm de Afiliado\AltaModifAfiliado.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Abm de Afiliado\AltaModifAfiliado.Designer.cs">
       <DependentUpon>AltaModifAfiliado.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Listados Estadisticos\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Listados Estadisticos\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -226,6 +220,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Generar Receta\GenerarReceta.resx">
       <DependentUpon>GenerarReceta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Listados Estadisticos\Estadisticos.resx">
+      <DependentUpon>Estadisticos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\LoginWindow.resx">
       <DependentUpon>LoginWindow.cs</DependentUpon>
@@ -352,6 +349,7 @@
     <Folder Include="obj\Debug\Refactor\" />
     <Folder Include="obj\Debug\TempPE\" />
     <Folder Include="obj\Release\TempPE\" />
+    <Folder Include="Registro de Usuario\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

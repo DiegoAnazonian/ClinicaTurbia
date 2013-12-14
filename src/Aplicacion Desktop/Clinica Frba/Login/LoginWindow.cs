@@ -16,6 +16,7 @@ using Clinica_Frba.Compra_de_Bono;
 using Clinica_Frba.Registro_de_LLegada;
 using Clinica_Frba.Registro_Resultado_Atencion;
 using Clinica_Frba.Registrar_Agenda;
+using Clinica_Frba.Listados_Estadisticos;
 
 namespace Clinica_Frba.NewFolder10
 {
@@ -199,6 +200,12 @@ namespace Clinica_Frba.NewFolder10
                         btn.Click += (ssender, args) =>
                         {
                             new CancelarTurno(LOGGED_USER).ShowDialog();
+                        };
+                        break;
+                    case "Estadisticos":
+                        btn.Click += (ssender, args) =>
+                        {
+                            new Estadisticos().ShowDialog();
                         };
                         break;
                     case "Cancelar fecha de atencion":

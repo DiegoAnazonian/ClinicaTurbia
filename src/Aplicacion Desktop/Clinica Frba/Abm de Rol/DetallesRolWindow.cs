@@ -120,7 +120,7 @@ namespace Clinica_Frba.Abm_de_Rol
             if (!checkBoxHabilitado.Checked)
             {
                 List<SqlParameter> rolParam = Database.GenerarListaDeParametros("id", this.idRol);
-                Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[DESHABILITAR_ROL]", rolParam);
+                Database.GetInstance.ExecuteQuery("[ClinicaTurbia].[INHABILITAR_ROL]", rolParam);
             }
         }
 
