@@ -62,6 +62,7 @@
             // 
             // comboConsulta
             // 
+            this.comboConsulta.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboConsulta.FormattingEnabled = true;
             this.comboConsulta.Location = new System.Drawing.Point(177, 14);
             this.comboConsulta.Name = "comboConsulta";
@@ -71,6 +72,7 @@
             // 
             // comboFarmacia
             // 
+            this.comboFarmacia.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboFarmacia.FormattingEnabled = true;
             this.comboFarmacia.Location = new System.Drawing.Point(177, 49);
             this.comboFarmacia.Name = "comboFarmacia";

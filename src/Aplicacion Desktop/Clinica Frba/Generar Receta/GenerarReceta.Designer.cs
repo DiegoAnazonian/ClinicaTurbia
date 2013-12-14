@@ -36,17 +36,17 @@
             this.txtCantidadString = new System.Windows.Forms.TextBox();
             this.btnAgregar = new System.Windows.Forms.Button();
             this.gridReceta = new System.Windows.Forms.DataGridView();
+            this.medicamento = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.eliminar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.btnGenerar = new System.Windows.Forms.Button();
             this.pnlPrincipal = new System.Windows.Forms.Panel();
+            this.comboCant = new System.Windows.Forms.ComboBox();
             this.txtNumAf = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.btnCargar = new System.Windows.Forms.Button();
             this.btnCambiar = new System.Windows.Forms.Button();
             this.pnlOpcional = new System.Windows.Forms.Panel();
-            this.medicamento = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.eliminar = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.comboCant = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.gridReceta)).BeginInit();
             this.pnlPrincipal.SuspendLayout();
             this.pnlOpcional.SuspendLayout();
@@ -63,6 +63,7 @@
             // 
             // comboBono
             // 
+            this.comboBono.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBono.FormattingEnabled = true;
             this.comboBono.Location = new System.Drawing.Point(149, 63);
             this.comboBono.Name = "comboBono";
@@ -130,6 +131,26 @@
             this.gridReceta.TabIndex = 5;
             this.gridReceta.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridReceta_CellContentClick);
             // 
+            // medicamento
+            // 
+            this.medicamento.HeaderText = "Medicamento";
+            this.medicamento.Name = "medicamento";
+            this.medicamento.ReadOnly = true;
+            // 
+            // cantidad
+            // 
+            this.cantidad.HeaderText = "Cantidad";
+            this.cantidad.Name = "cantidad";
+            this.cantidad.ReadOnly = true;
+            // 
+            // eliminar
+            // 
+            this.eliminar.HeaderText = "Eliminar";
+            this.eliminar.Name = "eliminar";
+            this.eliminar.ReadOnly = true;
+            this.eliminar.Text = "Eliminar";
+            this.eliminar.UseColumnTextForButtonValue = true;
+            // 
             // btnGenerar
             // 
             this.btnGenerar.Location = new System.Drawing.Point(346, 226);
@@ -154,6 +175,16 @@
             this.pnlPrincipal.Name = "pnlPrincipal";
             this.pnlPrincipal.Size = new System.Drawing.Size(480, 285);
             this.pnlPrincipal.TabIndex = 6;
+            // 
+            // comboCant
+            // 
+            this.comboCant.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboCant.FormattingEnabled = true;
+            this.comboCant.Location = new System.Drawing.Point(95, 37);
+            this.comboCant.Name = "comboCant";
+            this.comboCant.Size = new System.Drawing.Size(43, 21);
+            this.comboCant.TabIndex = 6;
+            this.comboCant.SelectedIndexChanged += new System.EventHandler(this.comboCant_SelectedIndexChanged);
             // 
             // txtNumAf
             // 
@@ -201,35 +232,6 @@
             this.pnlOpcional.Name = "pnlOpcional";
             this.pnlOpcional.Size = new System.Drawing.Size(480, 43);
             this.pnlOpcional.TabIndex = 7;
-            // 
-            // medicamento
-            // 
-            this.medicamento.HeaderText = "Medicamento";
-            this.medicamento.Name = "medicamento";
-            this.medicamento.ReadOnly = true;
-            // 
-            // cantidad
-            // 
-            this.cantidad.HeaderText = "Cantidad";
-            this.cantidad.Name = "cantidad";
-            this.cantidad.ReadOnly = true;
-            // 
-            // eliminar
-            // 
-            this.eliminar.HeaderText = "Eliminar";
-            this.eliminar.Name = "eliminar";
-            this.eliminar.ReadOnly = true;
-            this.eliminar.Text = "Eliminar";
-            this.eliminar.UseColumnTextForButtonValue = true;
-            // 
-            // comboCant
-            // 
-            this.comboCant.FormattingEnabled = true;
-            this.comboCant.Location = new System.Drawing.Point(95, 37);
-            this.comboCant.Name = "comboCant";
-            this.comboCant.Size = new System.Drawing.Size(43, 21);
-            this.comboCant.TabIndex = 6;
-            this.comboCant.SelectedIndexChanged += new System.EventHandler(this.comboCant_SelectedIndexChanged);
             // 
             // GenerarReceta
             // 

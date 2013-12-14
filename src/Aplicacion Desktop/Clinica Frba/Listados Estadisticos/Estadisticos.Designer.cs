@@ -59,6 +59,7 @@
             // 
             // comboTop
             // 
+            this.comboTop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboTop.FormattingEnabled = true;
             this.comboTop.Location = new System.Drawing.Point(12, 35);
             this.comboTop.Name = "comboTop";

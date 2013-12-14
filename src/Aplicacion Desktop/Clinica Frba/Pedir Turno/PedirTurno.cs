@@ -65,7 +65,8 @@ namespace Clinica_Frba.Pedir_Turno
             comboFecha.Items.Clear();
             DataTable tablaFech = Database.GetInstance.ExecuteQuery(
                 "[ClinicaTurbia].[TRAER_DIAS_MEDICO]",
-                Database.GenerarListaDeParametros("dni", comboMedico.SelectedValue));
+                Database.GenerarListaDeParametros("dni", comboMedico.SelectedValue,
+                    "fechaActual", Configuration.getFecha()));
             foreach (DataRow rou in tablaFech.Rows)
             {
                 if ((bool)rou[1])

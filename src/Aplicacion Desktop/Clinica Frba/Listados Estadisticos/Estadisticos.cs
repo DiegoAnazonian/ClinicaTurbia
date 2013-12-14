@@ -49,6 +49,7 @@ namespace Clinica_Frba.Listados_Estadisticos
                 evitarSem = true;
                 comboSem.SelectedItem = null;
             }
+            this.dataGridView1.Rows.Clear();
         }
 
         private void ComboAn_SelectedIndexChanged(object sender, EventArgs e)
@@ -60,6 +61,7 @@ namespace Clinica_Frba.Listados_Estadisticos
                 comboSem.SelectedItem = null;
             }
             comboSem.Enabled = true;
+            this.dataGridView1.Rows.Clear();
         }
 
         private void comboSem_SelectedIndexChanged(object sender, EventArgs e)
@@ -71,10 +73,13 @@ namespace Clinica_Frba.Listados_Estadisticos
                     completarGrid(top5CancelacionesPorEspecialidad());
                     break;
                 case 1:
+                    completarGrid(top5BonosVencidos());
                     break;
                 case 2:
+                    completarGrid(top5RecetasPorEspecialidades());
                     break;
                 case 3:
+                    completarGrid(top10BonosAjenos());
                     break;
             }
         }

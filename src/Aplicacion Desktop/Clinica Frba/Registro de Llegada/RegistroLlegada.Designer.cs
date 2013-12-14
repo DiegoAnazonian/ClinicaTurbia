@@ -69,6 +69,7 @@
             // 
             // comboMedico
             // 
+            this.comboMedico.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboMedico.FormattingEnabled = true;
             this.comboMedico.Location = new System.Drawing.Point(191, 32);
             this.comboMedico.Name = "comboMedico";
@@ -78,6 +79,7 @@
             // 
             // comboEspecialidad
             // 
+            this.comboEspecialidad.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboEspecialidad.FormattingEnabled = true;
             this.comboEspecialidad.Location = new System.Drawing.Point(12, 32);
             this.comboEspecialidad.Name = "comboEspecialidad";
@@ -131,11 +133,11 @@
             // 
             // cancelar
             // 
-            this.cancelar.Location = new System.Drawing.Point(371, 300);
+            this.cancelar.Location = new System.Drawing.Point(481, 341);
             this.cancelar.Name = "cancelar";
             this.cancelar.Size = new System.Drawing.Size(64, 23);
             this.cancelar.TabIndex = 10;
-            this.cancelar.Text = "Cancelar";
+            this.cancelar.Text = "Salir";
             this.cancelar.UseVisualStyleBackColor = true;
             this.cancelar.Click += new System.EventHandler(this.cancelar_Click);
             // 
@@ -158,7 +160,7 @@
             // 
             // registrarLlegadabtn
             // 
-            this.registrarLlegadabtn.Location = new System.Drawing.Point(484, 300);
+            this.registrarLlegadabtn.Location = new System.Drawing.Point(11, 161);
             this.registrarLlegadabtn.Name = "registrarLlegadabtn";
             this.registrarLlegadabtn.Size = new System.Drawing.Size(62, 23);
             this.registrarLlegadabtn.TabIndex = 13;
@@ -188,12 +190,13 @@
             // pnlPaciente
             // 
             this.pnlPaciente.Controls.Add(this.txtPaciente);
+            this.pnlPaciente.Controls.Add(this.registrarLlegadabtn);
             this.pnlPaciente.Controls.Add(this.lblbonos);
             this.pnlPaciente.Controls.Add(this.lblPaciente);
             this.pnlPaciente.Controls.Add(this.bonosAfiliado);
             this.pnlPaciente.Location = new System.Drawing.Point(371, 77);
             this.pnlPaciente.Name = "pnlPaciente";
-            this.pnlPaciente.Size = new System.Drawing.Size(174, 191);
+            this.pnlPaciente.Size = new System.Drawing.Size(174, 201);
             this.pnlPaciente.TabIndex = 16;
             // 
             // txtPaciente
@@ -210,7 +213,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(568, 376);
             this.Controls.Add(this.pnlPaciente);
-            this.Controls.Add(this.registrarLlegadabtn);
             this.Controls.Add(this.horaActual);
             this.Controls.Add(this.cancelar);
             this.Controls.Add(this.fechaDeHoy);

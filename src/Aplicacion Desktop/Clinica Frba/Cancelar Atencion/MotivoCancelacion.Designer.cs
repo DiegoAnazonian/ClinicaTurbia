@@ -37,6 +37,7 @@
             // 
             // comboTipoCan
             // 
+            this.comboTipoCan.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboTipoCan.FormattingEnabled = true;
             this.comboTipoCan.Location = new System.Drawing.Point(83, 17);
             this.comboTipoCan.Name = "comboTipoCan";

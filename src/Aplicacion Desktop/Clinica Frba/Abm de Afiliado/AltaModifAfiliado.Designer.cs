@@ -377,12 +377,12 @@
             // 
             // familiares
             // 
+            this.familiares.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.familiares.FormattingEnabled = true;
             this.familiares.Location = new System.Drawing.Point(388, 12);
             this.familiares.Name = "familiares";
             this.familiares.Size = new System.Drawing.Size(121, 21);
             this.familiares.TabIndex = 15;
-            this.familiares.Text = "Tipo Familiar";
             // 
             // AltaModifAfiliado
             // 

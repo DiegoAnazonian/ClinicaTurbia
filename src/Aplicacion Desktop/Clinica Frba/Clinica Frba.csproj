@@ -218,6 +218,9 @@
     <EmbeddedResource Include="Cancelar Atencion\MotivoCancelacion.resx">
       <DependentUpon>MotivoCancelacion.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Compra de Bono\CompraBono.resx">
+      <DependentUpon>CompraBono.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Generar Receta\GenerarReceta.resx">
       <DependentUpon>GenerarReceta.cs</DependentUpon>
     </EmbeddedResource>

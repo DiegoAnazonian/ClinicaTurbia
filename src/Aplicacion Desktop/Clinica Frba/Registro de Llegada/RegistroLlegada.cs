@@ -174,9 +174,7 @@ namespace Clinica_Frba.Registro_de_LLegada
             if (tablaMed.Rows.Count == 0)
             {
                 pnlPaciente.Hide();
-                MessageBox.Show("El profesional "
-                    + ((DataRowView)comboMedico.Items[comboMedico.SelectedIndex]).Row.ItemArray[3].ToString()
-                    + " no registra turnos");
+                MessageBox.Show("El profesional seleccionado no registra turnos para la fecha");
                 return;
             }
 

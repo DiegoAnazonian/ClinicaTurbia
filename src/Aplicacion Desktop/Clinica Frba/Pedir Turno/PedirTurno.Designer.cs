@@ -41,6 +41,7 @@
             // 
             // comboEspecialidad
             // 
+            this.comboEspecialidad.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboEspecialidad.FormattingEnabled = true;
             this.comboEspecialidad.Location = new System.Drawing.Point(12, 33);
             this.comboEspecialidad.Name = "comboEspecialidad";
@@ -59,6 +60,7 @@
             // 
             // comboMedico
             // 
+            this.comboMedico.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboMedico.FormattingEnabled = true;
             this.comboMedico.Location = new System.Drawing.Point(208, 33);
             this.comboMedico.Name = "comboMedico";
@@ -77,6 +79,7 @@
             // 
             // comboFecha
             // 
+            this.comboFecha.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboFecha.FormattingEnabled = true;
             this.comboFecha.Location = new System.Drawing.Point(12, 122);
             this.comboFecha.Name = "comboFecha";
@@ -95,6 +98,7 @@
             // 
             // comboHorario
             // 
+            this.comboHorario.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboHorario.FormattingEnabled = true;
             this.comboHorario.Location = new System.Drawing.Point(258, 122);
             this.comboHorario.Name = "comboHorario";
