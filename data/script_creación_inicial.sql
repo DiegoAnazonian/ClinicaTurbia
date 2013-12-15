@@ -1143,7 +1143,8 @@ GO
 CREATE PROCEDURE ClinicaTurbia.TRAER_DIAS_MEDICO
 	(@dni numeric(18,0), @fechaActual date) AS
 	SELECT AGENDA_DIA, AGENDA_TRABAJA FROM ClinicaTurbia.Agenda
-	WHERE AGENDA_MEDICO=@dni AND AGENDA_DIA >= @fechaActual;
+	WHERE AGENDA_MEDICO=@dni AND AGENDA_DIA >= @fechaActual
+	ORDER BY AGENDA_DIA;
 GO
 
 CREATE PROCEDURE ClinicaTurbia.TRAER_HORARIOS_MEDICO (@dni numeric(18,0), @dia date) AS
@@ -1477,7 +1478,7 @@ CREATE PROCEDURE ClinicaTurbia.MIGRAR_AGENDAS AS
 			ELSE IF DATEPART(WEEKDAY, @dia) != 1
 			BEGIN;
 				INSERT INTO ClinicaTurbia.Agenda(AGENDA_MEDICO, AGENDA_DIA, AGENDA_TRABAJA, AGENDA_HORA_DESDE, AGENDA_HORA_HASTA)
-					VALUES(@dni, @dia, 1, 9, 18);
+					VALUES(@dni, @dia, 1, 8, 18);
 			END;
 			SET @ii += 1;
 			SET @dia = DATEADD(weekday, 1, @dia);

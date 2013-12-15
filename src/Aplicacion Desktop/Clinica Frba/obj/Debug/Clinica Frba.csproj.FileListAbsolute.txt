@@ -71,3 +71,4 @@ C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Fr
 C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Registrar_Agenda.RegistrarAgenda.resources
 C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Abm_de_Afiliado.CambioDePlan.resources
 C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Listados_Estadisticos.Estadisticos.resources
+C:\Users\compu\Documents\seb\git\ClinicaTurbia\src\Aplicacion Desktop\Clinica Frba\obj\Debug\Clinica_Frba.Compra_de_Bono.ComprarBono.resources

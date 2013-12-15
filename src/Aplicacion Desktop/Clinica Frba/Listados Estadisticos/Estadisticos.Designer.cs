@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.comboTop = new System.Windows.Forms.ComboBox();
             this.comboAn = new System.Windows.Forms.ComboBox();
             this.comboSem = new System.Windows.Forms.ComboBox();
@@ -36,9 +39,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,6 +57,24 @@
             this.dataGridView1.Size = new System.Drawing.Size(503, 195);
             this.dataGridView1.TabIndex = 0;
             // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Column1";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Column2";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "Column3";
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            // 
             // comboTop
             // 
             this.comboTop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -69,6 +87,7 @@
             // 
             // comboAn
             // 
+            this.comboAn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAn.FormattingEnabled = true;
             this.comboAn.Location = new System.Drawing.Point(48, 93);
             this.comboAn.Name = "comboAn";
@@ -78,6 +97,7 @@
             // 
             // comboSem
             // 
+            this.comboSem.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboSem.FormattingEnabled = true;
             this.comboSem.Location = new System.Drawing.Point(257, 93);
             this.comboSem.Name = "comboSem";
@@ -121,24 +141,6 @@
             this.label3.Size = new System.Drawing.Size(51, 13);
             this.label3.TabIndex = 5;
             this.label3.Text = "Semestre";
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Column1";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Column2";
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "Column3";
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
             // 
             // Estadisticos
             // 

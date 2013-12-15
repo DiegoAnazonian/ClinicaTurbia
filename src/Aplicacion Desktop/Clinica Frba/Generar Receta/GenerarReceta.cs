@@ -97,6 +97,7 @@ namespace Clinica_Frba.Generar_Receta
                 DataTable tabBon = Database.GetInstance.ExecuteQuery(
                     "[ClinicaTurbia].[GENERAR_RECETA]", paramList);
             }
+            MessageBox.Show("Receta generada con exito");
             this.Close();
         }
 

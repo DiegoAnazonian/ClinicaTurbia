@@ -30,6 +30,7 @@ namespace Clinica_Frba.Registro_Resultado_Atencion
             DataTable tabTur = Database.GetInstance.ExecuteQuery(
                 "[ClinicaTurbia].[REGISTRAR_ATENCION]", paramList);
             btnRegistrar.Enabled = false;
+            MessageBox.Show("Atencion medica registrada con exito");
         }
 
         private void btnReceta_Click(object sender, EventArgs e)

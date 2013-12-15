@@ -258,10 +258,12 @@ namespace Clinica_Frba.NewFolder12
             }
             String sexoAfiliado = comboSexo.SelectedItem != null ? 
                 comboSexo.SelectedItem.ToString().Substring(0, 1) : null;
-            
+
+            String tel = txtTelefono.Text == "" ? null : txtTelefono.Text;
+
             List<SqlParameter> paramsAfiliado = Database.GenerarListaDeParametros(
                 "tiDoc", comboTipoDoc.SelectedValue, "dire", txtDireccion.Text,
-                "tel", Convert.ToInt64(txtTelefono.Text), "mail", txtMail.Text, "sexo", sexoAfiliado,
+                "tel", tel, "mail", txtMail.Text, "sexo", sexoAfiliado,
                 "estCivil", comboEstadoCivil.SelectedValue, 
                 "planMed", comboPlanMedico.SelectedValue, "numDoc", Convert.ToInt64(txtNroDoc.Text));
             DataTable tablaPlanMedico = Database.GetInstance.ExecuteQuery(
@@ -304,19 +306,25 @@ namespace Clinica_Frba.NewFolder12
                 String codigoNuevoAfiliado;
                 if (!String.IsNullOrEmpty(codigoAfiliadoPrincipal))
                 {
-                    String familiar = familiares.SelectedItem.ToString();
-                    if (familiar.Equals("Conyuge"))
+                    if (familiares != null && familiares.SelectedItem != null)
                     {
-                        endPointAfiliado = "02";
+                        String familiar = familiares.SelectedItem.ToString();
+                        if (familiar.Equals("Conyuge"))
+                        {
+                            endPointAfiliado = "02";
+                        }
+                        else
+                        {
+                            endPointAfiliado = Convert.ToString(0) + Convert.ToString(indexAfiliado);
+                            indexAfiliado++;
+                        }
+
+                        codigoNuevoAfiliado = String.Concat(codigoAfiliadoPrincipal, endPointAfiliado);
                     }
                     else
                     {
-                        endPointAfiliado = Convert.ToString(0) + Convert.ToString(indexAfiliado);
-                        indexAfiliado++;
+                        codigoNuevoAfiliado = String.Concat(txtNroDoc.Text, "01");
                     }
-
-                    codigoNuevoAfiliado = String.Concat(codigoAfiliadoPrincipal, endPointAfiliado);
-                    
                 }
                 else
                 {
@@ -326,16 +334,26 @@ namespace Clinica_Frba.NewFolder12
                 String sexoAfiliado = comboSexo.SelectedItem != null ?
                     comboSexo.SelectedItem.ToString().Substring(0, 1) : null;
 
+                String tel = txtTelefono.Text == "" ? null : txtTelefono.Text;
+                String cantF = txtTelefono.Text == "" ? null : txtFamiliares.Text;
+
                 List<SqlParameter> paramsAfiliado = Database.GenerarListaDeParametros(
                     "nom", txtNombre.Text, "ape", txtApellido.Text, "fecha", Convert.ToDateTime(txtFechaNac.Text),
                     "tiDoc", comboTipoDoc.SelectedValue, "dire", txtDireccion.Text,
-                    "tel", txtTelefono.Text, "mail", txtMail.Text, "sexo", sexoAfiliado,
-                    "estCivil", comboEstadoCivil.SelectedValue, "cantFam", txtFamiliares.Text,
-                    "planMed", comboPlanMedico.SelectedValue, "numDoc", Convert.ToInt64(txtNroDoc.Text), "numeroAfiliado", codigoNuevoAfiliado.ToString());
+                    "tel", tel, "mail", txtMail.Text, "sexo", sexoAfiliado,
+                    "estCivil", comboEstadoCivil.SelectedValue, "cantFam", cantF,
+                    "planMed", comboPlanMedico.SelectedValue, "numDoc", Convert.ToInt64(txtNroDoc.Text),
+                    "numeroAfiliado", Convert.ToInt64(codigoNuevoAfiliado.ToString()));
 
                 DataTable tablaPlanMedico = Database.GetInstance.ExecuteQuery(
                     "[ClinicaTurbia].[CREAR_AFILIADO]", paramsAfiliado);
                 MessageBox.Show("El afiliado " +  txtNombre.Text + ", " + txtApellido.Text +" se ha guardado correctamente. Su Codigo de afiliado es: " + codigoNuevoAfiliado, "Clinica Turbia FRBA", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                if (codigoNuevoAfiliado.ToString().EndsWith("01"))
+                {
+                    indexAfiliado = 3;
+                }
+
                 this.Close();
                 return true;
             }

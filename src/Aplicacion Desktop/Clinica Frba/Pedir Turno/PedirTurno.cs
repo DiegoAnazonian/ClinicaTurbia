@@ -171,6 +171,7 @@ namespace Clinica_Frba.Pedir_Turno
             comboHorario.Items.Remove(comboHorario.SelectedItem);
             comboHorario.SelectedItem = null;
             btnCrearTurno.Enabled = false;
+            MessageBox.Show("Turno registrado con exito");
         }
 
         private void comboHorario_SelectedIndexChanged(object sender, EventArgs e)
